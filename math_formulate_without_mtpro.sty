@@ -1,0 +1,62 @@
+\ProvidesPackage{math_formulate}
+%警告：不可与CJK宏包一同使用！
+\usepackage{
+  bm,% 粗体数学符号需要的
+  amsmath,
+  amsthm,
+  amssymb,
+  amsfonts,
+  mathrsfs
+  }
+\usepackage[bold-style=ISO]{unicode-math}
+\defaultfontfeatures{ Scale=MatchLowercase, Ligatures=TeX }
+%------------------------------------------%
+%常见的数学符号
+%------------------------------------------%
+%微分等符号
+\newcommand{\pdiff}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\diff}[2]{\frac{{\rm d}#1}{{\rm d}#2}}
+\newcommand{\sdiff}[2]{\frac{\Delta #1}{\Delta #2}}%差分
+\newcommand{\di}{{\rm d}}
+%高阶微分
+\newcommand{\pndiff}[3]{\frac{\partial^{#3}{#1}}{\partial{#2}^{#3}}}
+\newcommand{\ndiff}[3]{\frac{{\rm d}^{#3}#1}{{\rm d}{#2}^{#3}}}
+\newcommand{\sndiff}[3]{\frac{\Delta^{#3} #1}{\Delta {#2}^{#3}}}%差分
+%复数符号
+\newcommand{\cis}[1]{\cos #1+i\sin #1}
+\newcommand{\ci}{{\rm i}}
+\newcommand{\real}[1]{{\rm Re}\rectbrac{#1}}
+%大型运算符号
+\newcommand{\limit}[3]{\lim\limits_{#1\to #2}#3}
+\newcommand{\residue}[2]{{\rm Res}\rectbrac{#1,#2}}
+\newcommand{\infint}[2]{\int_{\ninfty}^{\pinfty}{#1}\di{#2}}
+\newcommand{\halfinfint}[2]{\int_{0}^{\pinfty}{#1}\di{#2}}
+%模、范数
+\newcommand{\mmode}[1]{\left | #1 \right |}
+\newcommand{\norm}[1]{\left| #1 \right|}
+%匹配大公式括号
+\newcommand{\circbrac}[1]{\left(#1\right)}
+\newcommand{\rectbrac}[1]{\left[#1\right]}
+\newcommand{\curlbrac}[1]{\left\{#1\right\}}
+%傅立叶变换及拉普拉斯变换
+\newcommand{\fourier}[1]{\mathscr{F}\rectbrac{#1}}
+\newcommand{\invfourier}[1]{\mathscr{F}^{-1}\rectbrac{#1}}
+\newcommand{\laplace}[1]{\mathscr{L}\rectbrac{#1}}
+\newcommand{\invlaplace}[1]{\mathscr{L}^{-1}\rectbrac{#1}}
+%无穷符号修正
+% \newcommand{\pinfty}{{\scriptscriptstyle +\infty}}
+% \newcommand{\ninfty}{{\scriptscriptstyle -\infty}}
+
+%------------------------------------------%
+%自定义数学符号及字体
+% 说明：需要打开unicode-math.pdf和unicode-symbols.pdf两个文件，前者是使用教程，后者是unicode索引，对照macro索引更换需要的符号字体，注意只能插入macro实现符号索引，不能插入unicode或者符号本身，可实现完全的自定义数学字体设计
+%------------------------------------------%
+\setmathfont{texgyretermes-math.otf}
+% \setmathfont{Asana-Math.otf}
+% \setmathfont{XCharter-Math.otf}%细线条的风格
+\setmathfont{XITSMath-Regular.otf}[range={\mathalpha}]%求和号很好看texgyredejavu-math.otf
+% \setmathfont{Erewhon-Math.otf}[range={\mitpi,\mbfitpi,\mitomega,\mbfitomega,\mitgamma,\mittau,\mbfittau,\mitsigma,\mbfitsigma,\mitpsi,\mbfitpsi}]
+\setmathfont{STIXTwoMath-Regular.otf}[range={\mathop,\mathopen,\mathclose}]
+\setmathfont{STIXTwoMath-Regular.otf}[range={\mitmu,\mbfitmu,\mitgamma,\mbfitgamma}]
+\setmathfont{texgyredejavu-math.otf}[range={\sum}]
+% \setmathfont{latinmodern-math.otf}[range={}]
