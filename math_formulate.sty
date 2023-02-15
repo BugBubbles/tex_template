@@ -62,7 +62,7 @@
 % \setmathfont{latinmodern-math.otf}[range={}]
 \newcommand{\varpsi}{{\it\symbol{"3C8}}}%单独定义\psi，让它好看点
 
-%专门为一个\psi写的latex函数，旨在将其加粗时规定为"1D74D字符，假定\psi只出现一次
+%专门为一个\psi写的latex函数，旨在将其加粗时规定为"1D74D字符，当误输入\varpsi时将产生错误输出ERROR。
 \ExplSyntaxOn
 \cs_new:Npn \mhbd:n #1{
   \tl_set:Nn \l_tmpa_str {#1}
