@@ -1,12 +1,15 @@
 \ProvidesPackage{math_formulate}
 %警告：不可与CJK宏包一同使用！
 \usepackage{
+  bm,% 粗体数学符号需要的
   amsmath,
-  stix,
-  bm,% 粗体数学符号需要的  
   amsthm,
-  amsfonts
-}
+  amssymb,
+  amsfonts,
+  mathrsfs
+  }
+\usepackage[bold-style=ISO]{unicode-math}
+\defaultfontfeatures{ Scale=MatchLowercase, Ligatures=TeX }
 %------------------------------------------%
 %常见的数学符号
 %------------------------------------------%
@@ -41,34 +44,19 @@
 \newcommand{\laplace}[1]{\mathscr{L}\rectbrac{#1}}
 \newcommand{\invlaplace}[1]{\mathscr{L}^{-1}\rectbrac{#1}}
 %无穷符号修正
-\newcommand{\pinfty}{{\scriptscriptstyle +\infty}}
-\newcommand{\ninfty}{{\scriptscriptstyle -\infty}}
-%矩阵字母代号
-\newcommand{\mb}[1]{\boldsymbol{#1}}
+% \newcommand{\pinfty}{{\scriptscriptstyle +\infty}}
+% \newcommand{\ninfty}{{\scriptscriptstyle -\infty}}
+
 %------------------------------------------%
-%mathtime的数学符号修改
+%自定义数学符号及字体
+% 说明：需要打开unicode-math.pdf和unicode-symbols.pdf两个文件，前者是使用教程，后者是unicode索引，对照macro索引更换需要的符号字体，注意只能插入macro实现符号索引，不能插入unicode或者符号本身，可实现完全的自定义数学字体设计
 %------------------------------------------%
-\DeclareFontFamily{U}{nxlmi}{}
-\DeclareFontSubstitution{U}{nxlmi}{m}{it}
-\DeclareFontShape{U}{nxlmi}{m}{it}{
-  <-6.3>    nxlmi05
-  <6.3-8.6> nxlmi07
-  <8.6->    nxlmi0
-}{}
-
-\DeclareFontShape{U}{nxlmi}{b}{it}{
-  <-6.3>    nxlbmi05
-  <6.3-8.6> nxlbmi07
-  <8.6->    nxlbmi0
-}{}
-\DeclareSymbolFont{EulerExtension}{U}{euex}{m}{n}
-\DeclareMathSymbol{\euintop}{\mathop} {EulerExtension}{"52}
-\DeclareMathSymbol{\euointop}{\mathop} {EulerExtension}{"48}
-\let\intop\euintop
-\let\ointop\euointop
-
-\renewcommand{\partial}{{\text{\usefont{U}{nxlmi}{m}{it}\symbol{64}}\mspace{1mu}}}
-
-\DeclareSymbolFont{orilargesymbols}{OMX}{cmex}{m}{n}
-\DeclareMathSymbol{\orisum}{\mathop}{orilargesymbols}{"50}
-\renewcommand\sum\orisum
+\setmathfont{texgyretermes-math.otf}
+% \setmathfont{Asana-Math.otf}
+% \setmathfont{XCharter-Math.otf}%细线条的风格
+\setmathfont{XITSMath-Regular.otf}[range={\mathalpha}]%求和号很好看texgyredejavu-math.otf
+% \setmathfont{Erewhon-Math.otf}[range={\mitpi,\mbfitpi,\mitomega,\mbfitomega,\mitgamma,\mittau,\mbfittau,\mitsigma,\mbfitsigma,\mitpsi,\mbfitpsi}]
+\setmathfont{STIXTwoMath-Regular.otf}[range={\mathop,\mathopen,\mathclose}]
+\setmathfont{STIXTwoMath-Regular.otf}[range={\mitmu,\mbfitmu,\mitgamma,\mbfitgamma}]
+\setmathfont{texgyredejavu-math.otf}[range={\sum}]
+% \setmathfont{latinmodern-math.otf}[range={}]
