@@ -54,7 +54,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   \end{figure}
 
   \large{\erhao\lishu{《基于Latex的实验报告撰写与排版》}}\par
-  \large{\erhao\lishu{ 课程设计  }}
+  \large{\erhao\lishu{ 课程实验报告  }}
   \vspace{8em}
 
   \begin{spacing}{2.0}
@@ -63,7 +63,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 
       {\xiaoerhao\lishu{班\quad \quad 级}} & {\heiti{\dlmu{123456班}}}   \\
       {\xiaoerhao\lishu{学\quad \quad 号}} & {\heiti{\dlmu{12345678} }} \\
-      {\xiaoerhao\lishu{姓\quad \quad 名}} & {\heiti{\dlmu{Tschen} }}      \\
+      {\xiaoerhao\lishu{姓\quad \quad 名}} & {\heiti{\dlmu{Tschen} }}   \\
       {\xiaoerhao\lishu{日\quad \quad 期}} & {\heiti{\dlmu{\today} } }  \\
     \end{tabular}
   \end{spacing}
@@ -82,6 +82,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   本次课程设计综合运用了光电探测技术、成像技术、红外成像技术相关的知识，进行了给定要求下的红外成像系统设计（含光学设计），对经过大气消光作用后的目标辐射、成像元件NETD以及识别准则进行了分析和陈述，最后进行了光学系统的设计并检验了其孔径和视场要求，除所设计的系统尺寸较大（约32cm）以外，其他要求均符合预期。
 \end{abstract}
 %目录
+
 \newpage
 \setcounter{tocdepth}{3}
 %设定目录深度                      
@@ -92,6 +93,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 
 
 \newpage
+
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \section{实验目的}
@@ -523,8 +525,8 @@ $\displaystyle\tau_{\rm asl}=e^{-\frac{3.912}{R_v}R}$；\par
 单靠以上各式并不能解出最终结果，需要考察此光组内部结构，根据公式\cite*{optical_engineer}，由于是两个相同的透镜组合，则有以下各式成立：
 \begin{align}
   \frac{1}{f_2'} & =\frac{1}{f_{21}'}+\frac{1}{f_{22}'}-\frac{d}{f_{21}'f_{22}'} \\
-  l_H            & =-f'\frac{d}{f_{21}'}                                            \\
-  l_H'           & =-f'\frac{d}{f_{22}}                                             \\
+  l_H            & =-f'\frac{d}{f_{21}'}                                         \\
+  l_H'           & =-f'\frac{d}{f_{22}}                                          \\
   l_{H_2H_2'}    & =-l_H+l_H'+d
 \end{align}
 \par
@@ -587,10 +589,10 @@ $\displaystyle\tau_{\rm asl}=e^{-\frac{3.912}{R_v}R}$；\par
 这里的$l_1'=-l_{H}+l_{H_2}'=45.53\unit{\mm}$，解得：$l_1=49.26\unit{\mm}$，说明孔径光阑位于照相物镜的右侧，再求其通光口径，其中垂轴放大率为$\displaystyle\beta=-\frac{l'}{l}=0.924$，则孔径光阑的口径为$\displaystyle D=\frac{D'}{\beta}=\frac{107.14}{0.924}=115.94\unit{\mm}$，可见变得更大了，同理对下一个放大镜进行相同的操作，得到的光阑口径也变得更大，而光学系统真实的孔径光阑是由通光口径最小的孔径光阑决定的，因此本系统的口径光阑仍然是照相物镜口径$107.14\unit{\mm}$，成像光束口径不受组合透镜影响。\par
 对$8\sim14\unit{\um}$波长范围内的辐亮度进行积分，由于辐射体可以看作朗伯体，且距离较远，其立体角可以近似计算为$\displaystyle\Delta\omega=\frac{\alpha\times\beta}{4\pi L_c^2}=1.194\times10^{-7}\unit{sr}$。参考讲义\cite*{hand_up}，根据朗伯面辐射体在微面元上的辐照度公式：
 \begin{align*}
-  {\rm d }E(\lambda)=L_O(\lambda)\cos\psi\cdot{\rm d }\omega
+  {\rm d }E(\lambda)=L_O(\lambda)\cos\varpsi\cdot{\rm d }\omega
 \end{align*}
 \par
-式中，$\psi$是辐射体中心对面元法线的方位角，这里取轴向对准目标，因此为0；${\rm d}\omega$是辐射体面元的立体角。对波段内积分，即可得到有效的辐照度，即：
+式中，$\varpsi$是辐射体中心对面元法线的方位角，这里取轴向对准目标，因此为0；${\rm d}\omega$是辐射体面元的立体角。对波段内积分，即可得到有效的辐照度，即：
 \begin{align*}
   E=\int_{8\unit{\um}}^{14\unit{\um}}L_O(\lambda)\Delta\omega{\rm d}\lambda=3.741\unit{\uW\cdot\m^{-2}}
 \end{align*}

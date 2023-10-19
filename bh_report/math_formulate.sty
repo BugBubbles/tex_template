@@ -60,3 +60,29 @@
 \setmathfont{STIXTwoMath-Regular.otf}[range={\mitmu,\mbfitmu,\mitgamma,\mbfitgamma}]
 \setmathfont{texgyredejavu-math.otf}[range={\sum}]
 % \setmathfont{latinmodern-math.otf}[range={}]
+\newcommand{\varpsi}{{\it\symbol{"3C8}}}%单独定义\psi，让它好看点
+
+%专门为一个\psi写的latex函数，旨在将其加粗时规定为"1D74D字符，当误输入\varpsi时将产生错误输出ERROR。
+\ExplSyntaxOn
+\cs_new:Npn \mhbd:n #1{
+  \tl_set:Nn \l_tmpa_str {#1}
+  \tl_replace_all:Nnn {\l_tmpa_str} {\varpsi} {\textbr{ERROR}}
+% 最终布尔表达式的值为true，执行 ⟨true code⟩ ，转为大写
+  \symbf{\l_tmpa_str}
+}
+\newcommand{\mathbold}[1]{\mhbd:n {#1}}
+\ExplSyntaxOff
+% \ExplSyntaxOn
+% \cs_new:Npn \mhbd:n #1{
+%   \tl_set:Nn \l_tmpa_str {#1}
+%   \str_set:Nn \l_tmpb_str {\varpsi}
+%   \tl_map_inline:nn {\l_tmpa_str} {
+%   \str_if_eq:nnTF {\l_tmpb_str} {\tl_to_str:N {#1}} {
+%     \symbol{"1D74D}
+%   } {
+%     \symbf{#1}
+%   }
+%   }
+% }
+% \newcommand{\mathbold}[1]{\mhbd:n {#1}}
+% \ExplSyntaxOff
