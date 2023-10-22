@@ -10,4 +10,5 @@
 */*.synctex.gz
 */*.toc
 */*.xdv
+*/*.pdf
 _*/*
