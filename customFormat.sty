@@ -1,0 +1,139 @@
+\ProvidesPackage{customFormat}
+\usepackage{
+  enumitem,			% Custom Item Bullets
+  multicol,			% Use Multi-columns
+  xcolor,			    % Use Colors
+  abstract,
+  geometry,
+  zhnumber%使用中文数字编号的宏包
+}
+\usepackage{listings}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{white},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{black},
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    title=\lstname,
+    escapeinside={},
+    keywordstyle={[2]\color{orange}},
+    morekeywords={as, None, with, yield},
+    deletekeywords={...},
+}
+% %%%% 设置 摘要 属性 %%%%
+\renewcommand{\abstractname}{摘\quad 要}
+\renewcommand{\abstractnamefont}{\xiaoerhao\lishu}
+\renewcommand{\abstracttextfont}{\xiaosihao\songti}
+% %%%% 设置 目录 属性 %%%%
+\renewcommand{\contentsname}{\sanhao\heiti 目录}
+%%目录标题格式的设定
+%用计数器成功实现section和subsection不相同标号的办法
+\newcounter{mycounter}
+\setcounter{mycounter}{1}
+
+\titlecontents{section}[2em]{\heiti\wuhao\vspace{0em}}{\contentslabel[\zhnum{mycounter}\stepcounter{mycounter}.]{2em}}{\hspace*{-4em}}{~\titlerule*[0.6pc]{ }~\contentspage}
+\titlecontents{subsection}[4em]{\wuhao\vspace{-1em}}{\contentslabel{2em}}{\hspace*{2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
+
+\titlecontents{subsubsection}[6em]{\wuhao\vspace{-2em}}{\contentslabel{3em}}{\hspace*{-2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
+
+% \titlecontents{paragraph}[11em]{\wuhao}{\contentslabel{4em}}{\hspace*{-2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
+% %%%% 设置 part 属性 %%%%
+% \makeatletter
+% \renewcommand\part{\@startsection{part}{1}{\z@}%
+% {-1.5ex \@plus -.5ex \@minus -.2ex}%
+% {.5ex \@plus .1ex}%
+% {\normalfont\sihao\heiti}}
+% \makeatother
+%%%% 设置 section 属性 %%%%
+
+% \makeatletter
+% \renewcommand\section{\@startsection{section}{1}{\z@}%
+% {-1.5ex \@plus -.5ex \@minus -.2ex}%
+% {.5ex \@plus .1ex}%
+% {\normalfont\sihao\heiti}}
+% \makeatother
+\titleformat{\section}[block]{\xiaosanhao\heiti}{\zhnum{section}.}{0.5em}{}[]
+% %%%% 设置 subsection 属性 %%%%
+% \makeatletter
+% \renewcommand\subsection{\@startsection{subsection}{1}{\z@}%
+% {-1.25ex \@plus -.5ex \@minus -.2ex}%
+% {.4ex \@plus .1ex}%
+% {\normalfont\xiaosihao\hwzs}}
+% \makeatother
+
+\titleformat{\subsection}[block]{\sihao\heiti}{\arabic{section}.\arabic{subsection}.}{0.5em}{}[]
+% %%%% 设置 subsubsection 属性 %%%%
+% \makeatletter
+% \renewcommand\subsubsection{\@startsection{subsubsection}{1}{\z@}%
+% {-1ex \@plus -.5ex \@minus -.2ex}%
+% {.3ex \@plus .1ex}%
+% {\normalfont\xiaosihao\textbf\songti}}
+% \makeatother
+\titleformat{\subsubsection}[block]{\xiaosihao\songti\bfseries}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}.}{0.5em}{}[]
+
+%%对enumerate类型的编号的设定
+\renewcommand{\labelenumi}{\theenumi 、}
+% 字体族设置：通过命令设置，{} 内为参数，即需要设置格式的文本
+%  \textrm{Roman Family} 
+%  \textsf{Sans Serif Family}
+%  \texttt{Typewriter Family} \par
+
+%------------------------------------------%
+%页面
+%------------------------------------------%
+\geometry{left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm}
+%%%% 下面的命令设置行间距与段落间距 %%%%
+\linespread{1}
+% \setlength{\parskip}{1ex}
+\setlength{\parskip}{0.5\baselineskip}
+
+%%%% 段落首行缩进两个字 %%%%
+\makeatletter
+\let\@afterindentfalse\@afterindenttrue
+\@afterindenttrue
+\makeatother
+\setlength{\parindent}{2em}  %中文缩进两个汉字位
+%页码位置
+%------------------------------------------%
+%图表框名设置
+%------------------------------------------%
+\DeclareCaptionLabelSeparator{quad}{\quad}
+\captionsetup[figure]{labelfont=rm,name=图,labelformat=simple,labelseparator=quad}
+\captionsetup[table]{labelfont=rm,name=表,labelformat=simple,labelseparator=quad}
+% \captionsetup[tabular]{labelfont=rm,name=表,labelformat=simple,labelseparator=punk}
+%子图设置
+\renewcommand{\thesubfigure}{图\hspace{0.5em}\thefigure.\arabic{subfigure}}
+\makeatletter
+\renewcommand{\p@subfigure}{}
+\renewcommand{\@thesubfigure}{\thesubfigure. \hskip\subfiglabelskip}
+\makeatother
+%------------------------------------------%
+%下划线
+%------------------------------------------%
+\makeatletter
+\newcommand\dlmu[2][8cm]{\hskip1pt\underline{\hb@xt@ #1{\hss#2\hss}}\hskip3pt}
+\makeatother
+% \renewcommand{\arraystretch}{1.5}%调行距
+%------------------------------------------%
+%参考文献
+%------------------------------------------%
+\renewcommand{\refname}{参考文献}
+%------------------------------------------%
+%日期落款格式
+%------------------------------------------%
+\renewcommand{\today}{\heiti{\number\year 年 \number\month 月 \number\day 日}}
+% \renewcommand{\today}{\heiti{\number\year 年 \number\month 月 }}
