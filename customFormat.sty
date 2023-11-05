@@ -39,8 +39,21 @@
 \renewcommand{\abstractnamefont}{\xiaoerhao\lishu}
 \renewcommand{\abstracttextfont}{\xiaosihao\songti}
 % %%%% 设置 目录 属性 %%%%
-\renewcommand{\contentsname}{\sanhao\heiti 目录}
 %%目录标题格式的设定
+\renewcommand{\contentsname}{\sanhao\heiti 目录}
+% \setlength\parskip{.5\baselineskip}%正文的行间距
+%%目录行间距的设定
+\renewcommand\tableofcontents{%
+    \setlength\parskip{1\baselineskip}% 控制目录内的行间距
+    \centerline{\normalfont\Large\bfseries\sffamily\contentsname
+        \@mkboth{%
+           \MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
+        \vskip 2ex%
+    \@starttoc{toc}% 恢复正文的行间距
+    \setlength\parskip{.5\baselineskip}%
+    }
+
+
 %用计数器成功实现section和subsection不相同标号的办法
 \newcounter{mycounter}
 \setcounter{mycounter}{1}
