@@ -98,16 +98,26 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \section{仿射变换校正}
 将经过射影变换失真后的图像恢复至可测量，需要恢复至相似变换，可以采用的方法诸如的先使用无穷远直线恢复仿射变换，然后使用虚圆点恢复相似变换；抑或是使用一个圆的像曲线和无穷远直线的交点直接恢复至相似变换；本文将要讨论的方法是，不通过仿射变换和虚圆点的选取，直接使用正交直线从射影变换恢复至相似变换。
 \subsection{数学描述}
-设原始图像的绝对对偶二次曲线为$C_\infty^*$，原始图像上任意两条直线段为$l_i=(l_i^1,l_i^2,l_i^3)^\textrm{T}$和$m_i=(m_i^1,m_i^2,m_i^3)^\textrm{T}$，任意某个点为$a=(x_i,y_i,z_i,w_i)$，经过一个变换矩阵为$H$的射影变换后，变换后的图像上的对偶二次曲线为$C_\infty^{*'}$，对应的直线段为$l_i'=(l_i^{1'},l_i^{2'},l_i^{3'})^\textrm{T}$和$m_i'=(m_i^{1'},m_i^{2'},m_i^{3'})^\textrm{T}$，像平面上的某个点为$a'=(x_i',y_i',z_i',w_i')$，需要找出满足这些条件的像直线段$l_i'$和$m_i'$，使得变换矩阵$H$能够被计算出，并用于射影变换图像的校正。
+设原始图像的绝对对偶二次曲线为$C_\infty^*$，原始图像上任意两条直线段为$\mathbf{l}_i=(l_i^1,l_i^2,l_i^3)^\textrm{T}$和$\mathbf{m}_i=(m_i^1,m_i^2,m_i^3)^\textrm{T}$，任意某个点为$\mathbf{a}=(x_i,y_i,z_i)$，经过一个变换矩阵为$H$的射影变换后，变换后的图像上的对偶二次曲线为$C_\infty^{*'}$，对应的直线段为$\mathbf{l}_i'=(l_i^{1'},l_i^{2'},l_i^{3'})^\textrm{T}$和$\mathbf{m}_i'=(m_i^{1'},m_i^{2'},m_i^{3'})^\textrm{T}$，像平面上的某个点为$\mathbf{a}'=(x_i',y_i',z_i')$，需要找出满足这些条件的像直线段$\mathbf{l}_i'$和$\mathbf{m}_i'$，使得变换矩阵$H$能够被计算出，并用于射影变换图像的校正。
 \subsection{问题结论}
 这里先给出该问题的结论，这样的直线至少需要10条，分为五对相互正交，各个正交直线对彼此之间不重叠、不平行，抑或是由这样的五对正交直线生成的\textbf{双线性矩阵}满秩。
 
 式中的双线性运算措辞借鉴自\cite{hartley2003multiple}，原书中对双线性乘积计算的定义为：
 \begin{align}
   \label{eq:bilinear}
-  (l|m)\triangleq \det(A,B,\~A,\~B)=l_{12}m_{34}+l_{34}m_{12}+l_{13}m_{42}+l_{42}m_{13}-l_{14}m_{23}-l_{23}m_{14}
+  \mathbf{(l|m)}\triangleq \det(A,B,\~A,\~B)=l_{12}m_{34}+l_{34}m_{12}+l_{13}m_{42}+l_{42}m_{13}-l_{14}m_{23}-l_{23}m_{14}
 \end{align}
-使用双线性乘积计算定义了两条直线的相交关系。在本文中，将使用到这一性质。
+使用双线性乘积计算定义了两条直线的相交关系。在本文中，将使用到这一性质。在原始图像中，经过点$\mathbf{a}$和点$\mathbf{b}$的直线可以使用Plücker矩阵表示为：
+\begin{align}
+  \label{eq:plucker}
+  \mathbf{l}_{ab}=\mathbf{a}\mathbf{b}^\textrm{T}-\mathbf{b}\mathbf{a}^\textrm{T}
+\end{align}
+在二维图像中，Plücker矩阵退化为两个齐次坐标点的向量积，即：
+\begin{align}
+  \label{eq:plucker2d}
+  \mathbf{l}_{ab}=\mathbf{a}\times\mathbf{b}
+\end{align}
+
 \section{校正关键点选取}
 
 \section{仿真实验}
