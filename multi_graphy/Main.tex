@@ -1,0 +1,229 @@
+\documentclass[11pt]{article}
+%基于北京航空航天大学仪器科学与光电工程学院实验报告及课程报告排版得来，类似于毕业论文排版格式
+%后续将更新毕业论文排版格式
+\usepackage{graphicx,float}%使用图的宏包，使用图的浮动体宏包，引入参数H使图像紧跟当前文字
+\usepackage{caption} %使用图表标题的宏包
+\usepackage[colorlinks=true,pdfstartview=FitH,%
+linkcolor=black,anchorcolor=violet,citecolor=magenta]{hyperref}%加载hyperref宏包，使用超链接
+\usepackage{setspace}%用于设置行间距列间距等命令的宏包
+\usepackage{array}%设置列表高度宽度的宏包
+\usepackage{zhnumber}%使用中文数字编号的宏包
+\usepackage{titlesec,titletoc}%使用标题自定义形式的宏包和使用目录自定义形式的宏包
+\usepackage{siunitx}%物理学单位宏包
+\usepackage{tabularx}%让表格宽度等于页面宽度
+\usepackage{makecell}%单个表格单元调整的宏包
+\usepackage{subfigure} %%使用子图的宏包
+\usepackage[backend=biber,bibstyle=gb7714-1987,%nature,%%加载biblatex宏包，使用参考文献
+citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
+,url=false
+]{biblatex}%标注(引用)样式citestyle，著录样式bibstyle都采用gb7714-2015样式
+% \usepackage{pgfplots}%类似tikz的一个画图库，主要画统计图
+\usepackage{../customStyle}
+% \usepackage{customFont}%自行编写的字体命令库，基于CJK宏包
+% \usepackage{bh_style}%自行编写的风格文件，基于使用习惯和格式要求
+% \usepackage{math_formulate}%自行编写的数学公式命令库，基于amsmath宏包
+% \usepackage{picture}%集成图形绘制库，主要包括了tikz和pgfplots两大主流宏包
+% \usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}%使用mathtimepro2商业字体作为数学环境，并不推荐
+
+%biblatex宏包的参考文献数据源加载方式，注意book.bib应当与.tex文件在同一目录下，不然有可能会报错
+\addbibresource[location=local]{book.bib}
+% % \bibliographystyle{gbt7714-numerical}
+%%% 下面的命令重定义页面边距，使其符合中文刊物习惯 %%%%
+% \addtolength{\topmargin}{2.5cm}
+\setlength{\oddsidemargin}{0.63cm}  % 3.17cm - 1 inch
+\setlength{\evensidemargin}{\oddsidemargin}
+% \setlength{\textwidth}{14.66cm}
+% \setlength{\textheight}{24.00cm}    % 24.62
+
+\graphicspath{{./fig}}
+
+\begin{document}
+{
+\pagestyle{empty}
+\begin{figure}
+  \includegraphics{title.jpg}
+\end{figure}
+\begin{center}
+
+  \begin{figure}[h]
+    
+    \centering
+    \includegraphics[]{title.png}\par
+    \vspace{4em}
+    \large{\yihao\lishu{2023－2024学年第一学期}}
+    \vspace{6em}
+  \end{figure}
+  
+  \large{\erhao\lishu{计算机视觉多视图几何}}\par
+  \large{\erhao\lishu{课程大作业}}
+  \vspace{8em}
+  
+  \begin{spacing}{2.0}
+    \begin{tabular}{cc}
+      
+      
+      {\xiaoerhao\lishu{班\quad \quad 级}} & {\heiti{\dlmu{SY23173}}}    \\
+      {\xiaoerhao\lishu{学\quad \quad 号}} & {\heiti{\dlmu{SY2317301} }} \\
+      {\xiaoerhao\lishu{姓\quad \quad 名}} & {\heiti{\dlmu{陈博非} }}       \\
+      {\xiaoerhao\lishu{日\quad \quad 期}} & {\heiti{\dlmu{\today} } }   \\
+    \end{tabular}
+  \end{spacing}
+\end{center}
+\thispagestyle{empty}
+}
+
+
+\newpage
+%手动分页
+\pagenumbering{roman}
+
+\setcounter{tocdepth}{3}
+%设定目录深度                      
+\tableofcontents
+%列出目录
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section{简介}
+\subsection{问题背景}
+在常规的计算机视觉应用场景中，通过摄像机等成像设备得到的场景图像往往是射影图像，其中的点、线等测度关系均由于摄像机等因素的射影变换而产生失真，不能用于直接测量和计算。因此，如何从射影失真的图像中恢复测量关系，是解决计算机视觉领域后续问题的基础，本文将讨论这一问题的通常解决办法，以及影响该问题的因素以及如何选取最佳的解决方案。
+\subsection{问题描述}
+\begin{itemize}
+  \item 问题一：根据现场拍摄的一幅图像，自行选取关键点，使用二维平面的仿射变换校正为仿射图像；
+  \item 问题二：讨论如何选取校正关键点，不同校正关键点的选取对校正结果的影响，并使用齐次坐标等数学工具证明为什么某些选取方式是不行的，而某些能行；
+  \item 问题三：使用仿真的方法，画棋盘格等生成虚拟场景，使用相机模型对虚拟场景成像，应用不同的方法对仿真照片处理，根据处理结果对不同的校正方法进行评价。
+\end{itemize}
+
+\section{仿射变换校正}
+将经过射影变换失真后的图像恢复至可测量，需要恢复至相似变换，可以采用的方法诸如的先使用无穷远直线恢复仿射变换，然后使用虚圆点恢复相似变换；抑或是使用一个圆的像曲线和无穷远直线的交点直接恢复至相似变换；本文将要讨论的方法是，不通过仿射变换和虚圆点的选取，直接使用正交直线从射影变换恢复至相似变换。
+\subsection{数学描述}
+设原始图像的绝对对偶二次曲线为$C_\infty^*$，原始图像上任意两条直线段为$\mathbf{l}_i=(l_i^1,l_i^2,l_i^3)^\textrm{T}$和$\mathbf{m}_i=(m_i^1,m_i^2,m_i^3)^\textrm{T}$，任意某个点为$\mathbf{a}=(x_i,y_i,z_i)$，经过一个变换矩阵为$H$的射影变换后，变换后的图像上的对偶二次曲线为$C_\infty^{*'}$，对应的直线段为$\mathbf{l}_i'=(l_i^{1'},l_i^{2'},l_i^{3'})^\textrm{T}$和$\mathbf{m}_i'=(m_i^{1'},m_i^{2'},m_i^{3'})^\textrm{T}$，像平面上的某个点为$\mathbf{a}'=(x_i',y_i',z_i')$，需要找出满足这些条件的像直线段$\mathbf{l}_i'$和$\mathbf{m}_i'$，使得变换矩阵$H$能够被计算出，并用于射影变换图像的校正。
+\subsection{预备知识}
+双线性乘积措辞借鉴自\cite{hartley2003multiple}，原书中对双线性乘积计算的定义为：
+\begin{align}
+  \label{eq:bilinear}
+  \mathbf{(l|m)}\triangleq \det(A,B,\tilde{A},\tilde{B})=l_{12}m_{34}+l_{34}m_{12}+l_{13}m_{42}+l_{42}m_{13}-l_{14}m_{23}-l_{23}m_{14}
+\end{align}\par
+使用双线性乘积计算定义了两条直线的相交关系。在本文中，将使用到这一性质。在原始图像中，经过点$\mathbf{a}$和点$\mathbf{b}$的直线可以使用Plücker矩阵表示为：
+\begin{align}
+  \label{eq:plucker}
+  \mathbf{l}_{ab}=\mathbf{a}\mathbf{b}^\textrm{T}-\mathbf{b}\mathbf{a}^\textrm{T}
+\end{align}
+在二维图像中，Plücker矩阵退化为两个齐次坐标点的向量积，即：
+\begin{align}
+  \label{eq:plucker2d}
+  \mathbf{l}_{ab}=\mathbf{a}\times\mathbf{b}
+\end{align}\par
+在二维齐次空间中，两条直线相互正交，当且仅当两条直线的齐次坐标与绝对对偶二次曲线的二次型为零，即有：
+\begin{align}
+  \mathbf{l^\mathrm{T}C_\infty^*m}=0
+\end{align}
+\par
+其中，绝对对偶二次曲线是一个$3\times3$的方阵，在未发生仿射、射影失真时，此方阵可写为：
+\begin{align*}
+  \mathbf{C_\infty^*}=\begin{bmatrix}
+                        1 & 0 & 0  \\
+                        0 & 1 & 0  \\
+                        0 & 0 & 0
+                      \end{bmatrix}
+\end{align*}
+\par
+假设当前图像经过一次点射影变换$\mathbf{H=H_SH_AH_P}$后，对应的图像上的绝对对偶二次曲线为$\mathbf{C_\infty^{*'}}$，则有：
+\begin{align*}
+   & \mathbf{l^\mathrm{T}C_\infty^{*}m}=0                                                                                                                                            \\
+   & \implies\mathbf{l^\mathrm{T'}H^{-1}C_\infty^{*}H^\mathrm{-T'}m}=0                                                                                                               \\
+   & \implies\mathbf{C_\infty^{*'}}=\mathbf{H}^{-1}\mathbf{C_\infty^*H}^{-\textrm{T}}                                                                                                \\
+   & \implies\mathbf{C_\infty^{*'}}=\mathbf{H}_P^{-1}\mathbf{H}_A^{-1}\mathbf{H}_S^{-1}\mathbf{C_\infty^{*}}\mathbf{H}_S^\mathrm{-T}\mathbf{H}_A^\mathrm{-T}\mathbf{H}_P^\mathrm{-T} \\
+   & \implies\mathbf{C_\infty^{*'}}=\mathbf{H}_P^{-1}\mathbf{H}_A^{-1}\mathbf{C_\infty^{*}}\mathbf{H}_A^\mathrm{-T}\mathbf{H}_P^\mathrm{-T}
+\end{align*}
+\par
+因此，可以借助射影变换后的\textbf{绝对对偶二次曲线}求解射影变换矩阵。设：
+\begin{align*}
+  \mathbf{C_\infty^{*'}}=\begin{bmatrix}
+                           a   & b/2 & c/2 \\
+                           b/2 & d   & e/2 \\
+                           c/2 & e/2 & f
+                         \end{bmatrix}
+\end{align*}
+则有：
+\begin{align*}
+   & \mathbf{l^\mathrm{T}C_\infty^{*}m}=0                                                                                    \\
+   & \implies\begin{bmatrix}
+               l_1 & l_2 & l_3
+             \end{bmatrix}\begin{bmatrix}
+                            a   & b/2 & c/2 \\
+                            b/2 & d   & e/2 \\
+                            c/2 & e/2 & f
+                          \end{bmatrix}
+  \begin{bmatrix}
+    m_1 \\
+    m_2 \\
+    m_3
+  \end{bmatrix}                                                                                                            \\
+   & \implies m_1l_1a+m_2l_2d+m_3l_3f+\frac{1}{2}(m_1l_2+m_2l_1)b+\frac{1}{2}(m_1l_3+m_3l_1)c+\frac{1}{2}(m_2l_3+m_3l_2)e=0
+\end{align*}\par
+进一步可将上式改写为矩阵形式：
+\begin{align}
+  \begin{bmatrix}
+    m_1l_1 & m_2l_2 & m_3l_3 & \frac{1}{2}(m_1l_2+m_2l_1 ) & \frac{1}{2}(m_1l_3+m_3l_1) & \frac{1}{2}(m_2l_3+m_3l_2)
+  \end{bmatrix}\begin{bmatrix}
+                 a \\
+                 d \\
+                 f \\
+                 b \\
+                 c \\
+                 e
+               \end{bmatrix}=0
+  \label{eq:line}
+\end{align}
+\par
+可见该线性方程共有六个未知参数，根据齐次性的约束条件，共有五个未知参数是独立的，因此至少需要有五个以上的方程，才可能有解。因此至少需要五组正交直线才能校正射影变换。将五组直线每一组计算得到一个行向量，将五组行向量按行合并成为一个矩阵，记为$\mathbf{D}$，记待定的参数为$\mathbf{X}$，则线性方程组可改写为$\mathbf{DX=0}$，下面讨论对这五组正交直线的要求：\par
+这样形式的方程可以通过最小二乘法求解，但是考虑到此处矩阵尚未达到超定状态，直接使用最小二乘法将明显受到噪声的影响，不能得到稳健的结果，因此考虑使用奇异值分解的办法求解上述参数，令$\mathbf{D=USV^\mathrm{T}}$，则有：
+\begin{align*}
+  \mathbf{DX}=\mathbf{USV^\mathrm{T}X}=\mathbf{0}
+\end{align*}
+令$\mathbf{Y=V^\mathrm{T}X}$，则有：
+\begin{align*}
+  \mathbf{SY}=\mathbf{U^\mathrm{T}DX}=\mathbf{0}
+\end{align*}\par
+因此，使用原式在二范数意义下的最优解$\min||\mathbf{DX}||$就是最小的奇异值对应的特征向量，即有：
+\begin{align*}
+  \mathbf{Y}=\begin{bmatrix}
+               0 \\0\\\vdots\\1
+             \end{bmatrix}
+\end{align*}\par
+再通过$\mathbf{X=VY}$求解出$\mathbf{X}$，梦中见$\mathbf{X}$的最优解实际上是奇异值分解后的正交矩阵$\mathbf{V}$的最后一列。\\
+解得$\mathbf{X}$后，可以表示出绝对对偶二次曲线$\mathbf{C_\infty^{*'}}$，因此下一步问题是使用该矩阵和已知的$\mathbf{C_\infty^{*}}$求解射影变换矩阵，该式可以表示为求解这样的非线性方程：
+\begin{align}
+  \mathbf{C_\infty^{*'}}=\mathbf{H}^{-1}\mathbf{C_\infty^*H}^{-\textrm{T}}  \implies\mathbf{H}\mathbf{C_\infty^{*'}}\mathbf{H}^\mathrm{T}=\mathbf{C_\infty^*}
+\end{align}\par
+其中，$\mathbf{C_\infty^{*'}}$可以由向量$\mathbf{X}$求得。由于绝对对偶二次曲线是对称矩阵，且一定正定（二次型的要求），因此可将当前的绝对对偶二次曲线使用Cholesky分解，即三角分解表示为：$\mathbf{C_\infty^{*'}}=\mathbf{R_\infty' R_\infty^\mathrm{T'}}$代回原式可得：
+\begin{align}
+  \mathbf{HR_\infty' R_\infty^\mathrm{T'} H^\mathrm{T}=C_\infty^*}
+\label{eq:C_infty_SVD}
+\end{align}\par
+取定$\mathbf{\tilde{H}=HR_\infty'}$，上式可表示为：
+\begin{align*}
+  \tilde{\mathbf{{H}}}\tilde{\mathbf{H}}^\mathrm{T}=\mathbf{C_\infty^*}
+\end{align*}\par
+显然右式是半正定的，且也是对称矩阵，因此其三角分解同样存在，可以解为：
+\begin{align*}
+  \mathbf{C_\infty^*}=\mathbf{R_\infty R_\infty^\mathrm{T}}
+\end{align*}\par
+限定对角元素均为正，则两个三角分解的结果均是唯一的，因此有：
+\begin{align}
+  \tilde{\mathbf{{H}}}\tilde{\mathbf{H}}^\mathrm{T}=\mathbf{R_\infty R_\infty^\mathrm{T}}\implies\mathbf{HR_\infty'=R_\infty}\implies\mathbf{H=R_\infty^{+'}R_\infty}
+  \label{eq:Cholesky}
+\end{align}\par
+式中的上标$+$表示广义逆矩阵，此式是通过两次三角分解将非线性方程线性化得到的解答结果，需要对两个绝对对偶二次曲线进行三角分解且求广义逆，因此，对噪声较为敏感。而根据参考书\cite{hartley2003multiple}给出的公式，是对$\mathbf{C_\infty^{*'}}$进行一次奇异值分解，选取分解得到的正交矩阵作为射影变换阵$\mathbf{H}$，而在实际使用中由于噪声的影响，奇异值分解往往不能保证奇异值是相等的两个值，从而得到的正交矩阵与射影变换阵也不能保证相等。
+\subsection{问题结论}
+
+不经过仿射变换校正，直接从射影图像中提取绝对对偶二次曲线并得到射影变换矩阵要求在射影图像上找到至少五组在原空间中相互正交的直线段才能有解，且任意两组直线段在像空间中不能对应平行的情况存在，以保证使用奇异值分解得到的绝对对偶二次矩阵接近真实值；否则，奇异值分解的结果将与真实结果差距较大。
+
+\section{校正关键点选取}
+
+\section{仿真实验}
+\newpage
+\printbibliography[heading=bibliography,title=参考文献]
+\end{document}
