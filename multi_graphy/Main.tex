@@ -98,7 +98,28 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \section{仿射变换校正}
 将经过射影变换失真后的图像恢复至可测量，需要恢复至相似变换，可以采用的方法诸如的先使用无穷远直线恢复仿射变换，然后使用虚圆点恢复相似变换；抑或是使用一个圆的像曲线和无穷远直线的交点直接恢复至相似变换；本文将要讨论的方法是，不通过仿射变换和虚圆点的选取，直接使用正交直线从射影变换恢复至相似变换。
 \subsection{数学描述}
-设原始图像的绝对对偶二次曲线为$C_\infty^*$，原始图像上任意两条直线段为$\mathbf{l}_i=(l_i^1,l_i^2,l_i^3)^\textrm{T}$和$\mathbf{m}_i=(m_i^1,m_i^2,m_i^3)^\textrm{T}$，任意某个点为$\mathbf{a}=(x_i,y_i,z_i)$，经过一个变换矩阵为$H$的射影变换后，变换后的图像上的对偶二次曲线为$C_\infty^{*'}$，对应的直线段为$\mathbf{l}_i'=(l_i^{1'},l_i^{2'},l_i^{3'})^\textrm{T}$和$\mathbf{m}_i'=(m_i^{1'},m_i^{2'},m_i^{3'})^\textrm{T}$，像平面上的某个点为$\mathbf{a}'=(x_i',y_i',z_i')$，需要找出满足这些条件的像直线段$\mathbf{l}_i'$和$\mathbf{m}_i'$，使得变换矩阵$H$能够被计算出，并用于射影变换图像的校正。
+设原始图像的绝对对偶二次曲线为$C_\infty^*$，原始图像上任意两条直线段为$\mathbf{l}_i=(l_i^1,l_i^2,l_i^3)^\textrm{T}$和$\mathbf{m}_i=(m_i^1,m_i^2,m_i^3)^\textrm{T}$，任意某个点为$\mathbf{a}=(x_i,y_i,z_i)$，经过一个变换矩阵为$H$的射影变换后，变换后的图像上的对偶二次曲线为$C_\infty^{*'}$，对应的直线段为$\mathbf{l}_i'=(l_i^{1'},l_i^{2'},l_i^{3'})^\textrm{T}$和$\mathbf{m}_i'=(m_i^{1'},m_i^{2'},m_i^{3'})^\textrm{T}$，像平面上的某个点为$\mathbf{a}'=(x_i',y_i',z_i')$，需要找出满足这些条件的像直线段$\mathbf{l}_i'$和$\mathbf{m}_i'$，使得变换矩阵$H$能够被计算出，并用于射影变换图像的校正。\par
+两条直线相交，则其与绝对对偶二次曲线的二次型乘积为0，即有$\mathbf{l}_i^\mathrm{T}\mathbf{C_\infty^*}\mathbf{m}_i$；如果两条直线平行，则其交点应当位于无穷远直线上，即有：
+\begin{align*}
+  \mathbf{l_i\times m_i}=\begin{bmatrix}
+                           0      & -l_i^3 & l_i^2  \\
+                           l_i^3  & 0      & -l_i^1 \\
+                           -l_i^2 & l_i^1  & 0
+                         \end{bmatrix}\begin{bmatrix}
+                                        m_i^1 \\m_i^2\\m_i^3
+                                      \end{bmatrix}
+  =\begin{bmatrix}
+     l_i^2m_i^3-l_i^3m_i^2 \\
+     l_i^3m_i^1-l_i^1m_i^3 \\
+     l_i^1m_i^2-l_i^2m_i^1
+   \end{bmatrix}
+\end{align*}\par
+因此上述最后一项应当为零，则两条齐次直线的前两维坐标应当满足：
+\begin{align}
+  l_i^1m_i^2-l_i^2m_i^1=0
+  \label{eq:parallel}
+\end{align}\par
+即前两维的对应维度成比例。
 \subsection{预备知识}
 双线性乘积措辞借鉴自\cite{hartley2003multiple}，原书中对双线性乘积计算的定义为：
 \begin{align}
@@ -228,16 +249,16 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{align}
   \left\{
   \begin{aligned}
-    m_j^{1}l_j^{1}                  & =km_i^{1}l_i^{1}                 \\
-    m_j^{2}l_j^{2}                  & =km_i^{2}l_i^{2}                   \\
-    m_j^{3}l_j^{3}                  & =km_i^{3}l_i^{3}                  \\
-    m_j^{1}l_j^{2}+m_j^{2}l_j^{1} & =km_i^{1}l_i^{2}+km_i^{2}l_i^{1} \\
-    m_j^{1'}l_j^{3}+m_j^{3}l_j^{1} & =km_i^{1}l_i^{2}+km_i^{2}l_i^{1} \\
-    m_j^{2}l_j^{3}+m_j^{3}l_j^{2} & =km_i^{1}l_i^{2}+km_i^{2}l_i^{1}
+    m_j^{1}l_j^{1}                 & =km_i^{1}l_i^{1}                 \\
+    m_j^{2}l_j^{2}                 & =km_i^{2}l_i^{2}                 \\
+    m_j^{3}l_j^{3}                 & =km_i^{3}l_i^{3}                 \\
+    m_j^{1}l_j^{2}+m_j^{2}l_j^{1}  & =km_i^{1}l_i^{2}+km_i^{2}l_i^{1} \\
+    m_j^{1'}l_j^{3}+m_j^{3}l_j^{1} & =km_i^{1}l_i^{3}+km_i^{3}l_i^{1} \\
+    m_j^{2}l_j^{3}+m_j^{3}l_j^{2}  & =km_i^{2}l_i^{3}+km_i^{3}l_i^{2}
   \end{aligned}
   \right.
 \end{align}\par
-可见该方程组是非线性方程组，其中$m^3$和$l^3$两个直线的分量只出现过一次，可以利用这一关系分解上述方程组。
+可见该方程组是非线性方程组，其中$m_i$和$l_i$两个直线的分量只有同名项对应时才有一项，其余情况下均不止一项，可以利用这一关系分解上述方程组。
 
 
 在理想情况下，若直线组的位置测量不存在误差时，则矩阵$\mathbf{D}$应该满足行满秩，且其特征值彼此之间相差不大。
