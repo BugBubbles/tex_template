@@ -46,22 +46,22 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{center}
 
   \begin{figure}[h]
-    
+
     \centering
     \includegraphics[]{title.png}\par
     \vspace{4em}
     \large{\yihao\lishu{2023－2024学年第一学期}}
     \vspace{6em}
   \end{figure}
-  
+
   \large{\erhao\lishu{计算机视觉多视图几何}}\par
   \large{\erhao\lishu{课程大作业}}
   \vspace{8em}
-  
+
   \begin{spacing}{2.0}
     \begin{tabular}{cc}
-      
-      
+
+
       {\xiaoerhao\lishu{班\quad \quad 级}} & {\heiti{\dlmu{SY23173}}}    \\
       {\xiaoerhao\lishu{学\quad \quad 号}} & {\heiti{\dlmu{SY2317301} }} \\
       {\xiaoerhao\lishu{姓\quad \quad 名}} & {\heiti{\dlmu{陈博非} }}       \\
@@ -123,8 +123,8 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 其中，绝对对偶二次曲线是一个$3\times3$的方阵，在未发生仿射、射影失真时，此方阵可写为：
 \begin{align*}
   \mathbf{C_\infty^*}=\begin{bmatrix}
-                        1 & 0 & 0  \\
-                        0 & 1 & 0  \\
+                        1 & 0 & 0 \\
+                        0 & 1 & 0 \\
                         0 & 0 & 0
                       \end{bmatrix}
 \end{align*}
@@ -148,25 +148,25 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{align*}
 则有：
 \begin{align*}
-   & \mathbf{l^\mathrm{T}C_\infty^{*}m}=0                                                                                    \\
+   & \mathbf{l}_i^\mathrm{T}\mathbf{C_\infty^{*}m}_i=0                                                                                                          \\
    & \implies\begin{bmatrix}
-               l_1 & l_2 & l_3
+               l_i^1 & l_i^2 & l_i^3
              \end{bmatrix}\begin{bmatrix}
                             a   & b/2 & c/2 \\
                             b/2 & d   & e/2 \\
                             c/2 & e/2 & f
                           \end{bmatrix}
   \begin{bmatrix}
-    m_1 \\
-    m_2 \\
-    m_3
-  \end{bmatrix}                                                                                                            \\
-   & \implies m_1l_1a+m_2l_2d+m_3l_3f+\frac{1}{2}(m_1l_2+m_2l_1)b+\frac{1}{2}(m_1l_3+m_3l_1)c+\frac{1}{2}(m_2l_3+m_3l_2)e=0
+    m_i^1 \\
+    m_i^2 \\
+    m_i^3
+  \end{bmatrix}                                                                                                                                                \\
+   & \implies m_i^1l_i^1a+m_i^2l_i^2d+m_i^3l_i^3f+\frac{1}{2}(m_i^1l_i^2+m_i^2l_i^1)b+\frac{1}{2}(m_i^1l_i^3+m_i^3l_i^1)c+\frac{1}{2}(m_i^2l_i^3+m_i^3l_i^2)e=0
 \end{align*}\par
 进一步可将上式改写为矩阵形式：
 \begin{align}
   \begin{bmatrix}
-    m_1l_1 & m_2l_2 & m_3l_3 & \frac{1}{2}(m_1l_2+m_2l_1 ) & \frac{1}{2}(m_1l_3+m_3l_1) & \frac{1}{2}(m_2l_3+m_3l_2)
+    m_i^1l_i^1 & m_i^2l_i^2 & m_i^3l_i^3 & \frac{1}{2}(m_i^1l_i^2+m_i^2l_i^1 ) & \frac{1}{2}(m_i^1l_i^3+m_i^3l_i^1) & \frac{1}{2}(m_i^2l_i^3+m_i^3l_i^2)
   \end{bmatrix}\begin{bmatrix}
                  a \\
                  d \\
@@ -193,7 +193,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
                0 \\0\\\vdots\\1
              \end{bmatrix}
 \end{align*}\par
-再通过$\mathbf{X=VY}$求解出$\mathbf{X}$，梦中见$\mathbf{X}$的最优解实际上是奇异值分解后的正交矩阵$\mathbf{V}$的最后一列。\\
+再通过$\mathbf{X=VY}$求解出$\mathbf{X}$，由此可见$\mathbf{X}$的最优解实际上是奇异值分解后的正交矩阵$\mathbf{V}$的最后一列。\\
 解得$\mathbf{X}$后，可以表示出绝对对偶二次曲线$\mathbf{C_\infty^{*'}}$，因此下一步问题是使用该矩阵和已知的$\mathbf{C_\infty^{*}}$求解射影变换矩阵，该式可以表示为求解这样的非线性方程：
 \begin{align}
   \mathbf{C_\infty^{*'}}=\mathbf{H}^{-1}\mathbf{C_\infty^*H}^{-\textrm{T}}  \implies\mathbf{H}\mathbf{C_\infty^{*'}}\mathbf{H}^\mathrm{T}=\mathbf{C_\infty^*}
@@ -222,7 +222,25 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 不经过仿射变换校正，直接从射影图像中提取绝对对偶二次曲线并得到射影变换矩阵要求在射影图像上找到至少五组在原空间中相互正交的直线段才能有解，且在矩阵$\mathbf{D}$中行向量不能线性相关，以保证使用奇异值分解得到的绝对对偶二次矩阵接近真实值；否则线性相关的行向量实质上不会增加新的方程，导致奇异值分解的结果将与真实结果差距较大。\par
 本结论仅讨论了一般意义下的条件，该条件在几何上以及在正交直线组的选择上尚未有任何指导意义，这部分留作第三章讨论。
 \section{校正关键点选取}
-本章专门讨论第二章\ref{sec:问题结论}部分引发的几何意义，即如何将公式\ref{eq:line}与几何意义结合起来。
+本章专门讨论第二章\ref{sec:问题结论}部分引发的几何意义，即如何将公式\ref{eq:line}与几何意义结合起来。首先讨论一种最简单的情况，即当两行向量彼此线性相关时，即两个行向量对应分量成比例时。
+\subsection{两个行向量线性相关}
+根据对应分量成比例，可以列出如下方程组：
+\begin{align}
+  \left\{
+  \begin{aligned}
+    m_j^{1}l_j^{1}                  & =km_i^{1}l_i^{1}                 \\
+    m_j^{2}l_j^{2}                  & =km_i^{2}l_i^{2}                   \\
+    m_j^{3}l_j^{3}                  & =km_i^{3}l_i^{3}                  \\
+    m_j^{1}l_j^{2}+m_j^{2}l_j^{1} & =km_i^{1}l_i^{2}+km_i^{2}l_i^{1} \\
+    m_j^{1'}l_j^{3}+m_j^{3}l_j^{1} & =km_i^{1}l_i^{2}+km_i^{2}l_i^{1} \\
+    m_j^{2}l_j^{3}+m_j^{3}l_j^{2} & =km_i^{1}l_i^{2}+km_i^{2}l_i^{1}
+  \end{aligned}
+  \right.
+\end{align}\par
+可见该方程组是非线性方程组，其中$m^3$和$l^3$两个直线的分量只出现过一次，可以利用这一关系分解上述方程组。
+
+
+在理想情况下，若直线组的位置测量不存在误差时，则矩阵$\mathbf{D}$应该满足行满秩，且其特征值彼此之间相差不大。
 \section{仿真实验}
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
