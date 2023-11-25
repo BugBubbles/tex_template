@@ -234,7 +234,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{align*}\par
 限定对角元素均为正，则两个三角分解的结果均是唯一的，因此有：
 \begin{align}
-  \tilde{\mathbf{{H}}}\tilde{\mathbf{H}}^\mathrm{T}=\mathbf{R_\infty R_\infty^\mathrm{T}}\implies\mathbf{HR_\infty'=R_\infty}\implies\mathbf{H=R_\infty^{+'}R_\infty}
+  \tilde{\mathbf{{H}}}\tilde{\mathbf{H}}^\mathrm{T}=\mathbf{R_\infty R_\infty^\mathrm{T}}\implies\mathbf{HR_\infty'=R_\infty}\implies\mathbf{H=R_\infty R_\infty^{+'}}
   \label{eq:Cholesky}
 \end{align}\par
 式中的上标$+$表示广义逆矩阵，此式是通过两次三角分解将非线性方程线性化得到的解答结果，需要对两个绝对对偶二次曲线进行三角分解且求广义逆，因此，对噪声较为敏感。而根据参考书\cite{hartley2003multiple}给出的公式，是对$\mathbf{C_\infty^{*'}}$进行一次奇异值分解，选取分解得到的正交矩阵作为射影变换阵$\mathbf{H}$，而在实际使用中由于噪声的影响，奇异值分解往往不能保证奇异值是相等的两个值，从而得到的正交矩阵与射影变换阵也不能保证相等。
@@ -259,7 +259,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   \right.
 \end{align}\par
 可见该方程组是非线性方程组，其中$m_i$和$l_i$两个直线的分量只有同名项对应时才有一项，其余情况下均不止一项，可以利用这一关系分解上述方程组。
-
+搞个半天白搞了哦
 
 在理想情况下，若直线组的位置测量不存在误差时，则矩阵$\mathbf{D}$应该满足行满秩，且其特征值彼此之间相差不大。
 \section{仿真实验}

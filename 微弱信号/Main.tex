@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+%基于北京航空航天大学仪器科学与光电工程学院实验报告及课程报告排版得来，类似于毕业论文排版格式
+%后续将更新毕业论文排版格式
+\usepackage{graphicx,float}%使用图的宏包，使用图的浮动体宏包，引入参数H使图像紧跟当前文字
+\usepackage{caption} %使用图表标题的宏包
+\usepackage[colorlinks=true,pdfstartview=FitH,%
+linkcolor=black,anchorcolor=violet,citecolor=magenta]{hyperref}%加载hyperref宏包，使用超链接
+\usepackage{setspace}%用于设置行间距列间距等命令的宏包
+\usepackage{array}%设置列表高度宽度的宏包
+\usepackage{zhnumber}%使用中文数字编号的宏包
+\usepackage{titlesec,titletoc}%使用标题自定义形式的宏包和使用目录自定义形式的宏包
+\usepackage{siunitx}%物理学单位宏包
+\usepackage{tabularx}%让表格宽度等于页面宽度
+\usepackage{makecell}%单个表格单元调整的宏包
+\usepackage{subfigure} %%使用子图的宏包
+\usepackage[backend=biber,bibstyle=gb7714-1987,%nature,%%加载biblatex宏包，使用参考文献
+citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
+,url=false
+]{biblatex}%标注(引用)样式citestyle，著录样式bibstyle都采用gb7714-2015样式
+% \usepackage{pgfplots}%类似tikz的一个画图库，主要画统计图
+\usepackage{../customStyle}
+% \usepackage{customFont}%自行编写的字体命令库，基于CJK宏包
+% \usepackage{bh_style}%自行编写的风格文件，基于使用习惯和格式要求
+% \usepackage{math_formulate}%自行编写的数学公式命令库，基于amsmath宏包
+% \usepackage{picture}%集成图形绘制库，主要包括了tikz和pgfplots两大主流宏包
+% \usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}%使用mathtimepro2商业字体作为数学环境，并不推荐
+
+%biblatex宏包的参考文献数据源加载方式，注意book.bib应当与.tex文件在同一目录下，不然有可能会报错
+\addbibresource[location=local]{book.bib}
+% % \bibliographystyle{gbt7714-numerical}
+%%% 下面的命令重定义页面边距，使其符合中文刊物习惯 %%%%
+% \addtolength{\topmargin}{2.5cm}
+\setlength{\oddsidemargin}{0.63cm}  % 3.17cm - 1 inch
+\setlength{\evensidemargin}{\oddsidemargin}
+% \setlength{\textwidth}{14.66cm}
+% \setlength{\textheight}{24.00cm}    % 24.62
+
+\graphicspath{{./fig}}
+
+\begin{document}
+{
+\pagestyle{empty}
+\begin{figure}
+  \includegraphics{title.jpg}
+\end{figure}
+\begin{center}
+
+  \begin{figure}[h]
+
+    \centering
+    \includegraphics[]{title.png}\par
+    \vspace{4em}
+    \large{\yihao\lishu{2023－2024学年第一学期}}
+    \vspace{6em}
+  \end{figure}
+
+  \large{\erhao\lishu{微弱信号}}\par
+  \large{\erhao\lishu{课程作业合集}}
+  \vspace{8em}
+
+  \begin{spacing}{2.0}
+    \begin{tabular}{cc}
+
+
+      {\xiaoerhao\lishu{班\quad \quad 级}} & {\heiti{\dlmu{SY23173}}}    \\
+      {\xiaoerhao\lishu{学\quad \quad 号}} & {\heiti{\dlmu{SY2317301} }} \\
+      {\xiaoerhao\lishu{姓\quad \quad 名}} & {\heiti{\dlmu{陈博非} }}       \\
+      {\xiaoerhao\lishu{日\quad \quad 期}} & {\heiti{\dlmu{\today} } }   \\
+    \end{tabular}
+  \end{spacing}
+\end{center}
+\thispagestyle{empty}
+}
+
+
+\newpage
+%手动分页
+\pagenumbering{roman}
+
+\setcounter{tocdepth}{3}
+%设定目录深度                      
+\tableofcontents
+%列出目录
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section{第一章作业}
+无
+\section{第二章作业}
+无
+\section{第三章作业}
+\subsection{第一题}
+{\heiti 阿伦方差的定义、计算方法、及物理含义。}\par
+阿伦方差\textit{Allan Variance}定义为，带有时变特性的信号量在一段采样时间内平均值所对应的误差方均根\textit{RME}。\par
+其计算方法如下式所示：
+\begin{equation}
+  \sigma^2(\tau)=\frac{1}{2(N-1)}\sum_{i=1}^{N-1}(\bar{x}_{i+1}-\bar{x}_i)^2
+\end{equation}\par
+其中$\bar{x}_i$为采样点的平均值，$N$为采样点数，$\tau$为采样点间隔即采样周期。\par
+阿伦方差的基本逻辑就是让数据序列做一阶差分后再重新计算标准方差\cite{HKJC202304012}，其物理含义是：在采样时间内，信号的变化量的平均值，在工程上常用于表征信号的时域频率稳定度。\par
+\subsection{第二题}
+{\heiti 用阿伦方差与求统计平均及均方差在误差描述方面的差异、及优缺点。}\par
+阿伦方差与统计平均的差异在于，阿伦方差是对信号的变化量进行统计，其计算过程中使用到了样本的平均值和均方差，样本的平均值多被认为是一个随机变量；而统计平均与均方差是直接对样本计算，样本值可以认为是一个确定量。一切可观测的宏观物理量都是对应的微观物理量的统计平均值，从这个意义上来说，可以认为统计平均和均方差是采样间隔极小的阿伦方差。\par
+阿伦方差在分析陀螺性能上具有优越性，可以快速地确定噪声参数；但是阿伦方差只能用于求解静态的噪声特性，在实际使用中均受到动态特性的影响，动态情况下的噪声差异可达数量级别的差异。而统计平均与均方差是一切样本都具有的特性，因此可以通用。
+\subsection{第三题}
+{\heiti 高斯分布白噪声经过模数转换后均值、方差、相关函数的分析。}\par
+先行跳过。
+\section{第四章作业}
+无
+\section{第五章作业}
+
+\newpage
+\printbibliography[heading=bibliography,title=参考文献]
+\end{document}
