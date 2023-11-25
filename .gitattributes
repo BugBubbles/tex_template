@@ -1,2 +1,2 @@
-*.tex   eol=lf
-*.sty   eol=lf
+*/*.tex   eol=lf
+*/*.sty   eol=lf

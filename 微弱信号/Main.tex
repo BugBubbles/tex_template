@@ -109,7 +109,26 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \section{第四章作业}
 无
 \section{第五章作业}
-
+\subsection{第一题}
+{\heiti 给出一个低噪声前置放大器的设计/测试/应用实例。}\par
+设计实例：如亚诺德公司设计的AD797低噪声放大器，其噪声参数列表如下：\par
+\begin{table}[H]
+  \centering
+  \renewcommand{\arraystretch}{1.5}
+  \caption{AD797低噪声放大器噪声参数表}
+  \begin{tabular}{c|c|c|c}
+    \hline
+    噪声&典型值&最大值&备注\\\hline
+    输入电压噪声&$0.9 \mathrm{nV}/\sqrt{\mathrm{Hz}}$&$1.2\mathrm{nV}/\sqrt{\mathrm{Hz}}$&$1 \mathrm{kHz}$\\\hline
+    输入电压噪声&$50 \mathrm{nV}$&&$0.1 \mathrm{Hz}$至$10 \mathrm{Hz}$，峰峰值\\
+    \hline
+  \end{tabular}
+\end{table}
+测试实例：？
+应用实例：在无线通信领域，用于接收机接收无线信号；在精密测量领域，如扫描隧道显微镜前置放大器放大电子束成像信号；在生物医学领域，如心电图设备和脑电图设备放大生物电信号。\par
+\subsection{第二题}
+{\heiti 运算放大器是否适合作为低噪声前置放大器？为什么？}\par
+运算放大器不适合作为低噪声前置放大器，因为普通运放内部的噪声较大，经多级运算放大输出后将产生极其显著的噪声影响。通常应当选取低噪声的放大器。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
