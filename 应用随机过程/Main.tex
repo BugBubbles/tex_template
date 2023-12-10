@@ -46,22 +46,22 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{center}
 
   \begin{figure}[h]
-    
+
     \centering
     \includegraphics[]{title.png}\par
     \vspace{4em}
     \large{\yihao\lishu{2023－2024学年第一学期}}
     \vspace{6em}
   \end{figure}
-  
+
   \large{\erhao\lishu{随机过程理论}}\par
   \large{\erhao\lishu{课程大作业合集}}
   \vspace{8em}
-  
+
   \begin{spacing}{2.0}
     \begin{tabular}{cc}
-      
-      
+
+
       {\xiaoerhao\lishu{班\quad \quad 级}} & {\heiti{\dlmu{SY23173}}}    \\
       {\xiaoerhao\lishu{学\quad \quad 号}} & {\heiti{\dlmu{SY2317301} }} \\
       {\xiaoerhao\lishu{姓\quad \quad 名}} & {\heiti{\dlmu{陈博非} }}       \\
@@ -155,7 +155,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{align}
   \left\{
   \begin{aligned}
-     & 20\lg\mmode{\frac{1}{\displaystyle 1+j\frac{\omega}{\omega_L}}}=20\lg\mmode{\frac{1}{\displaystyle 1+j\frac{\omega_H}{\omega}}}      \\\\
+     & 20\lg\mmode{\frac{1}{\displaystyle 1+j\frac{\omega}{\omega_L}}}=20\lg\mmode{\frac{1}{\displaystyle 1+j\frac{\omega_H}{\omega}}}     \\\\
      & 20\lg\mmode{\frac{1}{\displaystyle 1+j\frac{\omega}{\omega_L}}}+20\lg\mmode{\frac{1}{\displaystyle 1+j\frac{\omega_H}{\omega}}}<-15
   \end{aligned}
   \right.
@@ -164,7 +164,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{align*}
   \left\{
   \begin{aligned}
-     & \omega=\sqrt{\omega_H\omega_L}                        \\\\
+     & \omega=\sqrt{\omega_H\omega_L}                       \\\\
      & \frac{\omega_L^2}{\omega_H^2+\omega_L^2}<10^{-0.375}
   \end{aligned}
   \right.
@@ -177,7 +177,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{align*}
   H_1(j\omega)=\frac{1}{\displaystyle 1+j\frac{\omega}{\omega_L}} \implies h_1(t)=\left\{
   \begin{aligned}
-     & e^{\displaystyle -\frac{1}{\omega_L}t} & ,  t>0    \\
+     & e^{\displaystyle -\frac{1}{\omega_L}t} & ,  t>0   \\
      & 0                                      & ,  t\le0
   \end{aligned}
   \right.
@@ -186,7 +186,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{align*}
   H_2(j\omega)=\frac{1}{\displaystyle 1+j\frac{\omega_H}{\omega}} \implies h_1(t)=\left\{
   \begin{aligned}
-     & 0                                               & , t>0    \\
+     & 0                                               & , t>0   \\
      & \delta(t)-e^{\displaystyle \frac{1}{\omega_H}t} & , t\le0
   \end{aligned}
   \right.
@@ -197,7 +197,30 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 %分析一个应用泊松随机过程的实例。
 本文将主要讨论一种新型的神经网络模型，即脉冲神经网络（Spiking Neural Networks，SNN）。该网络据传是继感知机、卷积神经网络之后所谓的第三代类脑仿生网络模型，与前两代神经网络相比，脉冲神经网络在能耗上和存储占用上有着更加突出的优点。但是，当前脉冲神经网络的研究还很不充分，尚未形成一种通用的数学模型基础，因此其模型底层原理、模型训练方法以及模型的推理方法均未见到有通行的方法，大多数研究尚局限在某一具体方法中的应用。从大脑工作机理的仿生学中抽象数学模型、完成对神经元和网络连接拓扑的建模，是当前脉冲神经网络原理领域需要深入研究的工作。本文将针对这一问题，利用随机过程数学工具，对脉冲神经元进行建模，以期望能够归纳出一种通行的模型范式。
 \subsection{符号说明}
-SNN的输入与输出均是z
+SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopediaComputationalNeuroscience2015}，首先给出以下符号表示。
+\begin{enumerate}
+  \item 脉冲\textbf{电流信号}使用增量序列表示，记为$X(t)$，常用冲激函数串表示：$X(t)=\sum\limits_i\delta(t-t_i)$，其中$t_i$是产生事件的时刻。神经元的输入电流记为$X_i(t)$，输出电流记为$Y(t)$；
+  \item 神经元膜内外电位差用符号$V(t)$表示，简称为“膜电位”；
+  \item 神经元放电的阈值膜电位记为$V_T$；
+  \item 神经元膜电位时间常数为$\tau$，膜电阻记为$r$；
+\end{enumerate}
+\subsection{脉冲神经元模型}
+脉冲神经元是对神经元细胞生物机理的仿生抽象。根据神经细胞领域的研究\cite{albesa-gonzalezLearningFilopodiaSpines2023}，神经元仅当其动作电位（Active Potential）高于其活动阈值后，神经元细胞膜表面的离子通道（通常是钾、钙离子通道）在膜内外电位差的驱动下打开，神经元膜内的钾离子和钙离子将在极短的时间内从膜内释放至膜外，宏观上形成了一次放电时间极短的输出电流，在数学上通常建模为一次总放电能量有限但功率无限的信号，即冲激信号。\par
+神经元彼此间通过突触连接，突触是一种化学物质受体，用于接受前一个神经元释放的神经介质。例如，当前一个神经元兴奋时（即产生正电流输出），其释放的神经介质通常为谷氨酸（Glutamate），谷氨酸将与突触上的受体结合，使得后一个神经元膜上的抽运离子通道打开，后一个神经元膜内钠离子浓度提高，导致其膜电位升高。而当前一个神经元抑制时（即产生负电流输出），其释放的神经介质通常为$\gamma$-氨基丁酸（GABA），GABA将与突触上的受体结合，导致后一个神经元抽运阴离子至胞内（常为氯离子），使其膜电位下降。根据离子扩散现象，胞内的高浓度离子也将自发地穿过细胞膜扩散至膜外直到膜两则浓度相同，当神经元长期处于静息状态时，其离子扩散速率等于神经元的抽运速率，膜电位基本稳定在某一固定值。\par
+常用的模型是漏积分放电（Leaky Integrate-and-Fire，LIF）神经元\cite{gerstnerTimeStructureActivity1995}，即神经元将全部输入脉冲进行时间延迟的线性叠加，其与膜时间常数有关，微分方程为：
+\begin{align}
+  \tau\diff{V(t)}{t}=-V(t)+r\sum\limits_iX_i(t)
+  \label{eq:LIF积分过程}
+\end{align}\par
+式中，$X_i(t)$是第$i$个输入脉冲电流，如神经元有多个输入，则将其线性叠加；$-V(t)$描述了离子扩散速率，当膜电位较大时，扩散速度较大，因此符合前述一般性假设。神经元的行为不止有积分过程，当膜电位超过膜电位阈值时，神经元放电过程将被激活（Fire），放电过程不是线性过程，可用分段函数表示为：
+\begin{align}
+  Y(t)=\begin{cases}
+         1 & ,V(t)>V_T    \\
+         0 & ,V(t)\le V_T
+       \end{cases}\implise Y(t)=u(V(t)-V_T)
+  \label{eq:LIF放电过程}
+\end{align}
+
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
