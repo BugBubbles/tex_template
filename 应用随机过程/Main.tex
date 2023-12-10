@@ -244,9 +244,9 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
 同时将膜电位置回零位$V_0$，复位过程时间极短，可认为是瞬间完成复位，可用以下方程表示：
 \begin{align}
   V(t)=\left\{\begin{aligned}
-    V(t) & ,Y(t)=0    \\
-    V_0 & ,Y(t)= 1
-  \end{aligned}\right.
+                V(t) & ,Y(t)=0  \\
+                V_0  & ,Y(t)= 1
+              \end{aligned}\right.
   \label{eq:LIF复位过程}
 \end{align}\par
 以上过程可用如下示意图表示，其中下侧方框表示输入脉冲序列，上侧表示输出脉冲序列，中间为神经元膜电位，横坐标是时间。由图可知，当神经元静息时，其膜电位等于静息电位$V_0$，当神经元接受输入脉冲序列后，膜电位$V(t)$迅速上升，在较短时间内达到峰值，然后缓慢下降（Leak），如果前后两次输入脉冲到达时间较长，则由于漏电效应不能产生神经冲动；只有当相邻两次输入脉冲到达时间足够短时，神经元膜电位在短时间内达到阈值电位，从而产生神经冲动（Fire）。图中没有画出多个输入突触的情况。
@@ -254,7 +254,7 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
   \centering
   \includegraphics[width=0.8\textwidth]{神经冲动示意图.png}
   \label{fig:神经冲动示意图}
-  \caption{神经冲动示意图}
+  \caption{单输入作用下的神经冲动示意图}
 \end{figure}
 至此，基于LIF和脉冲序列的基本神经元模型已经介绍完毕。
 \subsubsection{LIF神经元学习过程}
@@ -264,8 +264,17 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
   \tau\diff{V(t)}{t}=-V(t)+rwX(t)=-V(t)+\tilde{w}X(t)
   \label{eq:LIF简化积分过程}
 \end{align}\par
+忽略放电过程，直接在零初值条件下联立\ref{eq:泊松脉冲序列定义}和\ref{eq:LIF简化积分过程}，得到：
+\begin{align}
+  V(t)=\frac{\tilde{w}}{\tau}\sum\limits_{i}u(t-t_i)e^{-\frac{t-t_i}{\tau}}
+  \label{eq:不考虑放电的膜电位}
+\end{align}\par
+可见该式较为复杂，膜电位仍然是随机过程，但是不能从表达式上推断其性质。忽略求和号前面的常数项，仅考虑膜电位的增量过程$\Delta V_i(t)$，可知：
+\begin{align}
+  \Delta V_i(t)=u(t-t_i)e^{-\frac{t-t_i}{\tau}}
+\end{align}
 
-
+% 目标渐渐清楚了，需要计算出膜电位期望和方差，进一步算出输出脉冲列的期望和方差，以此可以完成分类任务，也可以计算膜电位增量、输出脉冲序列的到达时间间隔，以到达时间间隔的估计求取分类结果。推得出一个是一个，推得出全部本文可以考虑写小论文了。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
