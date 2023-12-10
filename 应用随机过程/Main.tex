@@ -201,26 +201,37 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
 \begin{enumerate}
   \item 脉冲\textbf{电流信号}使用增量序列表示，记为$X(t)$，常用冲激函数串表示：$X(t)=\sum\limits_i\delta(t-t_i)$，其中$t_i$是产生事件的时刻。神经元的输入电流记为$X_i(t)$，输出电流记为$Y(t)$；
   \item 神经元膜内外电位差用符号$V(t)$表示，简称为“膜电位”；
-  \item 神经元放电的阈值膜电位记为$V_T$；
+  \item 神经元放电的阈值膜电位记为$V_T$，膜电位的零位记为$V_0$；
   \item 神经元膜电位时间常数为$\tau$，膜电阻记为$r$；
 \end{enumerate}
 \subsection{脉冲神经元模型}
-脉冲神经元是对神经元细胞生物机理的仿生抽象。根据神经细胞领域的研究\cite{albesa-gonzalezLearningFilopodiaSpines2023}，神经元仅当其动作电位（Active Potential）高于其活动阈值后，神经元细胞膜表面的离子通道（通常是钾、钙离子通道）在膜内外电位差的驱动下打开，神经元膜内的钾离子和钙离子将在极短的时间内从膜内释放至膜外，宏观上形成了一次放电时间极短的输出电流，在数学上通常建模为一次总放电能量有限但功率无限的信号，即冲激信号。\par
+脉冲神经元是对神经元细胞生物机理的仿生抽象。目前较为流行的脉冲神经元模型有漏积分放电、脉冲响应、活动频率模型，本文将主要讨论一种较为直观的模型——漏积分放电模型，并尝试将基于该模型得到的结论推广至其他模型。
+\subsubsection{数学模型介绍}
+根据神经细胞领域的研究\cite{albesa-gonzalezLearningFilopodiaSpines2023}，神经元仅当其动作电位（Active Potential）高于其活动阈值后，神经元细胞膜表面的离子通道（通常是钾、钙离子通道）在膜内外电位差的驱动下打开，神经元膜内的钾离子和钙离子将在极短的时间内从膜内释放至膜外，宏观上形成了一次放电时间极短的输出电流，在数学上通常建模为一次总放电能量有限但功率无限的信号，即冲激信号。\par
 神经元彼此间通过突触连接，突触是一种化学物质受体，用于接受前一个神经元释放的神经介质。例如，当前一个神经元兴奋时（即产生正电流输出），其释放的神经介质通常为谷氨酸（Glutamate），谷氨酸将与突触上的受体结合，使得后一个神经元膜上的抽运离子通道打开，后一个神经元膜内钠离子浓度提高，导致其膜电位升高。而当前一个神经元抑制时（即产生负电流输出），其释放的神经介质通常为$\gamma$-氨基丁酸（GABA），GABA将与突触上的受体结合，导致后一个神经元抽运阴离子至胞内（常为氯离子），使其膜电位下降。根据离子扩散现象，胞内的高浓度离子也将自发地穿过细胞膜扩散至膜外直到膜两则浓度相同，当神经元长期处于静息状态时，其离子扩散速率等于神经元的抽运速率，膜电位基本稳定在某一固定值。\par
-常用的模型是漏积分放电（Leaky Integrate-and-Fire，LIF）神经元\cite{gerstnerTimeStructureActivity1995}，即神经元将全部输入脉冲进行时间延迟的线性叠加，其与膜时间常数有关，微分方程为：
+常用的模型是漏积分放电（Leaky Integrate-and-Fire，LIF）神经元\cite{gerstnerTimeStructureActivity1995}，即神经元将全部输入脉冲进行线性叠加，微分方程为：
 \begin{align}
   \tau\diff{V(t)}{t}=-V(t)+r\sum\limits_iX_i(t)
   \label{eq:LIF积分过程}
 \end{align}\par
 式中，$X_i(t)$是第$i$个输入脉冲电流，如神经元有多个输入，则将其线性叠加；$-V(t)$描述了离子扩散速率，当膜电位较大时，扩散速度较大，因此符合前述一般性假设。神经元的行为不止有积分过程，当膜电位超过膜电位阈值时，神经元放电过程将被激活（Fire），放电过程不是线性过程，可用分段函数表示为：
 \begin{align}
-  Y(t)=\begin{cases}
-         1 & ,V(t)>V_T    \\
-         0 & ,V(t)\le V_T
-       \end{cases}\implise Y(t)=u(V(t)-V_T)
+  Y(t)=\left\{\begin{aligned}
+                1 & ,V(t)>V_T    \\
+                0 & ,V(t)\le V_T
+              \end{aligned}\right.\implies Y(t)=u\rectbrac{V(t)-V_T}
   \label{eq:LIF放电过程}
-\end{align}
-
+\end{align}\par
+同时将膜电位置回零位$V_0$，复位过程时间极短，可认为是瞬间完成复位，可用以下方程表示：
+\begin{align}
+  V(t)=\left\{\begin{aligned}
+    V(t) & ,Y(t)=0    \\
+    V_0 & ,Y(t)= 1
+  \end{aligned}\right.
+  \label{eq:LIF复位过程}
+\end{align}\par
+至此，基于LIF和脉冲序列的神经元模型已经介绍完毕。
+\subsubsection{LIF神经元学习过程}
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
