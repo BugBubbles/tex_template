@@ -211,6 +211,38 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
   \item 神经元放电的阈值膜电位记为$V_T$，膜电位的零位记为$V_0$；
   \item 神经元膜电位时间常数为$\tau$，膜电阻记为$r$；
 \end{enumerate}
+\subsubsection{泊松过程时间量}
+根据\cite{ZhouYinQingSuiJiGuoChengLiLun2013}，泊松过程的各事件到达时间$T_i$和相邻两个事件到达时间间隔$Z_i=T_{i+1}-T_i$是两个重要的衍生随机过程，其中到达时间的分布可按泊松过程等价事件概率之和求出，如下式：
+\begin{align}
+  F_{T_i}(t)=\left\{
+  \begin{aligned}
+     & 1-\sum\limits_{k=1}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!} & , t>0    \\
+     & 0                                                               & , t\le 0
+  \end{aligned}
+  \right.
+  \label{eq:到达时间概率分布函数}
+\end{align}\par
+对上式求导可得到其概率分布密度函数，如下式：
+\begin{align}
+  f_{T_i}(t)=\left\{
+  \begin{aligned}
+     & \lambda e^{-\lambda t}\frac{(\lambda t)^{i-1}}{(i-1)!} & ,t>0     \\
+     & 0                                                      & , t\le 0
+  \end{aligned}
+  \right.
+  \label{eq:到达时间概率密度函数}
+\end{align}\par
+类似地，到达时间间隔的分布也可按等价事件求出，其服从强度为$\lambda$的指数分布，即：
+\begin{align}
+  f_{Z_i}(t)=\left\{
+  \begin{aligned}
+     & \lambda e^{-\lambda t} & ,t>0    \\
+     & 0                      & ,t\le 0
+  \end{aligned}
+  \right.
+  \label{eq:到达时间间隔概率密度函数}
+\end{align}\par
+后文中将使用到以上两种衍生的随机过程。
 \subsubsection{泊松脉冲序列}
 本文将主要讨论输入为泊松脉冲序列的情况，因此首先介绍泊松脉冲序列的定义。泊松脉冲序列是一种随机过程，其定义为泊松随机过程的微分过程\cite{ZhouYinQingSuiJiGuoChengLiLun2013}，设$N(t)$泊松过程，则泊松脉冲序列定义为：
 \begin{align}
@@ -223,6 +255,7 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
   \label{eq:泊松脉冲序列自相关函数}
 \end{align}\par
 求解过程中使用到了脉冲函数的初等函数定义，即脉冲函数等于三角形脉冲在持续时长趋于0的极限。
+
 \subsection{脉冲神经元模型}
 脉冲神经元是对神经元细胞生物机理的仿生抽象。目前较为流行的脉冲神经元模型有漏积分放电、脉冲响应、活动频率模型，本文将主要讨论一种较为直观的模型——漏积分放电模型，并尝试将基于该模型得到的结论推广至其他模型。
 \subsubsection{数学模型介绍}
@@ -257,23 +290,89 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
   \caption{单输入作用下的神经冲动示意图}
 \end{figure}
 至此，基于LIF和脉冲序列的基本神经元模型已经介绍完毕。
-\subsubsection{LIF神经元学习过程}
+
+\subsection{LIF神经元学习过程}
 与感知机相同，LIF神经元也能够从大量的输入抽取内含的信息，完成无监督学习，从而实现对输入的分类。输入的脉冲增量序列可以看作是独立增量过程，神经元充当分类器，将输入的脉冲序列完成分类。考虑一种较为简单的情况，即将输入的脉冲序列看作是泊松脉冲列\cite{ZhouYinQingSuiJiGuoChengLiLun2013,NIPS2009_a5cdd4aa}，分类器根据脉冲列强度的数值分类。\par
+\subsubsection{膜电位增量}
 分类器由数据驱动，这里可供学习的隐含参数有三个，一个是脉冲神经元的膜电位时间常数$\tau$，一个是脉冲神经元突触的权重$w_i$以及脉冲神经元活动阈值电位$V_T$。实际上，阈值电位与神经元膜离子通道的组成和数量有关，通常同一类神经元其阈值电位都是相同的，（可类比感知神经元中的激活函数都是同一个函数，如Relu函数），也为了简化分析，不妨设神经元活动阈值电位是某个固定值（如常取为0）。另外两个参数可供学习改变，仅考虑一个神经元在单次输入下的学习过程，合并膜电阻$r$和突触权重$w$，将方程\ref{eq:LIF积分过程}简化为：
 \begin{align}
   \tau\diff{V(t)}{t}=-V(t)+rwX(t)=-V(t)+\tilde{w}X(t)
   \label{eq:LIF简化积分过程}
 \end{align}\par
-忽略放电过程，直接在零初值条件下联立\ref{eq:泊松脉冲序列定义}和\ref{eq:LIF简化积分过程}，得到：
+忽略放电过程，直接在初值条件下联立\ref{eq:泊松脉冲序列定义}和\ref{eq:LIF简化积分过程}，得到：
 \begin{align}
-  V(t)=\frac{\tilde{w}}{\tau}\sum\limits_{i}u(t-t_i)e^{-\frac{t-t_i}{\tau}}
-  \label{eq:不考虑放电的膜电位}
+  V(t)=\frac{\tilde{w}}{\tau}\sum\limits_{i}u(t-t_i)e^{-\frac{t-t_i}{\tau}}+\frac{V_0}{\tau}e^{-\frac{t}{\tau}}
 \end{align}\par
-可见该式较为复杂，膜电位仍然是随机过程，但是不能从表达式上推断其性质。忽略求和号前面的常数项，仅考虑膜电位的增量过程$\Delta V_i(t)$，可知：
+可见该式较为复杂，膜电位仍然是随机过程，但是不能从表达式上推断其性质。忽略求和号前面的常数项，初始值的指数衰减不受脉冲输入的影响，因此可以仅考虑膜电位的增量过程$\Delta V_i(t)$，可知：
 \begin{align}
   \Delta V_i(t)=u(t-t_i)e^{-\frac{t-t_i}{\tau}}
+  \label{eq:不考虑放电的膜电位增量}
+\end{align}\par
+利用公式\ref{eq:不考虑放电的膜电位增量}，在不考虑放电的条件下，可计算膜电位增量的概率分布。根据全概率公式，有：
+\begin{align}
+  \begin{aligned}
+    P\curlbrac{\Delta V_i(t)\le v} & =P\curlbrac{\Delta V_i(t)\le v|t\le t_i}P\curlbrac{t\le t_i}+P\curlbrac{\Delta V_i(t)\le v|t> t_i}P\curlbrac{t>t_i}                                                    \\
+                                   & =1\cdot\rectbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}}+P\curlbrac{\Delta V_i(t)\le v|t> t_i}\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}
+  \end{aligned}\label{eq:膜电位增量概率分布}
+\end{align}\par
+注意到零位电位为0，膜电位放电不会产生负电位，因此$v<0$的情况以概率0发生；同时，增量过程所能取得的最大值为1，因此$v>1$的情况以概率0发生。对于条件概率$P\curlbrac{\Delta V_i(t)\le v|t> t_i}$，由于时间为脉冲$t_i$之后，此时增量不为0，因此可利用等价事件原理，结合公式\ref{eq:到达时间概率密度函数}将上述概率改写为：
+\begin{align}
+  \begin{aligned}
+    P\curlbrac{\Delta V_i(t)\le v|t> t_i} & =P\curlbrac{ue^{-\frac{t-t_i}{\tau}}\le v}                    \\
+                                          & = P\curlbrac{t_i\le t+\tau\ln\frac{v}{u}}                     \\
+                                          & =P\curlbrac{t_i\le t(v)}                                      \\
+                                          & =\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}
+  \end{aligned}\label{eq:求膜电位增量的等价事件}
+\end{align}\par
+说明：式中的$\displaystyle t(v)=t+\tau\ln\frac{v}{u}$，其中$u=1\unit{A}$是量纲为电流的常数。联立公式\ref{eq:膜电位增量概率分布}和公式\ref{eq:求膜电位增量的等价事件}，可解出膜电位增量的概率密度分布函数：
+\begin{align}
+  \begin{aligned}
+    F_{\Delta V_i(t)}(v) & =P\curlbrac{\Delta V_i(t)\le v}                                                                                                                                                               \\
+                         & =1\cdot\rectbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}}+\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!} \\
+                         & =\left\{\begin{aligned}
+                                      & 1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}\cdot\curlbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}} & , 0 \le v \le 1\\
+                                      & 0                                                                                                                                      & ,\textrm{其他}
+                                   \end{aligned}\right.
+  \end{aligned}\label{eq:膜电位增量的分布}
+\end{align}\par
+对电压$v$求导，可得到膜电位增量分布的概率密度函数，注意此时\textbf{没有考虑放电}：
+\begin{align}
+  f_{\Delta V_i(t)}(v)=\left\{
+  \begin{aligned}
+     & \frac{\lambda\tau}{v}e^{-\lambda [t+t(v)]}\sum_{k=0}^{i-1}\frac{(\lambda t)^k}{k!}\sum_{k=0}^{i-1}\frac{[\lambda t(v)]^{(i-1)}}{(i-1)!} & ,0 \le v \le 1 \\
+     & 0                                                                                                                                       & ,\textrm{其他}
+  \end{aligned}
+  \right.\label{eq:膜电位增量的概率密度函数}
 \end{align}
-
+\subsubsection{膜电位}
+在膜电位增量已知的基础上，可以推算膜电位的概率分布，同样地，不考虑放电的影响，膜电位初始值置为$V_0$，则可以求得电位的条件概率分布为：
+\begin{align}
+  \begin{aligned}
+    P\curlbrac{V(t)\le v
+    \big|  N(t)=n} & =P\curlbrac{\frac{\tilde{w}}{\tau}\sum_{i=1}^{n}\Delta V_i(t)+\frac{V_0}{\tau}e^{-\frac{t}{\tau}}\le v\Big| N(t)=n}            \\
+                   & =P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le \frac{\tau}{\tilde{w}}\circbrac{v-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}\Big| N(t)=n}
+    % \\
+    %                       & =\sum_{i=1}^{\infty}P\curlbrac{\Delta V_i(t)\le \frac{\tau}{\tilde{w}}\circbrac{v-V_0e^{-\frac{t}{\tau}}}}                                                                                                        \\
+    %                       & =\sum_{i=1}^{\infty}\curlbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}\cdot\curlbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t(\frac{v\tau}{\tilde{w}})}\frac{[\lambda t(\frac{v\tau}{\tilde{w}})]^k}{k!}}}
+  \end{aligned}
+  \label{eq:膜电位的条件分布概率}
+\end{align}\par
+% 进一步算出膜电位的概率分布密度函数为：
+% \begin{align}
+%   f_{V(t)}(v)=\left\{
+%   \begin{aligned}
+%      & \frac{\lambda\tau}{v}\sum_{i=1}^{\infty}\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}e^{-\lambda t(\frac{v\tau}{\tilde{w}})}\frac{[\lambda t(\frac{v\tau}{\tilde{w}})]^{i-1}}{(i-1)!} & ,v\ge 0 \\
+%      & 0                                                                                                                                                                                              & ,v<0
+%   \end{aligned}\right.
+%   \label{eq:膜电位的概率分布密度函数}
+% \end{align}\par
+式中的随机过程$N(t)$表示从初始时刻到时刻$t$的时间段内，输入脉冲序列的脉冲个数，显然该随机过程是一个泊松过程。可见该式无法直接求解，不过并不影响后续的分析。
+\subsection{放电过程}
+放电过程中涉及到非线性系统，放电过程仅有两种取值可能，即放电或不放电。设某两次放电的时刻为$t_1$和$t_2$，则在$t_1$和$t_2$时刻内，神经元不产生放电现象，在该时间段内，膜电位的条件分布概率如公式\ref{eq:膜电位的条件分布概率}所示，根据全概率公式，可算出在该时间段内的膜电位分布：
+\begin{align}
+  F_{V(t)}(v)=    \sum_{n=1}^{\infty}P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le \frac{\tau}{\tilde{w}}\circbrac{v-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}\Big| N(t_2)-N(t_1)=n}P\curlbrac{ N(t_2)-N(t_1)=n}
+  \label{eq:膜电位分布概率}
+\end{align}\par
 % 目标渐渐清楚了，需要计算出膜电位期望和方差，进一步算出输出脉冲列的期望和方差，以此可以完成分类任务，也可以计算膜电位增量、输出脉冲序列的到达时间间隔，以到达时间间隔的估计求取分类结果。推得出一个是一个，推得出全部本文可以考虑写小论文了。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
