@@ -330,7 +330,7 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
     F_{\Delta V_i(t)}(v) & =P\curlbrac{\Delta V_i(t)\le v}                                                                                                                                                               \\
                          & =1\cdot\rectbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}}+\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!} \\
                          & =\left\{\begin{aligned}
-                                      & 1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}\cdot\curlbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}} & , 0 \le v \le 1\\
+                                      & 1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}\cdot\curlbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}} & , 0 \le v \le 1 \\
                                       & 0                                                                                                                                      & ,\textrm{其他}
                                    \end{aligned}\right.
   \end{aligned}\label{eq:膜电位增量的分布}
@@ -370,9 +370,14 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
 \subsection{放电过程}
 放电过程中涉及到非线性系统，放电过程仅有两种取值可能，即放电或不放电。设某两次放电的时刻为$t_1$和$t_2$，则在$t_1$和$t_2$时刻内，神经元不产生放电现象，在该时间段内，膜电位的条件分布概率如公式\ref{eq:膜电位的条件分布概率}所示，根据全概率公式，可算出在该时间段内的膜电位分布：
 \begin{align}
-  F_{V(t)}(v)=    \sum_{n=1}^{\infty}P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le \frac{\tau}{\tilde{w}}\circbrac{v-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}\Big| N(t_2)-N(t_1)=n}P\curlbrac{ N(t_2)-N(t_1)=n}
+  F_{V(t)}(v)=    \sum_{n=1}^{\infty}P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le \frac{\tau}{\tilde{w}}\circbrac{v-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}\Big| N(t_2)-N(t_1)=n,t_1\le t\le t_2}P\curlbrac{ N(t_2)-N(t_1)=n,t_1\le t\le t_2}
   \label{eq:膜电位分布概率}
 \end{align}\par
+在$t_1$到$t_2$时刻内未产生放电现象，因此有以下式成立：
+\begin{align*}
+  P\curlbrac{Y(t)=0|t_1\le t\le t_2}=1\Leftrightarrow  P\curlbrac{V(t)\le V_T-\varepsilon|t_1\le t\le t_2}=1-\frac{\varepsilon }{V_T}\quad\forall\varepsilon\in(0, V_T]
+\end{align*}\par
+说明：使用本式的等价事件是为了保证不等式能够取等，以满足概率分布函数不大于的定义条件。
 % 目标渐渐清楚了，需要计算出膜电位期望和方差，进一步算出输出脉冲列的期望和方差，以此可以完成分类任务，也可以计算膜电位增量、输出脉冲序列的到达时间间隔，以到达时间间隔的估计求取分类结果。推得出一个是一个，推得出全部本文可以考虑写小论文了。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
