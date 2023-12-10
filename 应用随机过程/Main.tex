@@ -206,7 +206,8 @@ doi=false,%不显示网址和doi
 SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopediaComputationalNeuroscience2015}，描述脉冲信号通常使用脉冲序列。
 \subsubsection{符号说明}
 \begin{enumerate}
-  \item 脉冲\textbf{电流信号}使用增量序列表示，记为$X(t)$，常用冲激函数串表示：$X(t)=\sum\limits_i\delta(t-t_i)$，其中$t_i$是产生事件的时刻。神经元的输入电流记为$X_i(t)$，输出电流记为$Y(t)$；
+  \item 脉冲\textbf{电流信号}使用增量序列表示，记为$X(t)$，常用冲激函数串表示：$X(t)=\sum_i\delta(t-t_i)$，其中$t_i$是产生事件的时刻；
+  \item 神经元的输入电流记为$X_i(t)$，输出电流记为$Y(t)$，输入过程是泊松分布过程；
   \item 神经元膜内外电位差用符号$V(t)$表示，简称为“膜电位”；
   \item 神经元放电的阈值膜电位记为$V_T$，膜电位的零位记为$V_0$；
   \item 神经元膜电位时间常数为$\tau$，膜电阻记为$r$；
@@ -339,7 +340,7 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
 \begin{align}
   f_{\Delta V_i(t)}(v)=\left\{
   \begin{aligned}
-     & \frac{\lambda\tau}{v}e^{-\lambda [t+t(v)]}\sum_{k=0}^{i-1}\frac{(\lambda t)^k}{k!}\sum_{k=0}^{i-1}\frac{[\lambda t(v)]^{(i-1)}}{(i-1)!} & ,0 \le v \le 1 \\
+     & \frac{\lambda\tau}{v}e^{-\lambda [t+t(v)]}\frac{[\lambda t(v)]^{i-1}}{(i-1)!}\sum_{k=0}^{i-1}\frac{(\lambda t)^k}{k!} & ,0 \le v \le 1 \\
      & 0                                                                                                                                       & ,\textrm{其他}
   \end{aligned}
   \right.\label{eq:膜电位增量的概率密度函数}
@@ -370,14 +371,32 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
 \subsection{放电过程}
 放电过程中涉及到非线性系统，放电过程仅有两种取值可能，即放电或不放电。设某两次放电的时刻为$t_1$和$t_2$，则在$t_1$和$t_2$时刻内，神经元不产生放电现象，在该时间段内，膜电位的条件分布概率如公式\ref{eq:膜电位的条件分布概率}所示，根据全概率公式，可算出在该时间段内的膜电位分布：
 \begin{align}
-  F_{V(t)}(v)=    \sum_{n=1}^{\infty}P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le \frac{\tau}{\tilde{w}}\circbrac{v-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}\Big| N(t_2)-N(t_1)=n,t_1\le t\le t_2}P\curlbrac{ N(t_2)-N(t_1)=n,t_1\le t\le t_2}
-  \label{eq:膜电位分布概率}
+  \begin{aligned}
+    F_{V(t)|t_1\le t\le t_2}(v)=    \sum_{n=1}^{\infty}P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le \frac{\tau}{\tilde{w}}\circbrac{v-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}\Big| N(t_2)-N(t_1)=n,t_1\le t\le t_2}\cdot \\
+    P\curlbrac{ N(t_2)-N(t_1)=n,t_1\le t\le t_2}
+  \end{aligned}
 \end{align}\par
 在$t_1$到$t_2$时刻内未产生放电现象，因此有以下式成立：
 \begin{align*}
   P\curlbrac{Y(t)=0|t_1\le t\le t_2}=1\Leftrightarrow  P\curlbrac{V(t)\le V_T-\varepsilon|t_1\le t\le t_2}=1-\frac{\varepsilon }{V_T}\quad\forall\varepsilon\in(0, V_T]
 \end{align*}\par
-说明：使用本式的等价事件是为了保证不等式能够取等，以满足概率分布函数不大于的定义条件。
+说明：使用本式的等价事件是为了保证不等式能够取等，以满足概率分布函数不大于的定义条件。根据全概率公式，对时间段内产生的脉冲数事件求全集，得到以下结果：
+\begin{align}
+  \begin{aligned}
+     & P\curlbrac{V(t)\le V_T-\varepsilon|t_1\le t\le t_2} \\&=\sum_{n=1}^{\infty}P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le \frac{\tau}{\tilde{w}}\circbrac{V_T-\varepsilon-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}\Big| N(t_2)-N(t_1)=n,t_1\le t\le t_2}\\
+     &\quad\cdot  P\curlbrac{ N(t_2)-N(t_1)=n,t_1\le t\le t_2}        \\
+  \end{aligned}
+\end{align}\par
+以上公式的和式非常复杂，需要用到有限维的膜电位增量过程的分布，而该增量过程来自于泊松脉冲序列，因此该增量过程中，不重叠的时间区间内对应的增量是独立的，任意有限维的分布等于单个维度分布的有限次乘积，各个增量的一维分布具有类似的分布性质，均可使用公式\ref{eq:膜电位增量的分布}表示。因此，需要求解其任意有限维的分布函数。取$V_\varepsilon=\frac{\tau}{\tilde{w}}\circbrac{V_T-\varepsilon-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}$，根据全概率公式，有：\par
+\begin{align}
+  \begin{aligned}
+    &\quad P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le V_\varepsilon\Big| N(t_2)-N(t_1)=n,t_1\le t\le t_2}=P\curlbrac{\sum_{i=1}^{n}\Delta V_i(t)\le V_\varepsilon\Big| N,t}\\
+    &=\sum_{\Delta v_2}\sum_{\Delta v_3}\cdots\sum_{\Delta v_n}P\curlbrac{\Delta V_1\le V_\varepsilon-\sum_{i=2}^{n}\Delta v_i
+    \Big|\Delta V_2=\Delta v_2,\Delta V_3=\Delta v_3,\cdots,\Delta V_n=\Delta v_n,N,t}\\
+    &\cdot P\curlbrac{\Delta V_2=\Delta v_2|N,t}\cdot P\curlbrac{\Delta V_3=\Delta v_3|N,t}\cdot \cdots \cdot P\curlbrac{\Delta V_n=\Delta v_n|N,t}
+\end{aligned}
+\label{eq:膜电位分布概率}
+\end{align}\par
 % 目标渐渐清楚了，需要计算出膜电位期望和方差，进一步算出输出脉冲列的期望和方差，以此可以完成分类任务，也可以计算膜电位增量、输出脉冲序列的到达时间间隔，以到达时间间隔的估计求取分类结果。推得出一个是一个，推得出全部本文可以考虑写小论文了。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
