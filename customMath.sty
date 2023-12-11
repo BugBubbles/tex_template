@@ -44,9 +44,16 @@
 \newcommand{\laplace}[1]{\mathscr{L}\rectbrac{#1}}
 \newcommand{\invlaplace}[1]{\mathscr{L}^{-1}\rectbrac{#1}}
 \newcommand{\T}{^\mathrm{T}}
+%概率表示
+\newcommand{\prob}[1]{\mathrm{P}\curlbrac{#1}}%事件概率
+% \newcommand{\cprob}[2]{\mathrm{P}\curlbrac{#1\left|#2\right.}}%条件概率
+\newcommand{\cprob}[2]{P\curlbrac{\left.#1\right|#2}}%条件概率
+\newcommand{\expec}[1]{\mathrm{E}\rectbrac{#1}}%期望
+\newcommand{\var}[1]{\mathrm{D}\rectbrac{#1}}%方差
+
 %无穷符号修正
-% \newcommand{\pinfty}{{\scriptscriptstyle +\infty}}
-% \newcommand{\ninfty}{{\scriptscriptstyle -\infty}}
+\newcommand{\pinfty}{+\infty}
+\newcommand{\ninfty}{-\infty}
 
 %------------------------------------------%
 %自定义数学符号及字体
