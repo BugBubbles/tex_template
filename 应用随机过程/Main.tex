@@ -495,14 +495,29 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
   &=\expec{N(t)}\expec{e^{-\frac{t-t_k}{\tau}}}\\
   &=\int_{0}^{t}t_k\frac{1}{t_k}e^{-\frac{t-t_k}{\tau}}\di t_k\cdot \lambda t\\
   &=\lambda t\cdot\frac{1-e^{- t/\tau}}{ t/\tau}=\lambda\tau\circbrac{1-e^{- t/\tau}}
+  \label{eq:膜电位量的期望}
 \end{align}\par
 说明：式中对$t_k$求期望时，由于到达时间在条件$N(t)=n$下的分布服从均匀分布，因此该式可直接使用均匀分布求取。
 \subsection{放电过程}
-结合公式\ref{eq:LIF放电过程}，可将放电过程用膜电位量改写为：
+在使用脉冲神经元时，需要根据数据更新神经元参数，主要是权重值$w$，这里对比输出、输入脉冲序列的强度来更新权重参数。求解输出脉冲序列的强度需要使用输出脉冲到达时间间隔的期望，结合公式\ref{eq:LIF放电过程}，可将放电过程用膜电位量改写为：
 \begin{align}
   Y(t)=u\rectbrac{\sum_{k=1}^{N(t)}e^{-\frac{t-t_k}{\tau}}-V_T}
 \end{align}\par
-以上一次放电时刻为时间零点$t=0$，则从上一次放电直到下一次放电之间的时间间隔，可记为
+可见放电过程是非线性过程，其概率分布的直接表达式很难求解，这里结合公式\ref{eq:膜电位量的期望}，间接地求解其放电脉冲序列时间间隔，即有：
+\begin{align}
+  \expec{V(t)}=V_T\implies T=-\tau\ln\circbrac{1-\frac{V_T}{\lambda\tau}}=-\tau\ln\circbrac{1-\frac{V_T}{\lambda\tilde{w}}}
+\end{align}\par
+式中的$\lambda$对于输出脉冲序列而言是未知量，因此将$\lambda\tilde{w}$合并为新的权重，记为$\omega=\lambda\tilde{w}$，上式可以化简为：
+\begin{align}
+  T=-\tau\ln\circbrac{1-\frac{V_T}{\omega}}
+  \label{eq:输出脉冲的到达时间间隔期望}
+\end{align}\par
+因此，在使用脉冲神经元时，可以结合公式\ref{eq:膜电位量的期望}和公式\ref{eq:输出脉冲的到达时间间隔期望}实现对权重的更新，下面将使用一个简单的二分类作为例子。
+\subsection{分类实验}
+如同感知神经元一样，使用脉冲神经元可以构建起脉冲神经网络，实现对输入信号的处理。这里，使用两个输出脉冲神经元，搭建一个二分类脉冲神经网络，实现对输入脉冲序列的分类。
+\subsubsection{实验准备}
+输入的脉冲序列按以下方式生成，准备一个只有两个实数的集合$A={1,2}$，使用噪声的方式在两个元素周边增加一系列噪声点，并向集合中插入，得到训练集$A={-0.9,1,1.2,1.8,2,2.3}$。\par
+
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
