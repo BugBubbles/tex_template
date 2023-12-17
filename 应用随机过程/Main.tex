@@ -380,8 +380,8 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
   \end{aligned}
   \right.\label{eq:膜电位增量的概率密度函数}
 \end{align}\par
-\subsubsection{膜电位}
-在膜电位增量已知的基础上，可以推算膜电位的概率分布，同样地，不考虑放电的影响，膜电位初始值置为$V_0$，则可以求得电位的条件概率分布为：
+\subsubsection{膜电位量}
+脉冲神经元的膜电位决定了其输出脉冲序列的一切分布特性，因此首先分析的是膜电位量，不考虑放电的影响，设随机过程$V(t)$为脉冲神经元在时刻$t$的膜电位随机量，膜电位初始值置为$V_0$，则可以求得电位的条件概率分布为：
 \begin{align}
   \begin{aligned}
     P\curlbrac{V(\Delta t)\le v
@@ -389,52 +389,21 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
                     =P\curlbrac{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le \frac{\tau}{\tilde{w}}\circbrac{v-\frac{V_0}{\tau}e^{-\frac{\Delta t}{\tau}}}\Big| N(\Delta t)=n,0<\Delta t\le t_2-t_1}
   \end{aligned} \label{eq:膜电位的条件分布概率}
 \end{align}\par
-式中的随机过程$N(t)$表示从初始时刻到时刻$t$的时间段内，输入脉冲序列的脉冲个数，显然该随机过程是一个泊松过程。按每个增量序列划分时间区间$[t_1,t_2]$，可保证每个小区间均不重叠且只含有一个输入脉冲，因此上式中的$\Delta V_i(\Delta t)$均服从如式\ref{eq:膜电位增量的分布}的分布。\par
-以上公式的和式非常复杂，需要用到有限维的膜电位增量过程的分布，而该增量过程来自于泊松脉冲序列，因此该增量过程中，不重叠的时间区间内对应的增量是独立的，任意有限维的分布等于单个维度分布的有限次乘积，均可使用公式\ref{eq:膜电位增量的分布}表示。因此，其任意有限维的分布函数为：
+式中的随机过程$N(t)$表示从初始时刻到时刻$t$的时间段内，输入脉冲序列的脉冲个数，显然该随机过程是一个泊松过程。根据公式\ref{eq:LIF膜电位公式}可知，该随机过程是由输入随机序列$X(t)$与指数衰减过程的复合随机过程，输入随机序列服从泊松分布，因此可将膜电位量写成如下的复合随机过程形式：
 \begin{align}
-  f_{\Delta V}(v_1,v_2,\cdots,v_n,t)=\left\{
-  \begin{aligned}
-     & \circbrac{\frac{\lambda\tau}{v^{\lambda \tau+1}}e^{-\lambda t}}^n & ,e^{-\frac{t}{\tau}} \le v_1,v_2,\cdots,v_n \le 1 \\
-     & 0                                                    & ,\textrm{其他}
-  \end{aligned}
-  \right.\label{eq:膜电位增量的有限维密度函数}
+  V(t)=\sum_{k=1}^{N(t)}e^{-\frac{t-t_k}{\tau}}
+  \label{eq:膜电位量复合随机过程形式}
 \end{align}\par
-% 取$V_\varepsilon=\frac{\tau}{\tilde{w}}\circbrac{V_T-\varepsilon-\frac{V_0}{\tau}e^{-\frac{t}{\tau}}}$，根据全概率公式，有：\par
-% \begin{align}
-%   \begin{aligned}
-%      & \quad P\curlbrac{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le V_\varepsilon\Big| N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}=P\curlbrac{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le V_\varepsilon\Big| N,\Delta t} \\
-%      & =\sum_{\Delta v_2}\sum_{\Delta v_3}\cdots\sum_{\Delta v_n}P\curlbrac{\Delta V_1\le V_\varepsilon-\sum_{i=2}^{n}\Delta v_i
-%     \Big|\Delta V_2=\Delta v_2,\Delta V_3=\Delta v_3,\cdots,\Delta V_n=\Delta v_n,N,\Delta t}                                                                                                           \\
-%      & \cdot P\curlbrac{\Delta V_2=\Delta v_2|N,\Delta t}\cdot P\curlbrac{\Delta V_3=\Delta v_3|N,\Delta t}\cdot \cdots \cdot P\curlbrac{\Delta V_n=\Delta v_n|N,\Delta t}
-%   \end{aligned}
-% \end{align}\par
-% 这里，各个随机过程$\Delta v_i$的事件集空间都是实数域，因此将求和号改为积分，有：
-% \begin{align}
-%   \begin{aligned}
-%      & \cprob{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le V_\varepsilon}{N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}                                                                                                                    \\
-%      & =\int_{0}^{\pinfty}\int_{0}^{\pinfty}\cdots\int_{0}^{\pinfty}P\curlbrac{\Delta V_1\le V_\varepsilon-\sum_{i=2}^{n}\Delta v_i\Big|\Delta V_2=\Delta v_2,\Delta V_3=\Delta v_3,\cdots,\Delta V_n=\Delta v_n,N,\Delta t} \\
-%      & \cdot P\curlbrac{\Delta V_2=\Delta v_2|N,\Delta t}\cdot P\curlbrac{\Delta V_3=\Delta v_3|N,\Delta t}\cdot \cdots \cdot P\curlbrac{\Delta V_n=\Delta v_n|N,\Delta t}
-%   \end{aligned}
-% \end{align}\par
-% 使用概率密度代替各个概率$P\curlbrac{\Delta V_n=\Delta v_n|N,\Delta t}$，得到以下积分形式：
-% \begin{align}
-%   \begin{aligned}
-%      & \cprob{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le V_\varepsilon}{N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}                                                                                                                    \\
-%      & =\int_{0}^{\pinfty}\int_{0}^{\pinfty}\cdots\int_{0}^{\pinfty}P\curlbrac{\Delta V_1\le V_\varepsilon-\sum_{i=2}^{n}\Delta v_i\Big|\Delta V_2=\Delta v_2,\Delta V_3=\Delta v_3,\cdots,\Delta V_n=\Delta v_n,N,\Delta t} \\
-%      & \cdot f_{\Delta V_2|N,\Delta t}(\Delta v_2)\mathrm{d}\Delta v_2\cdot f_{\Delta V_3|N,\Delta t}(\Delta v_3)\mathrm{d}\Delta v_3\cdot \cdots \cdot f_{\Delta V_n|N,\Delta t}(\Delta v_n)\mathrm{d}\Delta v_n
-%   \end{aligned}
-% \end{align}\par
-% 逻辑上判断，某个时间范围内输入的脉冲个数条件$N(t_2)-N(t_1)=n,0\le \Delta t\le t_2-t_1$对单个事件$\Delta V_1\le V_\varepsilon-\sum_{i=2}^{n}\Delta v_i$的发生没有影响，因此两者是独立的，可直接应用公式\ref{eq:膜电位增量的分布}求解该事件概率，解得：
-% \begin{align}
-%   \prob{\Delta V_1\le V_\varepsilon-\sum_{i=2}^{n}\Delta v_i}=\left\{\begin{aligned}
-%     & 1                                                                     & , V_\varepsilon-\sum_{i=2}^{n}\Delta v_i>1                              \\
-%     & \displaystyle 1-\frac{e^{-\lambda t}}{\circbrac{ V_\varepsilon-\sum_{i=2}^{n}\Delta v_i}^{\lambda\tau}}+e^{-\lambda t} & , e^{-\frac{t}{\tau}} \le  V_\varepsilon-\sum_{i=2}^{n}\Delta v_i \le 1 \\
-%     & e^{-\lambda t}                                                        & ,0\le  V_\varepsilon-\sum_{i=2}^{n}\Delta v_i<e^{-\frac{t}{\tau}}\\
-%     & 0                                                                     & , V_\varepsilon-\sum_{i=2}^{n}\Delta v_i<0
-%  \end{aligned}\right.
-% \end{align}\par
-% 利用上式将积分分为四段，然后完成积分，积分的过程如下式：
-
+式中，$t_k,k=1,2,\cdots,N(t)$表示第$k$个输入脉冲的到达时间，其中$0\le t_1\le t_2\le\cdots\le t_{N(t)}<t$均落在时间段$[0,t)$范围内。根据复合泊松随机过程的期望和方差，可求得膜电位量$V(t)$在公式\ref{eq:膜电位量复合随机过程形式}表达下的期望，即有：
+\begin{align}
+  \begin{aligned}
+  \expec{V(t)}&=\expec{\expec{\sum_{k=1}^{n}e^{-\frac{t-t_k}{\tau}}\Big|N(t)=n}}\\
+  &=\expec{N(t)}\expec{e^{-\frac{t-t_k}{\tau}}}\\
+  &=\int_{0}^{t}t_k\frac{1}{t_k}e^{-\frac{t-t_k}{\tau}}\di t_k\cdot \lambda t\\
+  &=\lambda t\cdot\frac{1-e^{- t/\tau}}{ t/\tau}=\lambda\tau\circbrac{1-e^{- t/\tau}}
+\end{aligned} \label{eq:膜电位量的期望}
+\end{align}\par
+说明：式中对$t_k$求期望时，由于到达时间在条件$N(t)=n$下的分布服从均匀分布，因此该式可直接使用均匀分布求取。
 \subsection{放电过程}
 放电过程中涉及到非线性系统，放电过程仅有两种取值可能，即放电或不放电。设某两次放电的时刻为$t_1$和$t_2$，则在$t_1$和$t_2$时刻内，神经元不产生放电现象，在该时间段内，膜电位的条件分布概率如公式\ref{eq:膜电位的条件分布概率}所示，根据全概率公式，可算出在该时间段内的膜电位分布：
 \begin{align}
@@ -446,78 +415,54 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
 在$t_1$到$t_2$时刻内未产生放电现象，设$T_i(t)$表示第i个输出信号的到达时间，有以下式成立：
 \begin{align*}
    & P\curlbrac{T_2-T_{1}>t_2-t_1}=P\curlbrac{Y(t)=0|t_1\le t\le t_2}                                                      \\
-   & =  P\curlbrac{V(t)\le V_T-\varepsilon|t_1\le t\le t_2}                                                                \\
-   & = P\curlbrac{\frac{V_0}{\tau}e^{-\frac{t}{\tau}}+V(t_1+\Delta t)-V(t_1)\le V_T-\varepsilon\Big|0<\Delta t\le t_2-t_1}
+   & =  P\curlbrac{V(t)\le V_T|t_1\le t\le t_2}                                                                \\
+   & = P\curlbrac{\frac{V_0}{\tau}e^{-\frac{t}{\tau}}+V(t_1+\Delta t)-V(t_1)\le V_T\Big|0<\Delta t\le t_2-t_1}
 \end{align*}\par
 根据全概率公式，对时间段内产生的脉冲数事件求全集，得到以下结果：
 \begin{align}
   \begin{aligned}
-     & P\curlbrac{\frac{V_0}{\tau}e^{-\frac{t}{\tau}}+V(t_1+\Delta t)-V(t_1)\le V_T-\varepsilon\Big|0<\Delta t\le t_2-t_1} \\
-     &=\sum_{n=1}^{\infty}P\curlbrac{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le \frac{\tau}{\tilde{w}}\circbrac{V_T-\varepsilon-\frac{V_0}{\tau}e^{-\frac{\Delta t}{\tau}}}\Big| N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}\\
-     & \quad\cdot  P\curlbrac{ N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}                                                      \\
+     & P\curlbrac{\frac{V_0}{\tau}e^{-\frac{t}{\tau}}+V(t_1+\Delta t)-V(t_1)\le V_T\Big|0<\Delta t\le t_2-t_1} \\
+     &=\sum_{n=1}^{\infty}P\curlbrac{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le \frac{\tau}{\tilde{w}}\circbrac{V_T-\frac{V_0}{\tau}e^{-\frac{\Delta t}{\tau}}}\Big| N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}\\
+     & \quad\cdot  P\curlbrac{ N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}                                                 
   \end{aligned}
+  \label{eq:放电过程等价事件全集}
 \end{align}\par
-取$\displaystyle V_\varepsilon= \frac{\tau}{\tilde{w}}\circbrac{V_T-\varepsilon-\frac{V_0}{\tau}e^{-\frac{\Delta t}{\tau}}}$由于输入脉冲的数量对单个脉冲引起的增量事件是独立的，因此上式的条件概率可以直接使用公式\ref{eq:膜电位增量的有限维密度函数}表示， 使用概率密度代替各个概率$P\curlbrac{\Delta V_n=\Delta v_n|N,\Delta t}$，得到以下积分形式：
-\begin{align}
-  \begin{aligned}
-     & \cprob{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le V_\varepsilon}{N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}                                                                                                                    \\
-     & =\int_{0}^{\pinfty}\int_{0}^{\pinfty}\cdots\int_{0}^{\pinfty}P\curlbrac{\Delta V_1\le V_\varepsilon-\sum_{i=2}^{n}\Delta v_i\Big|\Delta V_2=\Delta v_2,\Delta V_3=\Delta v_3,\cdots,\Delta V_n=\Delta v_n,N,\Delta t} \\
-     & \cdot f_{\Delta V_2|N,\Delta t}(\Delta v_2)\mathrm{d}\Delta v_2\cdot f_{\Delta V_3|N,\Delta t}(\Delta v_3)\mathrm{d}\Delta v_3\cdot \cdots \cdot f_{\Delta V_n|N,\Delta t}(\Delta v_n)\mathrm{d}\Delta v_n
-  \end{aligned}
-\end{align}\par
-忽略小量$\varepsilon$，进一步可化简得到：
-\begin{align*}
-  \begin{aligned}
-     & \cprob{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le V_\varepsilon}{N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}                                                                                                                    \\
-     & =\int_{e^{-t/\tau}}^{1}\mathrm{d}\Delta v_n\int_{e^{-t/\tau}}^{1}\mathrm{d}\Delta v_{n-1}\cdots\int_{e^{-t/\tau}}^{1}\mathrm{d}\Delta v_{2}\int_{e^{-t/\tau}}^{V_\varepsilon-\sum_{i=2}^{n}\Delta v_i}\circbrac{\frac{\lambda\tau}{v^{\lambda \tau+1}}e^{-\lambda t}}^n \mathrm{d}\Delta v_1\\
-     &=(\lambda\tau)^n(n\lambda t+n-1)\circbrac{1-e^{-\frac{t}{\tau}}}^ne^{n-1}+\frac{(n\lambda t)!}{(n\lambda t+n)!}\sum_{k=0}^{n-1}C_{n-1}^k\rectbrac{V_\varepsilon-k-(n-k-1)e^{-\frac{t}{\tau}}}^{-n\lambda t}\\
-     &=(n\lambda t+n-1)\circbrac{1-e^{-\frac{t}{\tau}}}^ne^{-n\lambda t-n+1}+\frac{(n\lambda t)!}{(n\lambda t+n)!}\sum_{k=0}^{n-1}C_{n-1}^k\rectbrac{\frac{\tau}{\tilde{w}}V_T-\frac{V_0}{\tilde{w}}e^{-\frac{t}{\tau}}-k-(n-k-1)e^{-\frac{t}{\tau}}}^{-n\lambda t}\\
-     &(t>0,n\in\mathbb{N}^*)
-  \end{aligned}
-\end{align*}\par
-对此项结果再求关于输入脉冲数量的期望，即为概率分布结果。此项结果复杂，考虑进行近似化简，$\lambda t$一般值为整数且接近于10，因此第一项中$1-e^{-\frac{t}{\tau}}<1$，$e^{-n\lambda t-n+1}<<1$，即使乘以$n$，其仍然是远远小于第二项，可以将第一项忽略。在和式的第二项中，首先括号内的$V_0=0$。由于组合数$C_{n-1}^k$与$n$有关，$n$值越大，该组合数在$k=1,n-1$两侧的位置值相对于中间位置$k=(n-1)/2$或者$k=n/2$处差距越大，并且组合数所乘值随$k$值增大而减小。近似得到的结果如下：
-\begin{align*}
-  \begin{aligned}
-     & \cprob{\sum_{i=1}^{n}\Delta V_i(\Delta t)\le V_\varepsilon}{N(t_2)-N(t_1)=n,0<\Delta t\le t_2-t_1}                                                                                                                    \\
-     &=\frac{(n\lambda t)!}{(n\lambda t+n)!}\sum_{k=0}^{n-1}C_{n-1}^k\rectbrac{\frac{\tau}{\tilde{w}}V_T-\frac{V_0}{\tilde{w}}e^{-\frac{t}{\tau}}-k-(n-k-1)e^{-\frac{t}{\tau}}}^{-n\lambda t}
-  \end{aligned}
-\end{align*}\par
-重要知识，教材上的第6.23题模型与我所推的模型高度相似！
-\subsection{膜电位量}
-脉冲神经元的膜电位决定了其输出脉冲序列的一切分布特性，因此首先分析的是膜电位量，设随机过程$V(t)$为脉冲神经元在时刻$t$的膜电位随机量。根据公式\ref{eq:LIF膜电位公式}可知，该随机过程是由输入随机序列$X(t)$与指数衰减过程的复合随机过程，输入随机序列服从泊松分布，因此可将膜电位量写成如下的复合随机过程形式：
-\begin{align}
-  V(t)=\sum_{k=1}^{N(t)}e^{-\frac{t-t_k}{\tau}}
-  \label{eq:膜电位量复合随机过程形式}
-\end{align}\par
-式中，$t_k,k=1,2,\cdots,N(t)$表示第$k$个输入脉冲的到达时间，其中$0\le t_1\le t_2\le\cdots\le t_{N(t)}<t$均落在时间段$[0,t)$范围内。根据复合泊松随机过程的期望和方差，可求得膜电位量$V(t)$在公式\ref{eq:膜电位量复合随机过程形式}表达下的期望，即有：
-\begin{align}
-  \expec{V(t)}&=\expec{\expec{\sum_{k=1}^{n}e^{-\frac{t-t_k}{\tau}}\Big|N(t)=n}}\\
-  &=\expec{N(t)}\expec{e^{-\frac{t-t_k}{\tau}}}\\
-  &=\int_{0}^{t}t_k\frac{1}{t_k}e^{-\frac{t-t_k}{\tau}}\di t_k\cdot \lambda t\\
-  &=\lambda t\cdot\frac{1-e^{- t/\tau}}{ t/\tau}=\lambda\tau\circbrac{1-e^{- t/\tau}}
-  \label{eq:膜电位量的期望}
-\end{align}\par
-说明：式中对$t_k$求期望时，由于到达时间在条件$N(t)=n$下的分布服从均匀分布，因此该式可直接使用均匀分布求取。
-\subsection{放电过程}
+取$\displaystyle \tilde{V}_T= \frac{\tau}{\tilde{w}}\circbrac{V_T-\frac{V_0}{\tau}e^{-\frac{\Delta t}{\tau}}}$。
 在使用脉冲神经元时，需要根据数据更新神经元参数，主要是权重值$w$，这里对比输出、输入脉冲序列的强度来更新权重参数。求解输出脉冲序列的强度需要使用输出脉冲到达时间间隔的期望，结合公式\ref{eq:LIF放电过程}，可将放电过程用膜电位量改写为：
 \begin{align}
   Y(t)=u\rectbrac{\sum_{k=1}^{N(t)}e^{-\frac{t-t_k}{\tau}}-V_T}
+  \label{eq:输出脉冲随机过程的定义}
 \end{align}\par
-可见放电过程是非线性过程，其概率分布的直接表达式很难求解，这里结合公式\ref{eq:膜电位量的期望}，间接地求解其放电脉冲序列时间间隔，即有：
+可见放电过程是非线性过程，前后两次输出脉冲序列可根据等价事件写为：
+\begin{align*}
+   \prob{Y(t_1)=1,Y(t_2)=1,V(t)<\tilde{V}_T}=\prob{V(t_1)\ge \tilde{V}_T,V(t_2)\ge \tilde{V}_T,V(t)<\tilde{V}_T},t_1\le t\le t_2
+\end{align*}\par
+求解前后两次输出脉冲的时间间隔，再次使用等价事件，写为：
+\begin{align*}
+  \prob{\Delta S=S_2-S_1>s}&=\prob{V(s_1)< \tilde{V}_T , V(s_1+s)< \tilde{V}_T,V(t)<\tilde{V}_T}\\
+  \prob{\Delta S=S_2-S_1\le s}&=s_2-s_1-\prob{V(s_1)< \tilde{V}_T , V(s_1+s)< \tilde{V}_T,V(t)<\tilde{V}_T},s_1\le t\le s_2
+\end{align*}\par
+进一步求解输出时间间隔的期望，得到以下形式：
+\begin{align*}
+  \expec{\Delta S}&=\sum_{s}s\prob{\Delta S=S_2-S_1\le s}\\
+&=\sum_{s}s\rectbrac{1-\prob{V(s_1)< \tilde{V}_T , V(s_1+s)< \tilde{V}_T,V(t)<\tilde{V}_T}}
+\end{align*}\par
+可见时间间隔的期望与初始时刻$s_1$有关，输出脉冲过程不是平稳的。在实际使用中，每次完成两次输出脉冲，可将计时器回零。求解时间间隔的分布需要使用膜电压量的分布，而根据公式\ref{eq:输出脉冲随机过程的定义}，膜电压量概率分布的直接表达式很难求解（实际上是不解析的）。将\ref{eq:膜电位量的期望}代入上式，间接地求解其放电脉冲序列时间间隔，即有：
+\begin{align*}
+  \expec{\Delta S}\expec{V(t)}&\approx\int_{0}^{+\infty}s\diff{\prob{V(s_1+s)< \tilde{V}_T,V(t)<\tilde{V}_T}}{s}\di s\expec{\expec{\sum_{k=1}^{n}e^{-\frac{t-t_k}{\tau}}\Big|N(t)=n}}\\
+  &=\int_{0}^{+\infty}s\diff{\prob{V(s_1+s)< \tilde{V}_T,V(t)<\tilde{V}_T}}{s}\di s\int_{0}^{t}t_k\frac{1}{t_k}e^{-\frac{t-t_k}{\tau}}\di t_k\cdot \lambda t\\
+  &=\int_{0}^{+\infty}\di s\int_{0}^{t} se^{-\frac{t-t_k}{\tau}}\diff{\prob{V(s)< \tilde{V}_T,V(t)<\tilde{V}_T}}{s}\di t_k\cdot \lambda t\\
+  &\approx \tilde{V}_T\tau\circbrac{1-e^\frac{t}{\tau}}
+\end{align*}\par
+式中，使用到了计时器回零操作$s_1=0$。因此有：
 \begin{align}
-  \expec{V(t)}=V_T\implies T=-\tau\ln\circbrac{1-\frac{V_T}{\lambda\tau}}=-\tau\ln\circbrac{1-\frac{V_T}{\lambda\tilde{w}}}
+  \expec{\Delta S} =\frac{\tilde{V}_T\tau\circbrac{1-e^{-\frac{t}{\tau}}}}{\expec{V(t)}}\implies \expec{\Delta S}=\frac{\tilde{V}_T}{\lambda}
 \end{align}\par
-式中的$\lambda$对于输出脉冲序列而言是未知量，因此将$\lambda\tilde{w}$合并为新的权重，记为$\omega=\lambda\tilde{w}$，上式可以化简为：
+因此联合公式\ref{eq:放电过程等价事件全集}，在初始膜电位取0的情况下，可以使用权重和门限电压值表示出近似的输出脉冲时间间隔期望：
 \begin{align}
-  T=-\tau\ln\circbrac{1-\frac{V_T}{\omega}}
-  \label{eq:输出脉冲的到达时间间隔期望}
+  \expec{\Delta S}=\frac{\tau}{\lambda\tilde{w}}V_T
+  \label{eq:近似的输出脉冲时间间隔期望值}
 \end{align}\par
-因此，在使用脉冲神经元时，可以结合公式\ref{eq:膜电位量的期望}和公式\ref{eq:输出脉冲的到达时间间隔期望}实现对权重的更新，下面将使用一个简单的二分类作为例子。
-\subsection{分类实验}
-如同感知神经元一样，使用脉冲神经元可以构建起脉冲神经网络，实现对输入信号的处理。这里，使用两个输出脉冲神经元，搭建一个二分类脉冲神经网络，实现对输入脉冲序列的分类。
-\subsubsection{实验准备}
-输入的脉冲序列按以下方式生成，准备一个只有两个实数的集合$A={1,2}$，使用噪声的方式在两个元素周边增加一系列噪声点，并向集合中插入，得到训练集$A={-0.9,1,1.2,1.8,2,2.3}$。\par
-
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
