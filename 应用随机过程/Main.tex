@@ -310,76 +310,76 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
   \Delta V_i(t)=u(t-t_i)e^{-\frac{t-t_i}{\tau}}
   \label{eq:不考虑放电的膜电位增量}
 \end{align}\par
-利用公式\ref{eq:不考虑放电的膜电位增量}，在不考虑放电的条件下，可计算膜电位增量的概率分布。根据全概率公式，有：
-\begin{align}
-  \begin{aligned}
-    P\curlbrac{\Delta V_i(t)\le v} & =P\curlbrac{\Delta V_i(t)\le v|t\le t_i}P\curlbrac{t\le t_i}+P\curlbrac{\Delta V_i(t)\le v|t> t_i}P\curlbrac{t>t_i}                                                    \\
-                                   & =1\cdot\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}+P\curlbrac{\Delta V_i(t)\le v|t> t_i}\rectbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}}
-  \end{aligned}\label{eq:膜电位增量概率分布}
-\end{align}\par
-注意到零位电位为0，膜电位放电不会产生负电位，因此$v<0$的情况以概率0发生；同时，增量过程所能取得的最大值为1，因此$v>1$的情况以概率1发生。对于条件概率$P\curlbrac{\Delta V_i(t)\le v|t> t_i}$，由于时间为脉冲$t_i$之后，此时增量不为0，因此可利用等价事件原理，结合公式\ref{eq:到达时间概率密度函数}和贝叶斯公式，将上述概率改写为：
-\begin{align}
-  \begin{aligned}
-    P\curlbrac{\Delta V_i(t)\le v|t> t_i} & =P\curlbrac{ue^{-\frac{t-t_i}{\tau}}\le v\Big|t> t_i}                                                                                                                     \\
-                                          & = P\curlbrac{t_i\le t+\tau\ln\frac{v}{u}\Big|t> t_i}                                                                                                                      \\
-                                          & =P\curlbrac{t_i\le t(v)|t> t_i}                                                                                                                                           \\
-                                          & =\left\{\begin{aligned}
-                                                       & 1                                                                                                                                     & ,v>1                   \\
-                                                       & \displaystyle\frac{1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}{[\lambda t(v)]^k}/{k!}}{1-\sum_{k=0}^{i-1}e^{-\lambda t}{(\lambda t)^k}/{k!} }
-                                                       & ,e^{-\frac{t}{\tau}}\le v\le 1                                                                                                                                 \\
-                                                       & 0                                                                                                                                     & ,v<e^{-\frac{t}{\tau}}
-                                                    \end{aligned} \right.
-  \end{aligned}\label{eq:求膜电位增量的等价事件}
-\end{align}\par
-说明：式中的$\displaystyle t(v)=t+\tau\ln\frac{v}{u}$，其中$u=1\unit{A}$是量纲为电流的常数。联立公式\ref{eq:膜电位增量概率分布}和公式\ref{eq:求膜电位增量的等价事件}，可解出膜电位增量的概率密度分布函数：
-\begin{align}
-  \begin{aligned}
-    F_{\Delta V_i}(v,t) & =P\curlbrac{\Delta V_i(t)\le v}                                                                                                                                                                       \\
-                         & =1\cdot\left\{
-                          \begin{aligned}
-                            & \sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!} & ,v\ge 0         \\
-                                                                                    & 0       & ,v< 0
-                           \end{aligned}\right.+\left\{\begin{aligned}
-                                                          & 1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!},      & v>1                    \\
-                                                          & 1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}
-                                                          & ,e^{-\frac{t}{\tau}}\le v\le 1                                                          \\
-                                                          & 0                                                              & ,v<e^{-\frac{t}{\tau}}
-                                                       \end{aligned} \right.                                                        \\
-                         & =\left\{\begin{aligned}
-                                      & 1                                                                                                                     & ,v>1                              \\
-                                      & 1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}+\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!} & , e^{-\frac{t}{\tau}} \le v \le 1 \\
-                                      & \sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}                                                                & ,0\le v<e^{-\frac{t}{\tau}}       \\
-                                      & 0                                                                                                                     & ,v<0
-                                   \end{aligned}\right.
-  \end{aligned}
-\end{align}\par
-而对于增量过程而言，一次只能出现一个增量，不能同时产生两个，因此$i=1$，上式可以化简为：
-\begin{align}
-  F_{\Delta V}(v,t) =\left\{\begin{aligned}
-                                & 1                                                                     & ,v>1                              \\
-                                & \displaystyle 1-\frac{e^{-\lambda t}}{v^{\lambda\tau}}+e^{-\lambda t} & , e^{-\frac{t}{\tau}} \le v \le 1 \\
-                                & e^{-\lambda t}                                                        & ,0\le v<e^{-\frac{t}{\tau}}\\
-                                & 0                                                                     & ,v<0
-                             \end{aligned}\right.\label{eq:膜电位增量的分布}
-\end{align}\par
-对变量$v$求导，可得到膜电位增量分布的概率密度函数，注意此时\textbf{没有考虑放电}：
-\begin{align}
-  f_{\Delta V_i}(v,t)=\left\{
-  \begin{aligned}
-     & \displaystyle\frac{\lambda\tau}{v}e^{-\lambda t(v)}\frac{[\lambda t(v)]^{i-1}}{(i-1)!} & ,e^{-\frac{t}{\tau}} \le v \le 1 \\
-     & 0                                                                                      & ,\textrm{其他}
-  \end{aligned}
-  \right.
-\end{align}\par
-同理，取$i=1$，得到：
-\begin{align}
-  f_{\Delta V}(v,t)=\left\{
-  \begin{aligned}
-     & \frac{\lambda\tau}{v^{\lambda \tau+1}}e^{-\lambda t} & ,e^{-\frac{t}{\tau}} \le v \le 1 \\
-     & 0                                                    & ,\textrm{其他}
-  \end{aligned}
-  \right.\label{eq:膜电位增量的概率密度函数}
-\end{align}\par
+% 利用公式\ref{eq:不考虑放电的膜电位增量}，在不考虑放电的条件下，可计算膜电位增量的概率分布。根据全概率公式，有：
+% \begin{align}
+%   \begin{aligned}
+%     P\curlbrac{\Delta V_i(t)\le v} & =P\curlbrac{\Delta V_i(t)\le v|t\le t_i}P\curlbrac{t\le t_i}+P\curlbrac{\Delta V_i(t)\le v|t> t_i}P\curlbrac{t>t_i}                                                    \\
+%                                    & =1\cdot\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}+P\curlbrac{\Delta V_i(t)\le v|t> t_i}\rectbrac{1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}}
+%   \end{aligned}\label{eq:膜电位增量概率分布}
+% \end{align}\par
+% 注意到零位电位为0，膜电位放电不会产生负电位，因此$v<0$的情况以概率0发生；同时，增量过程所能取得的最大值为1，因此$v>1$的情况以概率1发生。对于条件概率$P\curlbrac{\Delta V_i(t)\le v|t> t_i}$，由于时间为脉冲$t_i$之后，此时增量不为0，因此可利用等价事件原理，结合公式\ref{eq:到达时间概率密度函数}和贝叶斯公式，将上述概率改写为：
+% \begin{align}
+%   \begin{aligned}
+%     P\curlbrac{\Delta V_i(t)\le v|t> t_i} & =P\curlbrac{ue^{-\frac{t-t_i}{\tau}}\le v\Big|t> t_i}                                                                                                                     \\
+%                                           & = P\curlbrac{t_i\le t+\tau\ln\frac{v}{u}\Big|t> t_i}                                                                                                                      \\
+%                                           & =P\curlbrac{t_i\le t(v)|t> t_i}                                                                                                                                           \\
+%                                           & =\left\{\begin{aligned}
+%                                                        & 1                                                                                                                                     & ,v>1                   \\
+%                                                        & \displaystyle\frac{1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}{[\lambda t(v)]^k}/{k!}}{1-\sum_{k=0}^{i-1}e^{-\lambda t}{(\lambda t)^k}/{k!} }
+%                                                        & ,e^{-\frac{t}{\tau}}\le v\le 1                                                                                                                                 \\
+%                                                        & 0                                                                                                                                     & ,v<e^{-\frac{t}{\tau}}
+%                                                     \end{aligned} \right.
+%   \end{aligned}\label{eq:求膜电位增量的等价事件}
+% \end{align}\par
+% 说明：式中的$\displaystyle t(v)=t+\tau\ln\frac{v}{u}$，其中$u=1\unit{A}$是量纲为电流的常数。联立公式\ref{eq:膜电位增量概率分布}和公式\ref{eq:求膜电位增量的等价事件}，可解出膜电位增量的概率密度分布函数：
+% \begin{align}
+%   \begin{aligned}
+%     F_{\Delta V_i}(v,t) & =P\curlbrac{\Delta V_i(t)\le v}                                                                                                                                                                       \\
+%                          & =1\cdot\left\{
+%                           \begin{aligned}
+%                             & \sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!} & ,v\ge 0         \\
+%                                                                                     & 0       & ,v< 0
+%                            \end{aligned}\right.+\left\{\begin{aligned}
+%                                                           & 1-\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!},      & v>1                    \\
+%                                                           & 1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}
+%                                                           & ,e^{-\frac{t}{\tau}}\le v\le 1                                                          \\
+%                                                           & 0                                                              & ,v<e^{-\frac{t}{\tau}}
+%                                                        \end{aligned} \right.                                                        \\
+%                          & =\left\{\begin{aligned}
+%                                       & 1                                                                                                                     & ,v>1                              \\
+%                                       & 1-\sum_{k=0}^{i-1}e^{-\lambda t(v)}\frac{[\lambda t(v)]^k}{k!}+\sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!} & , e^{-\frac{t}{\tau}} \le v \le 1 \\
+%                                       & \sum_{k=0}^{i-1}e^{-\lambda t}\frac{(\lambda t)^k}{k!}                                                                & ,0\le v<e^{-\frac{t}{\tau}}       \\
+%                                       & 0                                                                                                                     & ,v<0
+%                                    \end{aligned}\right.
+%   \end{aligned}
+% \end{align}\par
+% 而对于增量过程而言，一次只能出现一个增量，不能同时产生两个，因此$i=1$，上式可以化简为：
+% \begin{align}
+%   F_{\Delta V}(v,t) =\left\{\begin{aligned}
+%                                 & 1                                                                     & ,v>1                              \\
+%                                 & \displaystyle 1-\frac{e^{-\lambda t}}{v^{\lambda\tau}}+e^{-\lambda t} & , e^{-\frac{t}{\tau}} \le v \le 1 \\
+%                                 & e^{-\lambda t}                                                        & ,0\le v<e^{-\frac{t}{\tau}}\\
+%                                 & 0                                                                     & ,v<0
+%                              \end{aligned}\right.\label{eq:膜电位增量的分布}
+% \end{align}\par
+% 对变量$v$求导，可得到膜电位增量分布的概率密度函数，注意此时\textbf{没有考虑放电}：
+% \begin{align}
+%   f_{\Delta V_i}(v,t)=\left\{
+%   \begin{aligned}
+%      & \displaystyle\frac{\lambda\tau}{v}e^{-\lambda t(v)}\frac{[\lambda t(v)]^{i-1}}{(i-1)!} & ,e^{-\frac{t}{\tau}} \le v \le 1 \\
+%      & 0                                                                                      & ,\textrm{其他}
+%   \end{aligned}
+%   \right.
+% \end{align}\par
+% 同理，取$i=1$，得到：
+% \begin{align}
+%   f_{\Delta V}(v,t)=\left\{
+%   \begin{aligned}
+%      & \frac{\lambda\tau}{v^{\lambda \tau+1}}e^{-\lambda t} & ,e^{-\frac{t}{\tau}} \le v \le 1 \\
+%      & 0                                                    & ,\textrm{其他}
+%   \end{aligned}
+%   \right.\label{eq:膜电位增量的概率密度函数}
+% \end{align}\par
 \subsubsection{膜电位量}
 脉冲神经元的膜电位决定了其输出脉冲序列的一切分布特性，因此首先分析的是膜电位量，不考虑放电的影响，设随机过程$V(t)$为脉冲神经元在时刻$t$的膜电位随机量，膜电位初始值置为$V_0$，则可以求得电位的条件概率分布为：
 \begin{align}
@@ -404,7 +404,7 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
 \end{aligned} \label{eq:膜电位量的期望}
 \end{align}\par
 说明：式中对$t_k$求期望时，由于到达时间在条件$N(t)=n$下的分布服从均匀分布，因此该式可直接使用均匀分布求取。
-\subsection{放电过程}
+\subsubsection{放电过程}
 放电过程中涉及到非线性系统，放电过程仅有两种取值可能，即放电或不放电。设某两次放电的时刻为$t_1$和$t_2$，则在$t_1$和$t_2$时刻内，神经元不产生放电现象，在该时间段内，膜电位的条件分布概率如公式\ref{eq:膜电位的条件分布概率}所示，根据全概率公式，可算出在该时间段内的膜电位分布：
 \begin{align}
   \begin{aligned}
