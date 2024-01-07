@@ -34,6 +34,7 @@
 %模、范数
 \newcommand{\abs}[1]{\left | #1 \right |}
 \newcommand{\norm}[1]{\left|| #1 \right||}
+\newcommand{\sep}{\hspace{0.3em}|\hspace{0.3em}}%用于矩阵分块里面的分隔符
 %匹配大公式括号
 \newcommand{\circbrac}[1]{\left(#1\right)}
 \newcommand{\rectbrac}[1]{\left[#1\right]}
@@ -76,10 +77,23 @@
   \tl_set:Nn \l_tmpa_str {#1}
   \tl_replace_all:Nnn {\l_tmpa_str} {\varpsi} {\textbr{ERROR}}
 % 最终布尔表达式的值为true，执行 ⟨true code⟩ ，转为大写
-  \symbf{\l_tmpa_str}
+  \symbfup{\l_tmpa_str}%symbfup是unicode-math的命令，用于将字母加粗，但是带有斜体
 }
 \newcommand{\mathbold}[1]{\mhbd:n {#1}}
 \ExplSyntaxOff
+%%%%%% 对全体数学字符斜体加粗 %%%%%%
+\ExplSyntaxOn
+\cs_new:Npn \mhbdit:n #1{
+  \tl_set:Nn \l_tmpa_str {#1}
+  \tl_replace_all:Nnn {\l_tmpa_str} {\varpsi} {\textbr{ERROR}}
+% 最终布尔表达式的值为true，执行 ⟨true code⟩ ，转为大写
+  \symbf{\l_tmpa_str}
+}
+\newcommand{\mathboldit}[1]{\mhbdit:n {#1}}
+\ExplSyntaxOff
+%重载两个常用的数学加粗命令
+% \renewcommand{\mathbf}[1]{\mathbold{#1}}
+% \renewcommand{\mathbfit}[1]{\mathboldit{#1}}
 % \ExplSyntaxOn
 % \cs_new:Npn \mhbd:n #1{
 %   \tl_set:Nn \l_tmpa_str {#1}
