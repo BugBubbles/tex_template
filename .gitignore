@@ -11,4 +11,5 @@
 */*.toc
 */*.xdv
 */*.pdf
+*/*.synctex(busy)
 _*
