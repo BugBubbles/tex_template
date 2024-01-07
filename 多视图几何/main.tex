@@ -415,11 +415,50 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \subsection{对极点、对极平面和对极线的概念P185}
 两个摄像机的中心与空间中一点形成的平面称为对极平面；中心的连线与图像平面的交点称为对极点；两个摄像机各自图像平面与对极平面的交线称为对极线。
 \subsection{基本矩阵的四项几何含义P189}
-基本矩阵有多种表现形式，以下根据要求写出几种：
+基本矩阵有多种表现形式，推导方法可根据图像点反投影得到直线$\mathbf{X}(\lambda)=\mathbf{P^+x}+\lambda\mathbf{C}$，对这两条线上两个特殊点$\mathbf{P^+x}$和$\mathbf{C}$成像，得到对极线，然后化简即可写出基本矩阵的定义式：
 \begin{equation*}
-  \mathbold{F}=
-\end{equation*}
-
+  \mathbf{F}=[\mathbf{e}']_\times\mathbf{P}'\mathbf{P}^+
+\end{equation*}\par
+推导过程中，不允许两个摄像机中心相同。代入摄像机投影矩阵的四种不表达式和对极点表达式（世界坐标系放在某一个摄像机中心）：
+\begin{equation*}
+  \mathbf{e}=\mathbf{P}\begin{bmatrix}
+    -\mathbf{R}^T\mathbf{t}\\
+    1
+  \end{bmatrix}=\mathbf{KR}^T\mathbf{t}\qquad\mathbf{e}'=\mathbf{P}'\begin{bmatrix}
+    \mathbf{0}\\
+    1
+  \end{bmatrix}=\mathbf{K}'\mathbf{t}
+\end{equation*}\par
+从而可以推导得出以下形式，这里使用下标l表示左相机，下标r表示右相机：
+\begin{equation*}
+  \mathbold{F}=[\mathbf{e}_r]_\times\mathbf{P}_r\mathbf{P}^+_l
+\end{equation*}\par
+解读该式：将左相机像点反向投影为直线，然后在左相机坐标系下将该直线旋转至右相机坐标系，对该直线成像，得到右相机的像点，该像素与右相机极点确定一条直线，即为与左相机像点对应的对极线。\par
+如果取定左相机坐标系与世界坐标系重合，则可以得到：
+\begin{equation*}
+  \mathbf{e}_r=\mathbf{K}_r\mathbf{[R\sep t]}\begin{bmatrix}
+    \mathbf{0}^T\\
+    1
+  \end{bmatrix}=\mathbf{K}_r\mathbf{t}\qquad\mathbf{e}_l=\mathbf{K}_l\mathbf{[I\sep 0]}\begin{bmatrix}
+    -\mathbf{R}^T\mathbf{t}\\
+    1
+  \end{bmatrix}=\mathbf{K}_l\mathbf{R^\mathrm{T}t}
+\end{equation*}\par
+结合反对称矩阵的性质，可以得到：
+\begin{equation*}
+  \mathbold{[A]_\times B}=\mathbold{B^{-T}}\mathbf{[B^\mathrm{-1}A]_\times}
+\end{equation*}\par
+可以得到下列式子：
+\begin{equation*}
+  \mathbold{F}=[\mathbf{K}_r\mathbf{t}]_\times\mathbf{K}_r\mathbf{R}\mathbf{K}_l^{-1}=\mathbf{K}_r^{-T}[\mathbf{t}]_\times\mathbf{R}\mathbf{K}_l^{-1}
+\end{equation*}\par
+对后一个式子解读：左相机坐标系下的像点被反向投影得到直线，将该直线旋转至右相机坐标系下，然后与两相机中心连线所在的向量求向量积得到极平面的法向量，相当于对极平面成像，得到右相机图像平面下的对极线。\par
+基本矩阵是像点之间的单应，如果要得到对极线之间的单应，应当在对极线上想办法得到一个点，这个点即可与另一条对极线形成单应。
+\subsection{本质矩阵与基本矩阵的关系P199}
+本质矩阵是归一化条件下（即标定矩阵都是单位阵）的基本矩阵，因此可写作：
+\begin{equation*}
+  \mathbold{E}=\mathbold{K}^T_r\mathbold{FK}_l
+\end{equation*}\par
 
 \section{简答证明要点}
 \subsection{证明射影变换交比不变}
