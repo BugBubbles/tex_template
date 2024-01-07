@@ -1,0 +1,369 @@
+\documentclass[11pt]{article}
+%基于北京航空航天大学仪器科学与光电工程学院实验报告及课程报告排版得来，类似于毕业论文排版格式
+%后续将更新毕业论文排版格式
+\usepackage{graphicx,float}%使用图的宏包，使用图的浮动体宏包，引入参数H使图像紧跟当前文字
+\usepackage{caption} %使用图表标题的宏包
+\usepackage[colorlinks=true,pdfstartview=FitH,%
+linkcolor=black,anchorcolor=violet,citecolor=magenta]{hyperref}%加载hyperref宏包，使用超链接
+\usepackage{setspace}%用于设置行间距列间距等命令的宏包
+\usepackage{array}%设置列表高度宽度的宏包
+\usepackage{zhnumber}%使用中文数字编号的宏包
+\usepackage{titlesec,titletoc}%使用标题自定义形式的宏包和使用目录自定义形式的宏包
+\usepackage{siunitx}%物理学单位宏包
+\usepackage{tabularx}%让表格宽度等于页面宽度
+\usepackage{makecell}%单个表格单元调整的宏包
+\usepackage{subfigure} %%使用子图的宏包
+\usepackage[backend=biber,bibstyle=gb7714-1987,%nature,%%加载biblatex宏包，使用参考文献
+citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
+,url=false
+]{biblatex}%标注(引用)样式citestyle，著录样式bibstyle都采用gb7714-2015样式
+% \usepackage{pgfplots}%类似tikz的一个画图库，主要画统计图
+\usepackage{../customStyle}
+% \usepackage{customFont}%自行编写的字体命令库，基于CJK宏包
+% \usepackage{bh_style}%自行编写的风格文件，基于使用习惯和格式要求
+% \usepackage{math_formulate}%自行编写的数学公式命令库，基于amsmath宏包
+% \usepackage{picture}%集成图形绘制库，主要包括了tikz和pgfplots两大主流宏包
+% \usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}%使用mathtimepro2商业字体作为数学环境，并不推荐
+
+%biblatex宏包的参考文献数据源加载方式，注意book.bib应当与.tex文件在同一目录下，不然有可能会报错
+\addbibresource[location=local]{book.bib}
+% % \bibliographystyle{gbt7714-numerical}
+%%% 下面的命令重定义页面边距，使其符合中文刊物习惯 %%%%
+% \addtolength{\topmargin}{2.5cm}
+\setlength{\oddsidemargin}{0.63cm}  % 3.17cm - 1 inch
+\setlength{\evensidemargin}{\oddsidemargin}
+% \setlength{\textwidth}{14.66cm}
+% \setlength{\textheight}{24.00cm}    % 24.62
+
+\graphicspath{{./fig}}
+
+\begin{document}
+\section{多视图几何知识点}
+\subsection{齐次坐标二维点、二维线的表示，齐次坐标二维点和线的关系（相交、点在线上、交点交线）P20}
+设齐次点为$\mathbold{x}=(x_1,x_2,x_3)^T$，齐次线为$\mathbold{l}=(l_1,l_2,l_3)^T$，其中点和线都是二维的，则从齐次点退化为非齐次点可用下式：
+\begin{equation*}
+  \mathbold{x}=(x_1,x_2,x_3)^T=\circbrac{\frac{x_1}{x_3},\frac{x_2}{x_3}}^T
+\end{equation*}\par
+点在直线上：
+\begin{equation*}
+  \mathbold{x}^T\mathbold{l}=0
+\end{equation*}\par
+两个齐次点确定一条直线：
+\begin{equation*}
+  \mathbold{l}=\mathbold{x}\times\mathbold{x}'
+\end{equation*}\par
+两条齐次线确定一个点：
+\begin{equation*}
+  \mathbold{x}=\mathbold{l}\times\mathbold{l}'
+\end{equation*}\par
+\subsection{什么是理想点？P21}
+理想点就是位于无穷远直线或者无穷远平面上的点，又称消隐点，其齐次坐标的最后一个坐标值为0。
+\subsection{二维二次曲线的表示、对偶二次曲线与二次曲线的关系，二次曲线切线切点怎么表示？P23}
+二维二次曲线的表示：
+\begin{equation*}
+  \mathbold{C}=\begin{bmatrix}
+    a   & b/2 & d/2 \\
+    b/2 & c   & e/2 \\
+    d/2 & e/2 & f
+  \end{bmatrix}
+\end{equation*}\par
+点在二次曲线上的表示：
+\begin{equation*}
+  \mathbold{x}^T\mathbold{C}\mathbold{x}=0
+\end{equation*}\par
+对偶二次曲线：二次曲线上的全部切线所形成的包络，即符合以下公式：
+\begin{equation*}
+  \mathbold{l}^T\mathbold{C}^*\mathbold{l}=0
+\end{equation*}\par
+对偶二次曲线等于二次曲线的伴随矩阵，当二次曲线可逆时，该伴随矩阵在齐次意义下等于二次曲线的逆矩阵。\par
+经过二次曲线上某一点的切线可表示为：
+\begin{equation*}
+  \mathbold{l=Cx}
+\end{equation*}
+\subsection{退化二次曲线P24}
+退化二次曲线是不满秩的二次曲线，当秩为2时，可以表示为两条直线的乘积，即：
+\begin{equation*}
+  \mathbold{C}=\mathbold{ml}^T+\mathbold{lm}^T
+\end{equation*}\par
+当秩为1时，二次曲线退化为一个重合的点。
+\subsection{二次曲线极点-极线关系、共轭概念、仿射分类P44}
+二次曲线外一点$\mathbold{x}$可作二次曲线两条切线$\mathbold{l}_1,\mathbold{l}_2$，两切点$\mathbold{x}_1,\mathbold{x}_2$确定一条直线$\mathbold{l}=\mathbold{l_1}\times\mathbold{l}_2$，该直线称为极线，点$\mathbold{x}$称为极点，二者具有以下的关系：
+\begin{equation*}
+  \mathbold{l}=\mathbold{Cx}
+\end{equation*}\par
+因此又有以下的关系，称为共轭关系：
+\begin{equation*}
+  \mathbold{l}^T\mathbold{C}\mathbold{x}=0
+\end{equation*}\par
+二次曲线根据其仿射性质可以分为三类，如下表：
+\begin{table}[H]
+  \centering
+  \caption{二次曲线的仿射分类}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    二次曲线 & 圆（椭圆） & 抛物线 & 双曲线 \\
+    \hline
+    与无穷远直线交点 & 2个 & 1个 & 0个 \\
+    \hline
+  \end{tabular}
+\end{table}
+\subsection{点变换、直线协变、二次曲线协变、对偶二次曲线逆变P27}
+在单应$\mathbold{H}$作用下，点$\mathbold{x}$变换为$\mathbold{x}'$，则有：
+\begin{equation*}
+  \mathbold{x}'=\mathbold{Hx} 
+\end{equation*}\par
+直线$\mathbold{l}$变换为$\mathbold{l}'$，则有：
+\begin{equation*}
+  \mathbold{l}'=\mathbold{H}^{-T}\mathbold{l}
+\end{equation*}\par
+二次曲线$\mathbold{C}$变换为$\mathbold{C}'$，则有：
+\begin{equation*}
+  \mathbold{C}'=\mathbold{H}^{-T}\mathbold{CH}^{-1}
+\end{equation*}\par
+对偶二次曲线$\mathbold{C}^*$变换为$\mathbold{C}^{*'}$，则有：
+\begin{equation*}
+  \mathbold{C}^{*'}=\mathbold{HC}^*\mathbold{H}^T
+\end{equation*}\par
+由于直线和二次曲线的变换中含有$\mathbold{H}^{-1}$项，因此又称为协变。
+\subsection{四类变换的性质及其变换矩阵P30}
+欧氏变换，又称刚体变换，不改变原始形状的长度和夹角，其变换矩阵为：
+\begin{equation*}
+  \mathbold{H}=\begin{bmatrix}
+    \mathbold{R} & \mathbold{t} \\
+    \mathbold{0}^T & 1
+  \end{bmatrix} 
+\end{equation*}\par
+其中，$\mathbold{R}$为旋转矩阵，$\mathbold{t}$为平移向量。\par
+相似变换，又称等距变换，不改变原始形状的夹角，其变换矩阵为：
+\begin{equation*}
+  \mathbold{H}=\begin{bmatrix}
+    s\mathbold{R} & \mathbold{t} \\
+    \mathbold{0}^T & s
+  \end{bmatrix}
+\end{equation*}\par
+其中增加了一项缩放因子$s$，是对整个图像的均匀缩放。\par
+仿射变换，不改变原始形状的平行性，变换矩阵为：
+\begin{equation*}
+  \mathbold{H}=\begin{bmatrix}
+    \mathbold{A} & \mathbold{t} \\
+    \mathbold{0}^T & 1
+  \end{bmatrix}
+\end{equation*}\par
+其中矩阵$\mathbold{A}$是一个非奇异的矩阵。\par
+射影变换，不改变原始形状的直线性，变换矩阵为：
+\begin{equation*}
+  \mathbold{H}=\begin{bmatrix}
+    \mathbold{A} & \mathbold{t} \\
+    \mathbold{v}^T & 1
+  \end{bmatrix}
+\end{equation*}\par
+其中矩阵$\mathbold{A}$是一个非奇异的矩阵，向量$\mathbold{v}$是非零向量。
+\subsection{	射影变换阵的分解P32}
+射影矩阵可以分解为三个独立的变换，即：
+\begin{equation*}
+  \mathbold{H}=\begin{bmatrix}
+    s\mathbold{R} & \mathbold{t} \\
+    \mathbold{0}^T & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    \mathbold{K} & \mathbold{0} \\
+    \mathbold{0}^T & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+    \mathbold{I} & \mathbold{0} \\
+    \mathbold{v}^T & 1
+  \end{bmatrix}
+  \triangleq\mathbold{H}_S\mathbold{H}_A\mathbold{H}_P
+\end{equation*}\par
+其中，$\mathbold{H}_P$仅改变图像的无穷远直线（射影变换），$\mathbold{H}_A$是仅改变比例尺的长宽比（仿射变换），$\mathbold{H}_S$是相似变换。\par
+射影变换的逆变换矩阵也是一个射影变换，因此也可以分解成类似的结果，通常将它们反着写，即：
+\begin{equation*}
+  \mathbold{H}'=\mathbold{H}'_P\mathbold{H}'_A\mathbold{H}'_S
+\end{equation*}\par
+\subsection{	两种恢复至仿射变换的方法P37}
+恢复至仿射变换，需要将无穷远直线校正至规范位置，因此需要求出图像的无穷远直线即可：
+\begin{itemize}
+  \item 通过两对平行线的交点求出无穷远直线；
+  \item 通过交比不变，作图求出无穷远直线。
+\end{itemize}
+\subsection{三种恢复至相似变换的方法P41}
+恢复至仿射变换，需要将绝对对偶二次曲线校正至规范位置，因此需要求出绝对对偶二次曲线：
+\begin{itemize}
+  \item 通过五正交直线；
+  \item 在仿射校正的基础上，通过两对正交直线即可校正；
+  \item 在仿射校正的基础上？？？
+\end{itemize}
+\subsection{三维点和平面的齐次式以及关联定义、对偶定义，平面点的参数方程表示P50}
+三维点定义：$\mathbold{X}=(X_1,X_2,X_3,X_4)^T$，平面定义为：$\mathbold{\pi}=(\pi_1,\pi_2,\pi_3,\pi_4)^T$，点在平面上，可有以下关系：
+\begin{equation*}
+  \mathbold{\pi}^T\mathbold{X}=0
+\end{equation*}\par
+对偶定义？？？\par
+平面点的参数方程表示：
+\begin{equation*}
+  \mathbold{X}=\mathbold{Mx}
+\end{equation*}\par
+式中，$\mathbf{M}$是平面$\mathbold{\pi}$的零空间，是一个$4\times3$的矩阵，$\mathbold{x}$是一个三维齐次向量，即参数。
+\subsection{	空间直线的生成子空间表示和零空间表示、平面与直线的交点以及包含一条直线和点的平面定义方法P52}
+两个空间点构成矩阵：
+\begin{equation*}
+  \begin{bmatrix}
+    \mathbold{X}_1^T \\
+     \mathbold{X}_2^T
+  \end{bmatrix} 
+\end{equation*}\par
+空间直线是它的生成子空间，即：
+\begin{equation*}
+  \mathbold{X}=\lambda_1\mathbold{X}_1+\lambda_2\mathbold{X}_2
+\end{equation*}\par
+空间直线也可以使用两个平面的零空间表示，即：
+\begin{equation*}
+  \begin{bmatrix}
+    \mathbold{\pi}_1^T \\
+     \mathbold{\pi}_2^T
+  \end{bmatrix} \mathbf{l}=0
+\end{equation*}\par
+平面与直线的交点，相当于三个平面交于一点，需要使用零空间表示，即：
+\begin{equation*}
+  \begin{bmatrix}
+    \mathbold{\pi}_1^T \\
+    \mathbold{\pi}_2^T\\
+    \mathbold{\pi}_3^T
+  \end{bmatrix} \mathbf{X}=0
+\end{equation*}\par
+直线与一点共面，相当于三个点位于平面上，需要使用生成子空间表示 ，即：
+\begin{equation*}
+  \begin{bmatrix}
+    \mathbold{X}_1^T \\
+    \mathbold{X}_2^T\\
+    \mathbold{X}_3^T
+  \end{bmatrix} \mathbold{\pi}=0
+\end{equation*}\par
+\subsection{使用Plücker矩阵定义的直线以及对偶直线，直线和平面的关联P53}
+直线的Plücker矩阵定义：
+\begin{equation*}
+  \mathbold{L}=\mathbold{X}_1\mathbold{X}_2^T-\mathbold{X}_2\mathbold{X}_1^T
+\end{equation*}\par
+对偶直线的Plücker矩阵定义：
+\begin{equation*}
+  \mathbold{L}^*=\mathbold{\pi}_1\mathbold{\pi}_2^T-\mathbold{\pi}_2\mathbold{\pi}_1^T
+\end{equation*}\par
+直线与平面交于一点，即：
+\begin{equation*}
+  \mathbf{X}=\mathbold{L}^T\mathbold{\pi}
+\end{equation*}\par
+直线和一点共面，即：
+\begin{equation*}
+  \mathbf{\pi}=\mathbold{L}^T\mathbold{X}
+\end{equation*}\par
+\subsection{两直线相交的充要条件以及三个推论P54}
+两直线相交的充要条件是两直线的双线性乘积为零，即：
+\begin{equation*}
+  \mathcal{L_1|L_2}=\det\circbrac{\mathbf{X}_1,\mathbf{X}_2,\mathbf{X}_3,\mathbf{X}_4}=0
+\end{equation*}\par
+三个推论分别是：
+\begin{itemize}
+  \item 一条直线和另一条直线的对偶形式已知，则可以写出：\\
+  $\circbrac{\mathbold{\pi}_1^T\mathbf{X}_1}^T\circbrac{\mathbold{\pi}_2^T\mathbf{X}_2}-\circbrac{\mathbold{\pi}_2^T\mathbf{X}_2}^T\circbrac{\mathbold{\pi}_1^T\mathbf{X}_1}=0$；
+  \item ???
+  \item ???
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{简答证明要点}
+\subsection{证明射影变换交比不变}
+方法一：三角形面积法，即证明三角形面积的比值不变；\par
+方法二：使用齐次坐标，如下图：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\linewidth]{证明题1.png}
+  \caption{射影变换交比不变证明}
+\end{figure}\par
+交比定义为距离比的比值，在一维空间中的齐次坐标系下，可以使用行列式表示：
+$$
+\mathrm{Cross}(A,B,C,D)=\frac{
+  |AC||AD|
+}{|BC||BD|}
+$$\par
+式中，
+$$
+|AC|=\det\begin{bmatrix}
+  x_A & x_C  \\
+  y_A& y_C  \\
+\end{bmatrix}
+$$\par
+是前两项的行列式，因此可设：
+$$
+\begin{aligned}
+\mathbf{A}'=s_1\mathbf{HA}\\
+\mathbf{B}'=s_2\mathbf{HB}\\
+\mathbf{C}'=s_3\mathbf{HC}\\
+\mathbf{D}'=s_4\mathbf{HD}
+\end{aligned}
+$$\par
+代入行列式中，得：
+$$
+\begin{aligned}
+|A'B'|=\det\begin{bmatrix}
+  s_1\mathbf{HA}& s_2\mathbf{HB}  
+\end{bmatrix}=s_1s_2\det(\mathbf{H})|AB|
+\end{aligned}
+$$\par
+同理可得：
+$$
+\begin{aligned}
+|A'C'|=s_1s_3\det(\mathbf{H})|AC|\\
+|A'D'|=s_1s_4\det(\mathbf{H})|AD|\\
+|B'C'|=s_2s_3\det(\mathbf{H})|BC|\\
+|B'D'|=s_2s_4\det(\mathbf{H})|BD|\\
+\end{aligned}
+$$\par
+代入交比定义，即可验证四个比例因子和行列式$\det\mathbf{H}$均被消去，原式得证。
+\subsection{证明仿射变换能把圆映射成椭圆但是不能映射成双曲线和抛物线}
+根据二次曲线的仿射分类可知，与无穷远直线没有交点的二次曲线是椭圆或者圆，有一个交点的二次曲线是抛物线，有两个交点的二次曲线是双曲线。仿射变换不改变无穷远直线，而交点性质是射影变换都不会改变的，因此经过仿射变换后，曲线与无穷远直线的交点数量不会变化，所以圆不会变成双曲线和抛物线，而可能变成椭圆。
+\subsection{证明仿射变换下平行的两条线段长度之比不变，而不平行的则不然}
+设平行线段$AB$和$CD$，则有：
+$$
+\begin{aligned}
+\mathbf{A-B}=&\lambda(\mathbf{C-D})\\
+\frac{|AB|}{|CD|}=&\lambda
+\end{aligned}
+$$\par
+其中$\lambda$为常数，设仿射变换为$\mathbf{X}'=\mathbf{HX}$，则有：
+$$
+\mathbf{H}=\begin{bmatrix}
+  \mathbf{A}& \mathbf{v}\\
+   0&1\\
+\end{bmatrix}
+$$\par
+当平行线段的端点ABCD不含有无穷远点时，经过仿射变换后，有：
+$$
+\begin{aligned}
+\mathbf{A}'=\begin{bmatrix}
+\mathbf{AX}_A+\mathbf{v}z_A\\
+z_A
+\end{bmatrix}
+\end{aligned}
+$$\par
+因此两平行线段的长度相应地变化为：
+$$
+\begin{aligned}
+|A'B'|=&\sqrt{(\mathbf{X}_A-\mathbf{X}_B)^T\mathbf{A}^T\mathbf{A}(\mathbf{X}_A-\mathbf{X}_B)}\\
+|C'D'|=&\sqrt{(\mathbf{X}_C-\mathbf{X}_D)^T\mathbf{A}^T\mathbf{A}(\mathbf{X}_C-\mathbf{X}_D)}\\
+=&\lambda\sqrt{(\mathbf{X}_A-\mathbf{X}_B)^T\mathbf{A}^T\mathbf{A}(\mathbf{X}_A-\mathbf{X}_B)}\\
+\end{aligned}
+$$\par
+因此两线段长度之比不变。对于不平行的线段，由于公式（第一项）不成立，因此其长度之比不能保持不变。
+\end{document}
