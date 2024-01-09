@@ -102,16 +102,16 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   \caption{二次曲线的仿射分类}
   \begin{tabular}{|c|c|c|c|}
     \hline
-    二次曲线 & 圆（椭圆） & 抛物线 & 双曲线 \\
+    二次曲线     & 圆（椭圆） & 抛物线 & 双曲线 \\
     \hline
-    与无穷远直线交点 & 0个 & 1个 & 2个 \\
+    与无穷远直线交点 & 0个    & 1个  & 2个  \\
     \hline
   \end{tabular}
 \end{table}
 \subsection{点变换、直线协变、二次曲线协变、对偶二次曲线逆变P27}
 在单应$\mathbold{H}$作用下，点$\mathbold{x}$变换为$\mathbold{x}'$，则有：
 \begin{equation*}
-  \mathbold{x}'=\mathbold{Hx} 
+  \mathbold{x}'=\mathbold{Hx}
 \end{equation*}\par
 直线$\mathbold{l}$变换为$\mathbold{l}'$，则有：
 \begin{equation*}
@@ -130,9 +130,9 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 欧氏变换，又称刚体变换，不改变原始形状的长度和夹角，其变换矩阵为：
 \begin{equation*}
   \mathbold{H}=\begin{bmatrix}
-    \mathbold{R} & \mathbold{t} \\
+    \mathbold{R}   & \mathbold{t} \\
     \mathbold{0}^T & 1
-  \end{bmatrix} 
+  \end{bmatrix}
 \end{equation*}\par
 其中，$\mathbold{R}$为旋转矩阵，$\mathbold{t}$为平移向量。\par
 相似变换，又称等距变换，不改变原始形状的夹角，其变换矩阵为：
@@ -146,7 +146,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 仿射变换，不改变原始形状的平行性，变换矩阵为：
 \begin{equation*}
   \mathbold{H}=\begin{bmatrix}
-    \mathbold{A} & \mathbold{t} \\
+    \mathbold{A}   & \mathbold{t} \\
     \mathbold{0}^T & 1
   \end{bmatrix}
 \end{equation*}\par
@@ -154,7 +154,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 射影变换，不改变原始形状的直线性，变换矩阵为：
 \begin{equation*}
   \mathbold{H}=\begin{bmatrix}
-    \mathbold{A} & \mathbold{t} \\
+    \mathbold{A}   & \mathbold{t} \\
     \mathbold{v}^T & 1
   \end{bmatrix}
 \end{equation*}\par
@@ -163,15 +163,15 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 射影矩阵可以分解为三个独立的变换，即：
 \begin{equation*}
   \mathbold{H}=\begin{bmatrix}
-    s\mathbold{R} & \mathbold{t} \\
+    s\mathbold{R}  & \mathbold{t} \\
     \mathbold{0}^T & 1
   \end{bmatrix}
   \begin{bmatrix}
-    \mathbold{K} & \mathbold{0} \\
+    \mathbold{K}   & \mathbold{0} \\
     \mathbold{0}^T & 1
   \end{bmatrix}
   \begin{bmatrix}
-    \mathbold{I} & \mathbold{0} \\
+    \mathbold{I}   & \mathbold{0} \\
     \mathbold{v}^T & 1
   \end{bmatrix}
   \triangleq\mathbold{H}_S\mathbold{H}_A\mathbold{H}_P
@@ -209,8 +209,8 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \begin{bmatrix}
     \mathbold{X}_1^T \\
-     \mathbold{X}_2^T
-  \end{bmatrix} 
+    \mathbold{X}_2^T
+  \end{bmatrix}
 \end{equation*}\par
 空间直线是它的生成子空间，即：
 \begin{equation*}
@@ -220,14 +220,14 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \begin{bmatrix}
     \mathbold{\pi}_1^T \\
-     \mathbold{\pi}_2^T
+    \mathbold{\pi}_2^T
   \end{bmatrix} \mathbold{l}=0
 \end{equation*}\par
 平面与直线的交点，相当于三个平面交于一点，需要使用零空间表示，即：
 \begin{equation*}
   \begin{bmatrix}
     \mathbold{\pi}_1^T \\
-    \mathbold{\pi}_2^T\\
+    \mathbold{\pi}_2^T \\
     \mathbold{\pi}_3^T
   \end{bmatrix} \mathbold{X}=0
 \end{equation*}\par
@@ -235,7 +235,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \begin{bmatrix}
     \mathbold{X}_1^T \\
-    \mathbold{X}_2^T\\
+    \mathbold{X}_2^T \\
     \mathbold{X}_3^T
   \end{bmatrix} \mathbold{\pi}=0
 \end{equation*}\par
@@ -264,20 +264,20 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 三个推论分别是：
 \begin{itemize}
   \item 一条直线和另一条直线的对偶形式已知，则可以写出：\\
-  $\circbrac{\mathbold{\pi}_1^T\mathbold{X}_1}\cdot\circbrac{\mathbold{\pi}_2^T\mathbold{X}_2}-\circbrac{\mathbold{\pi}_2^T\mathbold{X}_1}\cdot\circbrac{\mathbold{\pi}_1^T\mathbold{X}_2}=0$
+        $\circbrac{\mathbold{\pi}_1^T\mathbold{X}_1}\cdot\circbrac{\mathbold{\pi}_2^T\mathbold{X}_2}-\circbrac{\mathbold{\pi}_2^T\mathbold{X}_1}\cdot\circbrac{\mathbold{\pi}_1^T\mathbold{X}_2}=0$
   \item 使用两平面表示的直线也可以得到相同的双线性乘积结果：\\
-  $\mathcal{L_1\sep L_2}=\det\circbrac{\mathbold{\pi}_1,\mathbold{\pi}_2,\mathbold{\pi}_3,\mathbold{\pi}_4}=0
-  $
-  \item 六维向量$\mathcal{L}=[l_12,l_12,l_14,l_23,l_24,l_34]^T$仅表示一条三维直线，当且仅当双线性乘积为零。
+        $\mathcal{L_1\sep L_2}=\det\circbrac{\mathbold{\pi}_1,\mathbold{\pi}_2,\mathbold{\pi}_3,\mathbold{\pi}_4}=0
+        $
+  \item 六维向量$\mathcal{L}=[l_{12},l_{12},l_[14],l_{23},l_{24},l_{34}]^T$仅表示一条三维直线，当且仅当双线性乘积为零。
 \end{itemize}
 \subsection{	绝对二次曲线、度量两空间直线的夹角，四个关于绝对二次曲线的性质P61}
 绝对二次曲线定义为符合以下公式的全部点的集合：
 \begin{align*}
   \left\{
-    \begin{aligned}
-      x_1^2+x_2^2+x_3^2&=0\\
-      x_4&=0
-    \end{aligned}
+  \begin{aligned}
+    x_1^2+x_2^2+x_3^2 & =0 \\
+    x_4               & =0
+  \end{aligned}
   \right.
 \end{align*}\par
 在规范位置处，绝对二次曲线可以表示为：
@@ -334,16 +334,16 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 记标定矩阵$\mathbold{P}$为：
 \begin{equation*}
   \mathbold{P}=\begin{bmatrix}
-    P_1^T\\\\
-    P_2^T\\\\
+    P_1^T \\\\
+    P_2^T \\\\
     P_3^T
   \end{bmatrix}
   =\begin{bmatrix}
-    p_1&p_2&p_3&p_4
+    p_1 & p_2 & p_3 & p_4
   \end{bmatrix}=\begin{bmatrix}
-    p_{11}&p_{12}&p_{13}&p_{14}\\
-    p_{21}&p_{22}&p_{23}&p_{24}\\
-    p_{31}&p_{32}&p_{33}&p_{34}
+    p_{11} & p_{12} & p_{13} & p_{14} \\
+    p_{21} & p_{22} & p_{23} & p_{24} \\
+    p_{31} & p_{32} & p_{33} & p_{34}
   \end{bmatrix}
 \end{equation*}\par
 投影矩阵的行向量$P_1^T,P_2^T$代表图像上x轴和y轴的与相机主轴形成的两个平面，称为轴平面；第三行$P_3^T$代表相机的主平面；\par
@@ -356,14 +356,14 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \subsection{仿射摄像机与有限摄像机的三个区别P131}
 \begin{itemize}
   \item 平行投影矩阵$\begin{bmatrix}
-    1&0&0&0\\
-    0&1&0&0\\
-    0&0&0&1
-  \end{bmatrix}$代替了有限摄像机的规范射影矩阵$\mathbold{[I\sep 0]}$；
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 0 & 1
+          \end{bmatrix}$代替了有限摄像机的规范射影矩阵$\mathbold{[I\sep 0]}$；
   \item 标定矩阵$\begin{bmatrix}
-    \mathbold{K}_{2\times2}&0\\
-    0^T&1
-  \end{bmatrix}$代替了有限摄像机的上三角阵$\mathbold{K}$；
+            \mathbold{K}_{2\times2} & 0 \\
+            0^T                     & 1
+          \end{bmatrix}$代替了有限摄像机的上三角阵$\mathbold{K}$；
   \item 主点位于无穷远处，即主点无定义。
 \end{itemize}
 \subsection{摄像机将二次曲线反向投影成锥面、将二次曲面映射为二次曲线P153}
@@ -373,9 +373,9 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 摄像机同中心缩放，相当于其左乘一个倍缩变换矩阵，即有：
 \begin{equation*}
   \mathbold{P}'=\begin{bmatrix}
-    s&0&0\\
-    0&s&0\\
-    0&0&1
+    s & 0 & 0 \\
+    0 & s & 0 \\
+    0 & 0 & 1
   \end{bmatrix}\mathbold{P}
 \end{equation*}\par
 摄像机同中心纯旋转，相当于对图像坐标系乘以一个旋转矩阵，即：
@@ -387,8 +387,8 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 因此，一条图像直线可以确定一张过摄像机中心的平面，该平面在欧氏空间中的法线方向是$\mathbold{n=K}^T\mathbold{l}$。\par
 \subsection{绝对二次曲线的图像P161}
 三维空间中的绝对二次曲线定义为无穷远平面\textbf{的}绝对二次曲线，其图像求法通过无穷远平面间接求解。无穷远平面上的点可以表示为$\mathbold{X}_\infty=\begin{pmatrix}
-  \mathbold{d} \\ 0
-\end{pmatrix}$，因此可经过摄像机投影为：
+    \mathbold{d} \\ 0
+  \end{pmatrix}$，因此可经过摄像机投影为：
 \begin{equation*}
   \mathbold{x}=\mathbold{KR[I\sep 0]}\begin{pmatrix}
     \mathbold{d} \\ 0
@@ -404,14 +404,14 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{equation*}\par
 \subsection{三维空间的消影点在图像的位置P165}
 三维空间中相互平行的直线拥有相同的消影点，设这个消影点为$\mathbf{D}=\begin{pmatrix}
-  \mathbold{d} \\ 0
-\end{pmatrix}$因此，可以将直线记为$\mathbold{X}(\lambda)=\mathbold{A}+\lambda\mathbf{D}$，对该直线上每一点施加摄像机投影，可得：
+    \mathbold{d} \\ 0
+  \end{pmatrix}$因此，可以将直线记为$\mathbold{X}(\lambda)=\mathbold{A}+\lambda\mathbf{D}$，对该直线上每一点施加摄像机投影，可得：
 \begin{equation*}
   \lim_{\lambda\to\infty}\mathbold{x}(\lambda)=\lim_{\lambda\to\infty}\circbrac{\mathbold{PA}+\lambda\mathbf{PD}}=\mathbold{Kd}
 \end{equation*}\par
 因此摄像机将消影点$\mathbf{D}=\begin{pmatrix}
-  \mathbold{d} \\ 0
-\end{pmatrix}$映射到了图像平面上的同一点$\mathbold{v=Kd}$。
+    \mathbold{d} \\ 0
+  \end{pmatrix}$映射到了图像平面上的同一点$\mathbold{v=Kd}$。
 \subsection{对极点、对极平面和对极线的概念P185}
 两个摄像机的中心与空间中一点形成的平面称为对极平面；中心的连线与图像平面的交点称为对极点；两个摄像机各自图像平面与对极平面的交线称为对极线。
 \subsection{基本矩阵的四项几何含义P189}
@@ -422,10 +422,10 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 推导过程中，不允许两个摄像机中心相同。代入摄像机投影矩阵的四种不表达式和对极点表达式（世界坐标系放在某一个摄像机中心）：
 \begin{equation*}
   \mathbf{e}=\mathbf{P}\begin{bmatrix}
-    -\mathbf{R}^T\mathbf{t}\\
+    -\mathbf{R}^T\mathbf{t} \\
     1
   \end{bmatrix}=\mathbf{KR}^T\mathbf{t}\qquad\mathbf{e}'=\mathbf{P}'\begin{bmatrix}
-    \mathbf{0}\\
+    \mathbf{0} \\
     1
   \end{bmatrix}=\mathbf{K}'\mathbf{t}
 \end{equation*}\par
@@ -437,10 +437,10 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 如果取定左相机坐标系与世界坐标系重合，则可以得到：
 \begin{equation*}
   \mathbf{e}_r=\mathbf{K}_r\mathbf{[R\sep t]}\begin{bmatrix}
-    \mathbf{0}^T\\
+    \mathbf{0}^T \\
     1
   \end{bmatrix}=\mathbf{K}_r\mathbf{t}\qquad\mathbf{e}_l=\mathbf{K}_l\mathbf{[I\sep 0]}\begin{bmatrix}
-    -\mathbf{R}^T\mathbf{t}\\
+    -\mathbf{R}^T\mathbf{t} \\
     1
   \end{bmatrix}=\mathbf{K}_l\mathbf{R^\mathrm{T}t}
 \end{equation*}\par
@@ -471,42 +471,42 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{figure}\par
 交比定义为距离比的比值，在一维空间中的齐次坐标系下，可以使用行列式表示：
 $$
-\mathrm{Cross}(A,B,C,D)=\frac{
-  \sep AC\sep \sep AD\sep 
-}{\sep BC\sep \sep BD\sep }
+  \mathrm{Cross}(A,B,C,D)=\frac{
+    \sep AC\sep \sep AD\sep
+  }{\sep BC\sep \sep BD\sep }
 $$\par
 式中，
 $$
-\sep AC\sep =\det\begin{bmatrix}
-  x_A & x_C  \\
-  y_A& y_C  \\
-\end{bmatrix}
+  \sep AC\sep =\det\begin{bmatrix}
+    x_A & x_C \\
+    y_A & y_C \\
+  \end{bmatrix}
 $$\par
 是前两项的行列式，因此可设：
 $$
-\begin{aligned}
-\mathbold{A}'=s_1\mathbold{HA}\\
-\mathbold{B}'=s_2\mathbold{HB}\\
-\mathbold{C}'=s_3\mathbold{HC}\\
-\mathbold{D}'=s_4\mathbold{HD}
-\end{aligned}
+  \begin{aligned}
+    \mathbold{A}'=s_1\mathbold{HA} \\
+    \mathbold{B}'=s_2\mathbold{HB} \\
+    \mathbold{C}'=s_3\mathbold{HC} \\
+    \mathbold{D}'=s_4\mathbold{HD}
+  \end{aligned}
 $$\par
 代入行列式中，得：
 $$
-\begin{aligned}
-\sep A'B'\sep =\det\begin{bmatrix}
-  s_1\mathbold{HA}& s_2\mathbold{HB}  
-\end{bmatrix}=s_1s_2\det(\mathbold{H})\sep AB\sep 
-\end{aligned}
+  \begin{aligned}
+    \sep A'B'\sep =\det\begin{bmatrix}
+                         s_1\mathbold{HA} & s_2\mathbold{HB}
+                       \end{bmatrix}=s_1s_2\det(\mathbold{H})\sep AB\sep
+  \end{aligned}
 $$\par
 同理可得：
 $$
-\begin{aligned}
-\sep A'C'\sep =s_1s_3\det(\mathbold{H})\sep AC\sep \\
-\sep A'D'\sep =s_1s_4\det(\mathbold{H})\sep AD\sep \\
-\sep B'C'\sep =s_2s_3\det(\mathbold{H})\sep BC\sep \\
-\sep B'D'\sep =s_2s_4\det(\mathbold{H})\sep BD\sep \\
-\end{aligned}
+  \begin{aligned}
+    \sep A'C'\sep =s_1s_3\det(\mathbold{H})\sep AC\sep \\
+    \sep A'D'\sep =s_1s_4\det(\mathbold{H})\sep AD\sep \\
+    \sep B'C'\sep =s_2s_3\det(\mathbold{H})\sep BC\sep \\
+    \sep B'D'\sep =s_2s_4\det(\mathbold{H})\sep BD\sep \\
+  \end{aligned}
 $$\par
 代入交比定义，即可验证四个比例因子和行列式$\det\mathbold{H}$均被消去，原式得证。
 \subsection{证明仿射变换能把圆映射成椭圆但是不能映射成双曲线和抛物线}
@@ -514,35 +514,213 @@ $$\par
 \subsection{证明仿射变换下平行的两条线段长度之比不变，而不平行的则不然}
 设平行线段$AB$和$CD$，则有：
 $$
-\begin{aligned}
-\mathbold{A-B}=&\lambda(\mathbold{C-D})\\
-\frac{\sep AB\sep }{\sep CD\sep }=&\lambda
-\label{eq:证明题3}
-\end{aligned}
+  \begin{aligned}
+    \mathbold{A-B}=                    & \lambda(\mathbold{C-D}) \\
+    \frac{\sep AB\sep }{\sep CD\sep }= & \lambda
+    \label{eq:证明题3}
+  \end{aligned}
 $$\par
 其中$\lambda$为常数，设仿射变换为$\mathbold{X}'=\mathbold{HX}$，则有：
 $$
-\mathbold{H}=\begin{bmatrix}
-  \mathbold{A}& \mathbold{v}\\
-   0&1\\
-\end{bmatrix}
+  \mathbold{H}=\begin{bmatrix}
+    \mathbold{A} & \mathbold{v} \\
+    0            & 1            \\
+  \end{bmatrix}
 $$\par
 当平行线段的端点ABCD不含有无穷远点时，经过仿射变换后，有：
 $$
-\begin{aligned}
-\mathbold{A}'=\begin{bmatrix}
-\mathbold{AX}_A+\mathbold{v}z_A\\
-z_A
-\end{bmatrix}
-\end{aligned}
+  \begin{aligned}
+    \mathbold{A}'=\begin{bmatrix}
+                    \mathbold{AX}_A+\mathbold{v}z_A \\
+                    z_A
+                  \end{bmatrix}
+  \end{aligned}
 $$\par
 因此两平行线段的长度相应地变化为：
 $$
-\begin{aligned}
-\sep A'B'\sep =&\sqrt{(\mathbold{X}_A-\mathbold{X}_B)^T\mathbold{A}^T\mathbold{A}(\mathbold{X}_A-\mathbold{X}_B)}\\
-\sep C'D'\sep =&\sqrt{(\mathbold{X}_C-\mathbold{X}_D)^T\mathbold{A}^T\mathbold{A}(\mathbold{X}_C-\mathbold{X}_D)}\\
-=&\lambda\sqrt{(\mathbold{X}_A-\mathbold{X}_B)^T\mathbold{A}^T\mathbold{A}(\mathbold{X}_A-\mathbold{X}_B)}\\
-\end{aligned}
+  \begin{aligned}
+    \sep A'B'\sep = & \sqrt{(\mathbold{X}_A-\mathbold{X}_B)^T\mathbold{A}^T\mathbold{A}(\mathbold{X}_A-\mathbold{X}_B)}        \\
+    \sep C'D'\sep = & \sqrt{(\mathbold{X}_C-\mathbold{X}_D)^T\mathbold{A}^T\mathbold{A}(\mathbold{X}_C-\mathbold{X}_D)}        \\
+    =               & \lambda\sqrt{(\mathbold{X}_A-\mathbold{X}_B)^T\mathbold{A}^T\mathbold{A}(\mathbold{X}_A-\mathbold{X}_B)} \\
+  \end{aligned}
 $$\par
 因此两线段长度之比不变。对于不平行的线段，由于公式\ref{eq:证明题3}不成立，因此其长度之比不能保持不变。
+\subsection{	在二维射影变换中，证明存在一个变换使得单位圆作为集合不变。}
+在二维射影变换作用下，单位圆的变换为：
+\begin{equation*}
+  s\mathbold{C}=\mathbf{H}^{-T}\mathbf{CH}^{-1}
+\end{equation*}\par
+其中的$\mathbf{C}$满足：
+\begin{equation*}
+  \mathbf{C}=\begin{bmatrix}
+    1 & 0 & 0  \\
+    0 & 1 & 0  \\
+    0 & 0 & -1
+  \end{bmatrix}
+\end{equation*}\par
+因此可取$\mathbf{H}$为$\mathbf{C}$的相似变换矩阵，而矩阵$\mathbf{C}$是实对称矩阵，它是可以相似对角化的，因此这样的射影变换矩阵是一定存在的。
+\subsection{给出极点在椭圆内部的绘图方法}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\linewidth]{证明题4.png}
+  \caption{射影变换交比不变证明}
+  \label{fig:证明题4}
+\end{figure}\par
+如图\ref{fig:证明题4}所示，过椭圆内部一点任意作两割线，交椭圆于四点，过两割线的对应两点作切线交于两点，连接两点得直线即是椭圆内该点的共轭极线。说明：椭圆的极点极线具有共轭关系，因此过椭圆内一点作的直线与椭圆外一点存在共轭关系，一条直线并不能确定椭圆内的一点，因此需要作两条直线即可确定该极点，而极线上任意一点的极线都经过椭圆内的同一点，这就说明该点就是与极线共轭的极点。
+\subsection{证明无穷远平面是绝对对偶二次曲面的零化向量。}
+在标准情况下，无穷远平面的方程为：
+\begin{equation*}
+  \mathbold{\pi}_\infty=\begin{bmatrix}
+    0 \\0\\0\\1
+  \end{bmatrix}
+\end{equation*}\par
+绝对对偶二次曲面的方程为：
+\begin{equation*}
+  \mathbold{Q}^*_\infty=\begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\end{equation*}\par
+显然二者满足：
+\begin{equation*}
+  \mathbold{Q}^*_\infty\mathbold{\pi}_\infty=0
+\end{equation*}\par
+在施加射影变换的作用下，绝对对偶二次曲面将变化为：
+\begin{equation*}
+  {\mathbold{Q}^*_\infty}'=\mathbold{H}\mathbold{Q}^*_\infty\mathbold{H}^T
+\end{equation*}\par
+而无穷远平面将变化为：
+\begin{equation*}
+  \mathbold{\pi}_\infty'=\mathbold{H}^{-T}\mathbold{\pi}_\infty
+\end{equation*}\par
+因此有：
+\begin{equation*}
+  {\mathbold{Q}^*_\infty}'{\mathbold{\pi}_\infty}'=\mathbold{H}\mathbold{Q}^*_\infty\mathbold{H}^T\mathbold{H}^{-T}\mathbold{\pi}_\infty=\mathbold{H}\mathbold{Q}^*_\infty\mathbold{\pi}_\infty=\mathbold{0}
+\end{equation*}\par
+因此在任意情况下，无穷远平面均是绝对对偶二次曲面的零化向量。
+\subsection{利用Plücker直线坐标写出关于直线与平面交点的表示式以及由一点与一直线定义的平面的表示式}
+直线与平面$\mathbold{\pi}$的交点可写为：
+\begin{equation*}
+  \mathbold{X}=\mathbold{L}\mathbold{\pi}
+\end{equation*}\par
+证明该点同时位于直线上和平面上：
+设直线的plücker表达式为：
+\begin{equation*}
+  \mathbold{L}=\mathbf{AB}^T-\mathbf{BA}^T\qquad\mathbf{L}^*=\mathbf{PQ}^T-\mathbf{QP}^T
+\end{equation*}\par
+其中$\mathbf{A,B}$为直线上的两点，位于平面$\mathbf{P,Q}$上，则有：
+\begin{equation*}
+  \mathbf{P}^T\mathbf{A}=\mathbf{P}^T\mathbf{B}=\mathbf{Q}^T\mathbf{A}=\mathbf{Q}^T\mathbf{B}=0
+\end{equation*}\par
+因此有：
+\begin{align*}
+  \mathbf{L^*X} & =\circbrac{\mathbf{PQ}^T-\mathbf{QP}^T}\circbrac{\mathbf{AB}^T-\mathbf{BA}^T}\mathbf{X}                                                              \\
+                & =\mathbf{PQ}^T\mathbf{AB}^T\mathbf{X}-\mathbf{PQ}^T\mathbf{BA}^T\mathbf{X}-\mathbf{QP}^T\mathbf{AB}^T\mathbf{X}+\mathbf{QP}^T\mathbf{BA}^T\mathbf{X} \\
+                & =\mathbf{0}
+\end{align*}\par
+可见该点位于直线上，同理：
+\begin{align*}
+  \mathbold{\pi}^T\mathbf{X}= & \mathbold{\pi}^T\mathbf{L}\mathbold{\pi}                                               \\
+                              & =\mathbold{\pi}^T\circbrac{\mathbf{AB}^T-\mathbf{BA}^T}\mathbold{\pi}                  \\
+                              & =\mathbold{A^\mathrm{T}\pi B^\mathrm{T}\pi}-\mathbold{B^\mathrm{T}\pi A^\mathrm{T}\pi} \\
+                              & =\mathbf{0}
+\end{align*}\par
+式中用到了内积为纯量因此可以交换位置的性质，而交换后恰好让两式归0，因此该点同时位于直线和平面上。\par
+同理，由一点与一条直线定义的平面表达式为：
+\begin{equation*}
+  \mathbold{\pi}=\mathbold{L^*}\mathbold{X}
+\end{equation*}\par
+证明方法类似，不再赘述。
+\subsection{利用plucker坐标推导点在直线上和直线在平面上的条件}
+点在直线上的条件：
+\begin{equation*}
+  \mathbf{L^*X}=\mathbf{0}
+\end{equation*}\par
+证明方法是说明该点即在平面$\mathbf{P}$又在平面$\mathbf{Q}$上说明的；\par
+直线在平面上的条件：
+\begin{equation*}
+  \mathbold{L\pi}=\mathbf{0}
+\end{equation*}\par
+证明方法是通过直线上某两点在平面上说明的。
+\subsection{利用Plücker坐标证明平行平面相交在无穷远平面上的一条直线上}
+设两平行平面为：
+\begin{align*}
+  \mathbold{\pi}_1=\begin{bmatrix}
+                     a \\b\\c\\d_1
+                   \end{bmatrix}\qquad\mathbold{\pi}_2=\begin{bmatrix}
+                                                         a \\b\\c\\d_2
+                                                       \end{bmatrix}
+\end{align*}\par
+然后计算出来即可说明用该两平面生成的直线位于无穷远平面上。
+\subsection{证明平行线相交在无穷远平面上}
+证明思路：无，还一时半伙想不出来。
+\subsection{证明绝对对偶二次曲面是绝对二次曲线的对偶（对偶即二次曲线的切面被二次曲面的包络）}
+在标准情况下绝对二次曲线和绝对对偶二次曲面都是如下的矩阵：
+\begin{equation*}
+  \mathbold{\Omega}_\infty=\mathbold{Q}^*_\infty=\begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 0
+  \end{bmatrix}
+\end{equation*}\par
+在标准情况下，绝对二次曲线的切线方程为：
+\begin{equation*}
+\mathbold{l}=\mathbold{\Omega}_\infty\mathbold{X}=\begin{bmatrix}
+  \mathbf{I} & 0 \\
+  \mathbf{0}^T         & 0
+\end{bmatrix}\begin{bmatrix}
+  \mathbf{v}\\ 0
+\end{bmatrix}=\begin{bmatrix}
+  \mathbf{v}\\ 0
+\end{bmatrix}
+\end{equation*}\par
+由于切点在绝对二次曲线上，因此满足：
+\begin{equation*}
+  \mathbold{v}^T\mathbold{v}=0
+\end{equation*}\par
+因此，切线满足以下方程：
+\begin{equation*}
+  \mathbf{l}^T\mathbf{Q}_\infty^*\mathbf{l}=\mathbf{v}^T\mathbf{v}=0
+\end{equation*}\par
+说明绝对对偶二次曲线是绝对二次曲线的对偶。当外加射影变换矩阵作用后，无穷远平面产生协变，因此绝对二次曲线产生协变，绝对对偶二次曲面产生变换，分别为：
+\begin{equation*}
+  \mathbold{\Omega}_\infty'=\mathbold{H}^{-T}\mathbold{\Omega}_\infty\mathbold{H}^{-1}\qquad\mathbold{Q}_\infty^{*'}=\mathbold{H}\mathbold{Q}_\infty^*\mathbold{H}^T
+\end{equation*}\par
+因此，绝对二次曲线的切线方程变为：
+\begin{equation*}
+  \mathbold{l}'=\mathbf{H}^{-T}\mathbf{l}
+\end{equation*}\par
+其符合变换后的绝对对偶二次曲面方程：
+\begin{equation*}
+  \mathbf{l}'^T\mathbf{Q}_\infty^{*'}\mathbf{l}'=\mathbf{l}^T\mathbf{H}^{-1}\mathbf{H}\mathbf{Q}_\infty^*\mathbf{H}^T\mathbf{H}^{-T}\mathbf{l}=\mathbf{l}^T\mathbf{Q}_\infty^*\mathbf{l}=0
+\end{equation*}\par
+因此在任意情况下，绝对对偶二次曲面都是绝对二次曲线的对偶。
+\subsection{证明绝对对偶二次曲面不变射影变换是相似变换，反之也成立。}
+证明思路：用标准情况下的绝对对偶二次曲面（秩亏单位阵）和一般情况下的的射影变换阵，然后证明变换后的绝对对偶二次曲面阵与原始阵相同，因此可推出射影变换阵的$\mathbf{A}$子块是正交矩阵，同时也可以得出$\mathbf{v}^T\mathbf{v}=0$，推出矢量$\mathbf{v}$是零向量，因此射影变换矩阵是相似变换阵。
+\subsection{证明过点x的二次曲线切线是Cx}
+这是二维齐次坐标下的证明，可反设过$\mathbf{x}$点直线还交二次曲线于$\mathbf{y}$点，即有：
+\begin{equation*}
+  \mathbf{x}^T\mathbf{Qx}=\mathbf{y}^T\mathbf{Qy}=0
+\end{equation*}\par
+因此可通过线性叠加证明经过$\mathbf{x,y}$的全部点的直线都在二次曲线上，与二次曲线不退化的前提矛盾，因此$\mathbf{y}$点不可能存在，即$\mathbf{x}$点的切线是$\mathbf{Cx}$。
+\subsection{证明过点X的二次曲面切平面是QX}
+与上一问的证明方式一模一样，不再赘述。
+\subsection{蒙娜丽莎的眼睛。}
+{\heiti 设是$I_0$射影图像，而$I_1$是$I_0$的图像，其合成图像为$I'$，证明$I'$的视在摄像机中心与$I_0$的一样，并验证$I'$和$I_0$的其他参数可能不同。}
+摄像机模型为：
+\begin{equation*}
+  \mathbold{P}=\mathbold{KR[I\sep -\tilde{C}]}
+\end{equation*}\par
+对原始射影场景$I_0$生成得到的图像$I_1$为：
+\begin{equation*}
+  \mathbold{x}_1=\mathbold{KRP}^{-1}\mathbold{X}_0
+\end{equation*}\par
+而人眼相当于另一套摄像机，其对图像$I_1$成像，相当于一个二维的单应变换，将该单应叠加至投影成像中，可得：
+\begin{equation*}
+  \mathbold{x}'=\mathbold{HKR[I\sep -\tilde{C}]}\mathbold{X}_0
+\end{equation*}\par
+
 \end{document}
