@@ -384,7 +384,23 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{equation*}\par
 \subsection{摄像机标定矩阵K是图像点与欧氏坐标系下的射线方向的一个单应（仿射变换）P161}
 这一点是公理性质的结论，书上也并未给出证明，以$\mathbold{d}$代表\textbf{欧氏坐标系}下测量得到的射线方向，其在图像平面上的像点满足：$\mathbold{x=Kd}$。\par
-因此，一条图像直线可以确定一张过摄像机中心的平面，该平面在欧氏空间中的法线方向是$\mathbold{n=K}^T\mathbold{l}$。\par
+因此，一条图像直线可以确定一张过摄像机中心的平面，该平面在欧氏空间中的法线方向是$\mathbold{n=K}^T\mathbold{l}$。
+\subsection{三个重要公式}
+\subsubsection{直线反投影公式P152}
+图像平面上的一条直线对应原始空间中的一个平面，该平面为：
+\begin{equation*}
+  \mathbold{\pi}=\mathbold{P}^T\mathbold{l}
+\end{equation*}
+\subsubsection{直线确定空间法线P161}
+图像平面直线对应的空间平面法线可直接求为：
+\begin{equation*}
+  \mathbold{n}=\mathbold{K}^T\mathbold{l}
+\end{equation*}
+\subsubsection{空间直线正投影P152}
+空间直线对应的图像平面直线可直接求为：
+\begin{equation*}
+  \mathbold{[l]_\times}=\mathbold{P}\mathbold{LP}^T
+\end{equation*}
 \subsection{绝对二次曲线的图像P161}
 三维空间中的绝对二次曲线定义为无穷远平面\textbf{的}绝对二次曲线，其图像求法通过无穷远平面间接求解。无穷远平面上的点可以表示为$\mathbold{X}_\infty=\begin{pmatrix}
     \mathbold{d} \\ 0
@@ -655,7 +671,7 @@ $$\par
 \end{align*}\par
 然后计算出来即可说明用该两平面生成的直线位于无穷远平面上。
 \subsection{证明平行线相交在无穷远平面上}
-证明思路：无，还一时半伙想不出来。
+证明思路：参考自\cite{MultipleViewGeometrya}，两平行直线必定是共面的，因此可构造两个平行平面依次与公共平面相交于两平行直线处，根据上文证明，两平行平面交于无穷远平面，而公共平面与无穷远平面有交线，因此两平行直线与无穷远平面的交点必定是公共平面交线和平行平面交线的交集，因此该点位于无穷远平面上。
 \subsection{证明绝对对偶二次曲面是绝对二次曲线的对偶（对偶即二次曲线的切面被二次曲面的包络）}
 在标准情况下绝对二次曲线和绝对对偶二次曲面都是如下的矩阵：
 \begin{equation*}
@@ -709,18 +725,155 @@ $$\par
 \subsection{证明过点X的二次曲面切平面是QX}
 与上一问的证明方式一模一样，不再赘述。
 \subsection{蒙娜丽莎的眼睛。}
-{\heiti 设是$I_0$射影图像，而$I_1$是$I_0$的图像，其合成图像为$I'$，证明$I'$的视在摄像机中心与$I_0$的一样，并验证$I'$和$I_0$的其他参数可能不同。}
-摄像机模型为：
+{\heiti 设是$I_0$射影图像，而$I_1$是$I_0$的图像，其合成图像为$I'$，证明$I'$的视在摄像机中心与$I_0$的一样，并验证$I'$和$I_0$的其他参数可能不同。}\par
+这个题题意不明，查阅资料\cite{MultipleViewGeometry}后才知道，合成图像应该就是$I_0$的意思，只不过$I_1$和$I_0$是针对不同摄像机而言的。一般的射影摄像机模型为：
 \begin{equation*}
   \mathbold{P}=\mathbold{KR[I\sep -\tilde{C}]}
 \end{equation*}\par
 对原始射影场景$I_0$生成得到的图像$I_1$为：
 \begin{equation*}
-  \mathbold{x}_1=\mathbold{KRP}^{-1}\mathbold{X}_0
+  \mathbold{x}_0=\mathbold{KRP}^{-1}\mathbold{X}_\mathrm{cam}
 \end{equation*}\par
-而人眼相当于另一套摄像机，其对图像$I_1$成像，相当于一个二维的单应变换，将该单应叠加至投影成像中，可得：
+而人眼相当于一套双目摄像机，其对图像$I_1$成像，相当于一个二维的单应变换，将该单应叠加至投影成像中，可得：
 \begin{equation*}
-  \mathbold{x}'=\mathbold{HKR[I\sep -\tilde{C}]}\mathbold{X}_0
+  \mathbold{x}_1=\mathbold{HKR[I\sep -\tilde{C}]}\mathbold{X}_\mathrm{cam}
+\end{equation*}\par
+可见，合成图像中的摄像机中心仍然与原始摄像机中心一致，在世界坐标系下均为$\tilde{\mathbf{C}}$，而其他参数如摄像机矩阵等均受到二次投影的影响，因此可能不同。\par
+因此，蒙娜丽莎的眼睛始终看着观察者，原因在于，观察者的眼睛相当于一个射影摄像机，蒙娜丽莎图像本身可以相当于一幅射影摄像机的图像，画中蒙娜丽莎的眼睛始终看着摄像机的中心，而观察者对该图像的二次成像不改变摄像机中心，所以看起来蒙娜丽莎在观察者眼中成像后的图像中的眼睛始终看着观察者。
+\subsection{射影摄像机反向投影}
+{\heiti 证明在射影摄像机下，图像点的反向投影的射线可以被写成$\mathbf{L}^*=\mathbf{P}^T\mathbf{[x]_\times P}$}\par
+过图像点$\mathbf{x}$，在图像上任作两直线$\mathbf{l}_1,\mathbf{l}_2$，利用射影摄像机对直线的反向投影，可得：
+\begin{align*}
+  \mathbold{\pi}_1=\mathbf{P}^T\mathbf{l}_1&\qquad\mathbold{\pi}_2=\mathbf{P}^T\mathbf{l}_2\\
+  \mathbf{x}=\mathbf{l}_1\times\mathbf{l}_2&\implies\mathbf{[x]_\times}=\mathbf{l}_1\mathbf{l}_2^T-\mathbf{l}_1\mathbf{l}_2^T
+\end{align*}\par
+因此，利用Plücker坐标的定义，可得：
+\begin{equation*}
+  \mathbf{L}^*=\mathbold{\pi}_1\mathbold{\pi}_2^T-\mathbold{\pi}_2\mathbold{\pi}_1^T=\mathbf{P}^T\mathbf{l}_1\mathbf{l}_2^T\mathbf{P}-\mathbf{P}^T\mathbf{l}_2\mathbf{l}_1^T\mathbf{P}=\mathbf{P}^T\mathbf{[x]_\times P}
+\end{equation*}\par
+\subsection{证明仿射摄像机是可以将平行的世界直线映射为平行的图像直线的关于齐次坐标的最一般的线性映射}
+证明思路：任取无穷远平面上的一点$\mathbf{X}_\infty$，对其作投影变换，其在图像平面上的应该也位于无穷远直线上，可得：
+\begin{equation*}
+  \mathbf{x}_\infty=\begin{bmatrix}
+    x\\y\\0
+  \end{bmatrix}=\mathbf{P}\mathbf{X}_\infty
+\end{equation*}\par
+因此可知：
+\begin{equation*}
+  p_{31}X+p_{32}Y+p_{33}Z+p_{34}\times0=0
+\end{equation*}\par
+现根据该无穷远点的任意性，上式恒成立，因此可得：
+\begin{equation*}
+  p_{31}=p_{32}=p_{33}=0,p_{34}\neq0
+\end{equation*}\par
+因此证明投影矩阵具有以下形式：
+\begin{equation*}
+  \mathbf{P}=\begin{bmatrix}
+    p_{11} & p_{12}&p_{13}&p_{14} \\
+    p_{21} & p_{22}&p_{23}&p_{24} \\
+    0&0&0 & p_{34}
+  \end{bmatrix}
+\end{equation*}\par
+说明该摄像机是仿射摄像机。
+\subsection{重要公式之一}
+{\heiti 经相机矩阵$\mathbf{P}$映射成一条直线$\mathbf{l}$的空间点集是平面$\mathbf{P}^T\mathbf{l}$}。\par
+\textbr{超级简单，但是超级经典！}\par
+在空间中任取一点$\mathbf{X}$，其射影点$\mathbf{x=PX}$落在直线$\mathbf{l}$上，因此有：
+\begin{equation*}
+  \mathbf{l}^T\mathbf{x}=\mathbf{l}^T\mathbf{PX}=0
+\end{equation*}\par
+可取后式的前半项为对应的平面，因此证得：
+\begin{equation*}
+  \mathbf{P}^T\mathbf{l}=\mathbold{\pi}
+\end{equation*}\par
+为所求的反投影平面。
+\subsection{重要公式之二}
+{\heiti 图像直线$\mathbf{l}$能够确定一张过摄像机中心的平面，该平面的法线方向为$\mathbf{n=K^\mathit{T}l}$}。\par
+\textbr{超级简单，但是注意引论！}\par
+证明该结论首先应当证明一个引论，即射影摄像机将图像平面上的点反向投影为直线的方向向量为：
+\begin{equation*}
+  \mathbf{x}=\mathbf{K[I\sep 0]}\begin{bmatrix}
+    \lambda\mathbf{d}\\1
+  \end{bmatrix}
+\end{equation*}\par
+因此可知该方向向量为：
+\begin{equation*}
+  \mathbf{d}=\mathbf{K}^{-1}\mathbf{x}
+\end{equation*}\par
+因此，图像点在图像直线上，有：
+\begin{equation*}
+  \mathbf{l^\mathit{T}x}=\mathbf{l^\mathit{T}K}\mathbf{d}=0
+\end{equation*}\par
+此式解出了与直线的方向向量正交的向量，该向量就是平面的法向量，因此可得：
+\begin{equation*}
+  \mathbf{n}=\mathbf{K}^T\mathbf{l}
+\end{equation*}\par
+\subsection{平面全景拼图的步骤，为什么会产生黑边（原文：蝴蝶结形状）}
+书上原话：因为所有的图像都是往中间一幅图像配准所得的，因此两侧的图像射影变换产生的拉伸较大，而靠近中间的射影变换拉伸较小，因此两头大中间小，产生了黑边（或蝴蝶结的形状）。
+\subsection{空间绝对二次曲线的图像}
+{\heiti 证明空间中绝对二次曲线的图像是$\circbrac{\mathbf{KK}^{T}}^{-1}$}\par
+空间的绝对二次曲线位于无穷远平面上，因此考虑使用无穷远平面向图像平面的二维单应解决此问题。设无穷远平面上的一点为$\mathbf{X}_\infty$，其在图像平面上的投影为${\mathbf{x}_\infty}'$，则有：
+\begin{equation*}
+  {\mathbf{x}_\infty}'=\mathbf{KR[I\sep} -\tilde{\mathbf{C}}]\begin{bmatrix}
+    \mathbf{x}_\infty\\0
+  \end{bmatrix}=\mathbf{KRx}_\infty
+\end{equation*}\par
+所以该二维单应是$\mathbf{H=KR}$，根据二维单应情况下的绝对二次曲线协变，可得图像平面上的绝对二次曲线为：
+\begin{equation*}
+  \mathbf{C}'=\mathbf{H}^{-T}\mathbf{CH}^{-1}=\mathbf{K^\mathit{-T}R^\mathit{-T}IR^{-1}K^{-1}}=\mathbf{K^\mathit{-T}K^{-1}}
+\end{equation*}\par
+因为旋转矩阵是正交矩阵，因此可以得到上述结果，由此完成证明。
+\subsection{证明使用三条共面的等距平行线可确定图像的消影线}
+\textbr{重要前提：}$\mathbf{l_\infty}=a\mathbf{l}_1+b\mathbf{l}_2$\par
+在这个重要前提下，可以待定系数$a,b$解出无穷远直线。首先等距直线在原始图像上满足：
+\begin{align*}
+  \mathbf{l}_1'=\mathbf{l}_0'+{\mathbf{l}_\infty  }'\\
+  \mathbf{l}_2'=\mathbf{l}_0'+{2\mathbf{l}_\infty  }'
+\end{align*}\par
+因此，去除右上标的标记即可得到在失真图像平面上的关系式，即：
+\begin{align*}
+  \mathbf{l}_1=\mathbf{l}_0+{\mathbf{l}_\infty  }\\
+  \mathbf{l}_2=\mathbf{l}_0+{2\mathbf{l}_\infty  }
+\end{align*}\par
+叉乘重要前提公式有：
+\begin{align*}
+  \mathbf{l}_\infty\times\mathbf{l}_1&=b\mathbf{l}_2\times\mathbf{l}_1\\
+  \mathbf{l}_\infty\times\mathbf{l}_2&=a\mathbf{l}_1\times\mathbf{l}_2
+\end{align*}
+由此使用内积将矢量转为纯量，可以反解出：
+\begin{align*}
+  b&=-\frac{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_1}}{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_2\times\mathbf{l}_1}}\\
+  a&=-\frac{1}{2}\frac{\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_2}}{\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_1\times\mathbf{l}_2}}
+\end{align*}\par
+因此，可以得到无穷远直线的表达式为：
+\begin{equation*}
+  \mathbf{l}_\infty=-\frac{1}{2}\frac{\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_2}}{\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_1\times\mathbf{l}_2}}\mathbf{l}_1-\frac{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_1}}{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_2\times\mathbf{l}_1}}\mathbf{l}_2
+\end{equation*}\par
+叉乘满足反交换律，因此约去齐次的比例因子可得：
+\begin{equation*}
+  \mathbf{l}_\infty=\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_2}\mathbf{l}_1+2\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_1}\mathbf{l}_2
+\end{equation*}\par
+即为所求。
+\subsection{证明空间直线的正投影公式}
+{\heiti 证明空间直线的正投影公式为$\mathbf{[l]}_\times=\mathbf{P}\mathbf{LP}^T$}\par
+在空间直线上任取两点，使用投影变换算出其在图像平面上的投影点，然后利用投影点的扩展叉乘公式即可证明该公式。
+\subsection{证明通过摄像机中心的空间直线被投影为零向量}
+在空间直线上任取一点$\mathbf{X}$，表示该直线为：
+\begin{equation*}
+  \mathbf{L}=\mathbf{CX}^{T}-\mathbf{XC}^T
+\end{equation*}\par
+代入上述正投影公式，可得：
+\begin{equation*}
+  \mathbf{[l]}_\times=\mathbf{0}
+\end{equation*}
+因此该图像直线是零向量。
+\subsection{火车为什么远处运动慢而近处运动快？}
+\textbr{提醒：本题需要用到二视图}\par
+设空间中一点的齐次坐标为：$\mathbf{X}=[X,Y,Z,W]^T$，人眼相当于一个摄像机，投影矩阵的模型为$\mathbf{P=K[I\sep 0]}$，因此成像在视网膜上的图像坐标为：
+\begin{equation*}
+  \mathbf{x}=\mathbf{K[I\sep 0]X}=\mathbf{text}
 \end{equation*}\par
 
+\newpage
+\printbibliography[heading=bibliography,title=参考文献]
 \end{document}
