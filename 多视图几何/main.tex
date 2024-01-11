@@ -38,7 +38,14 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \graphicspath{{./fig}}
 
 \begin{document}
+\pagenumbering{Roman}
 
+\setcounter{tocdepth}{3}
+%设定目录深度                      
+\tableofcontents
+%列出目录
+\newpage
+\pagenumbering{arabic}
 \section{多视图几何知识点}
 \subsection{齐次坐标二维点、二维线的表示，齐次坐标二维点和线的关系（相交、点在线上、交点交线）P20}
 设齐次点为$\mathbold{x}=(x_1,x_2,x_3)^T$，齐次线为$\mathbold{l}=(l_1,l_2,l_3)^T$，其中点和线都是二维的，则从齐次点退化为非齐次点可用下式：
@@ -138,7 +145,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 相似变换，又称等距变换，不改变原始形状的夹角，其变换矩阵为：
 \begin{equation*}
   \mathbold{H}=\begin{bmatrix}
-    s\mathbold{R} & \mathbold{t} \\
+    s\mathbold{R}  & \mathbold{t} \\
     \mathbold{0}^T & 1
   \end{bmatrix}
 \end{equation*}\par
@@ -515,7 +522,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \mathbold{H}=\begin{bmatrix}
     \mathbold{A}^{-1} & 0 \\
-    \mathbf{0}^T           & 1
+    \mathbf{0}^T      & 1
   \end{bmatrix}
 \end{equation*}\par
 其中，$\mathbold{A}$由以下式的Cholesky分解给出：
@@ -526,7 +533,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \mathbold{P}_r=\mathbold{[M\sep m]}\begin{bmatrix}
     \mathbold{A} & 0 \\
-    \mathbf{0}^T           & 1
+    \mathbf{0}^T & 1
   \end{bmatrix}= \mathbold{[MA\sep m]}
 \end{equation*}\par
 根据摄像机对空间绝对二次曲线的成像，有：
@@ -538,7 +545,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{itemize}
   \item 正交约束：两个正交的方向在绝对二次曲线意义下是共轭的，一个平面的无穷远平面交线和其法向量方向在绝对二次曲线意义下满足极点极线关系，选取五组以上这样的约束即可完成解算绝对二次曲线；
   \item 内参矩阵约束：如果能够先验内参数矩阵，则直接可以得到绝对二次曲线的像；
-  \item 相同摄像机约束：相当于先验两个摄像机的内参数相同，两个视图中的绝对二次曲线是相同的。 
+  \item 相同摄像机约束：相当于先验两个摄像机的内参数相同，两个视图中的绝对二次曲线是相同的。
 \end{itemize}
 \section{简答证明要点}
 \subsection{证明射影变换交比不变}
@@ -778,7 +785,7 @@ $$\par
   \mathbf{l'}^T\mathbf{Q'}_\infty^{*}\mathbf{l'}=\mathbf{l}^T\mathbf{H}^{-1}\mathbf{H}\mathbf{Q}_\infty^*\mathbf{H}^T\mathbf{H}^{-T}\mathbf{l}=\mathbf{l}^T\mathbf{Q}_\infty^*\mathbf{l}=0
 \end{equation*}\par
 因此在任意情况下，绝对对偶二次曲面都是绝对二次曲线的对偶。
-\subsection{证明绝对对偶二次曲面不变射影变换是相似变换，反之也成立。}
+\subsection{证明绝对对偶二次曲面不变射影变换是相似变换，反之也成立}
 证明思路：用标准情况下的绝对对偶二次曲面（秩亏单位阵）和一般情况下的的射影变换阵，然后证明变换后的绝对对偶二次曲面阵与原始阵相同，因此可推出射影变换阵的$\mathbf{A}$子块是正交矩阵，同时也可以得出$\mathbf{v}^T\mathbf{v}=0$，推出矢量$\mathbf{v}$是零向量，因此射影变换矩阵是相似变换阵。
 \subsection{证明过点x的二次曲线切线是Cx}
 这是二维齐次坐标下的证明，可反设过$\mathbf{x}$点直线还交二次曲线于$\mathbf{y}$点，即有：
@@ -788,7 +795,7 @@ $$\par
 因此可通过线性叠加证明经过$\mathbf{x,y}$的全部点的直线都在二次曲线上，与二次曲线不退化的前提矛盾，因此$\mathbf{y}$点不可能存在，即$\mathbf{x}$点的切线是$\mathbf{Cx}$。
 \subsection{证明过点X的二次曲面切平面是QX}
 与上一问的证明方式一模一样，不再赘述。
-\subsection{蒙娜丽莎的眼睛。}
+\subsection{蒙娜丽莎的眼睛}
 {\heiti 设是$I_0$射影图像，而$I_1$是$I_0$的图像，其合成图像为$I'$，证明$I'$的视在摄像机中心与$I_0$的一样，并验证$I'$和$I_0$的其他参数可能不同。}\par
 这个题题意不明，查阅资料\cite{MultipleViewGeometry}后才知道，合成图像应该就是$I_0$的意思，只不过$I_1$和$I_0$是针对不同摄像机而言的。一般的射影摄像机模型为：
 \begin{equation*}
@@ -892,7 +899,7 @@ $$\par
 在这个重要前提下，可以待定系数$a,b$解出无穷远直线。首先等距直线在原始图像上满足：
 \begin{align*}
   \mathbf{l}_1'=\mathbf{l}_0'+\mathbf{l'}_\infty \\
-  \mathbf{l}_2'=\mathbf{l}_0'+2\mathbf{l'}_\infty 
+  \mathbf{l}_2'=\mathbf{l}_0'+2\mathbf{l'}_\infty
 \end{align*}\par
 因此，去除右上标的标记即可得到在失真图像平面上的关系式，即：
 \begin{align*}
@@ -932,6 +939,7 @@ $$\par
 \end{equation*}
 因此该图像直线是零向量。
 \subsection{火车为什么远处运动慢而近处运动快？}
+\label{subsec:火车为什么远处运动慢而近处运动快？}
 \textbr{提醒：本题需要用到二视图}\par
 设空间中一点的非齐次坐标为：$\mathbf{X}=[X,Y,Z]^T$，人眼相当于一个摄像机，投影矩阵的模型为$\mathbf{P=K[I\sep 0]}$，因此成像在视网膜上的图像齐次坐标为：
 \begin{equation*}
@@ -977,7 +985,92 @@ $$\par
 可见，在X轴方向的运动上，当深度越大时，视在的运动量越小，因此坐火车时，火车运动方向相当于是X轴运动，距离车窗较远的场景点深度较大，其视在运动越慢，而距离车窗较近的场景点深度较小，其视在运动越快。
 \subsection{证明虚圆点相对相似变换不变}
 二维的结论是显然的，对于三维：三维的映射不是点点不变的，而是集合不变，因此证明该结论只能通过标准情况+射影变换证得。
-
+\section{练习题答案}
+\subsection{使用一条消影直线和一个消影点对应和基本矩阵可算出仿射重构}
+\textbr{说明：}这里的一条消影直线对应和一个消影点对应分别指的是左右相机各有一条消影直线和同一个消影点的像，消影点不在消影线上（空间无穷远平面不过摄像机中心）。\par
+思路：$\mathbf{H}_\infty$共有8个独立的参数，因此需要想办法取得4对不同的对应点。这里，在左图的消影线上任取两点，使用对极线约束$\mathbf{l}_r=\mathbf{Fx}_l$可以算出右图的两条对极线，又因为两个点均在消影线上，因此右图中的两条对极线分别与消影线向量积可以求出右图中对应 的两个消影点，由此得到了两个对应点约束。（此时不能从消影线上再取点得到对应点了，因为再取的点将与这两个点线性相关，约束是无效的）。\par
+然后可通过基本矩阵的左零空间和右零空间，算出两个对极点：
+\begin{equation*}
+  \mathbf{Fe}_l=0\qquad\mathbf{e}_r^T\mathbf{F}=0
+\end{equation*}\par
+加上题目中给出的不共线消影点约束，即可得到四个对应点约束，方程：
+\begin{equation*}
+  \mathbf{x}_r=\mathbf{H}_\infty \mathbf{x}_l
+\end{equation*}\par
+在齐次意义下存在唯一解。
+\subsection{坐在一个旋转木马上旋转，观察到的远处的景物和近处的景物有什么差别？}
+\textbr{提醒：对结论\ref{subsec:火车为什么远处运动慢而近处运动快？}的扩展，牢记双目推导法。}\par
+设旋转木马上旋转前后的人眼摄像机的投影矩阵分别为$\mathbf{P}_1,\mathbf{P}_2$，则有：
+\begin{equation*}
+  \mathbf{P}_1=\mathbf{K[I\sep 0]}\qquad\mathbf{P}_2=\mathbf{K[R\sep t ]} 
+\end{equation*}\par
+图像点为$\mathbf{x}=[x,y,1]^T$，则在世界坐标系下的世界点为：
+\begin{equation*}
+  \mathbf{X}=\begin{bmatrix}
+    X \\Y\\Z\\1
+  \end{bmatrix}=Z\mathbf{K^\mathrm{-1}x}
+\end{equation*}\par
+则在旋转后的成像为：
+\begin{align*}
+  Z\mathbf{x}'=\mathbf{P}_2\mathbf{X}=\mathbf{K[R\sep t ]}\mathbf{X}&=Z\mathbf{KRK^\mathrm{-1}x}+Z\mathbf{Kt}\\
+  \mathbf{x}'=\mathbf{KRK^\mathrm{-1}x}+\frac{\mathbf{K^\mathrm{-1}t}}{Z}
+\end{align*}\par
+因此世界点的视在旋转量相同，但是视在平移量与深度呈反比，距离人越远的点，给人的感觉是运动越慢，越近的人运动越快。
+\subsection{提出一种利用标定二次曲线标定摄像机的方法}
+\textbr{提醒：}这里的标定二次曲线是指世界坐标已知的二次曲线。\par
+该方法较为复杂，标定板上必须有至少两个圆，圆的半径可以不相等，标定思路是首先利用两个圆求解出无穷远直线，然后通过两组垂直线解出仿射矩阵，对拼合起来的矩阵使用QR分解，上三角阵就是待标定的摄像机矩阵。\par
+在摄像机的作用下，标定板到图像存在一个二维单应，即：
+\begin{equation}
+  \mathbf{H=KR}=\begin{bmatrix}
+    \mathbf{I}&\mathbf{0}\\
+    \mathbf{v}^T&v_3
+  \end{bmatrix}\begin{bmatrix}
+    \mathbf{K}&\mathbf{0}\\
+    \mathbf{0}^T&1
+  \end{bmatrix}\begin{bmatrix}
+    s\mathbf{R}&\mathbf{t}\\
+    \mathbf{0}^T&1
+  \end{bmatrix}
+  \label{eq:标定板到图像的二维单应}
+\end{equation}\par
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{练习题5.png}
+  \caption{两个标定圆求解无穷远直线}
+\label{fig:两个标定圆求解无穷远直线}
+\end{figure}\par
+如图\ref{fig:两个标定圆求解无穷远直线}，在图像平面上，作两个圆长轴的连线，作内公切线得到四个切线，连接对应的切点，可得两条平行线。这两条平行线在世界坐标系下应该是相交的，因此可以求出无穷远直线，使用该无穷远直线和任意一个圆的影像求出虚圆点，使用虚圆点还原绝对二次曲线，从而获取绝对对偶二次曲线，使用奇异值分解可算出单应矩阵$\mathbf{H}$，对单应矩阵作QR分解可得标定矩阵$\mathbf{K}$。（本方法将求解非线性方程）\par
+为了避免求解非线性方程，可选取两对正交直线，使用仿射校正矩阵$\begin{bmatrix}
+  \mathbf{I}&\mathbf{0}\\
+  \mathbf{v}^T&v_3
+\end{bmatrix}$
+将直线校正后，通过下式解出矩阵$\mathbf{K}$：
+\begin{equation*}
+  \rectbrac{l_1,l_2,l_3}\begin{bmatrix}
+    \mathbf{KK}^T&\mathbf{0}\\
+    \mathbf{0}^T&1
+  \end{bmatrix}\begin{bmatrix}
+    m_1\\
+    m_2\\
+    m_3
+  \end{bmatrix}
+\end{equation*}\par
+然后作Cholesky分解可求得矩阵$K$，从而利用公式\ref{eq:标定板到图像的二维单应}可在相差一个相似变换的情况下求得$\mathbf{H}$，该结果对QR分解不影响，因此完成标定。
+\subsection{给出一种用消隐线求解摄像机旋转的方法}
+以旋转前的相机为世界坐标系，旋转后所得的图像可由单应矩阵$\mathbf{H}$联系，即：
+\begin{equation*}
+  \mathbf{H}=\mathbf{KRK}^{-1}
+\end{equation*}\par
+其中旋转矩阵共有三个自由度，因此至少需要两组对应的消隐点即可完成旋转求解。这里必须先验摄像机的内参数矩阵$\mathbf{K}$，相机图像中的绝对二次曲线的图像为：
+\begin{equation*}
+  \mathbold{\omega}=\mathbf{K}^{-T}\mathbf{K}^{-1}
+\end{equation*}\par
+在旋转前图像的消隐线上选择一点$\mathbf{x}$，其满足旋转的极点极线约束并在旋转后图像的消隐线上，有：
+\begin{equation*}
+  \mathbf{l}'=\mathbold{\omega x}\qquad\mathbf{l}'\times\mathbf{l'}_\infty=\mathbf{x'}
+\end{equation*}\par
+由此可以两组对应点，能够解出旋转矩阵。
+\subsection{一个矩形的标定物体平行移动为什么不能实现摄像机的标定？}
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
