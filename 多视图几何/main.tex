@@ -392,6 +392,52 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \subsection{摄像机标定矩阵K是图像点与欧氏坐标系下的射线方向的一个单应（仿射变换）P161}
 这一点是公理性质的结论，书上也并未给出证明，以$\mathbold{d}$代表\textbf{欧氏坐标系}下测量得到的射线方向，其在图像平面上的像点满足：$\mathbold{x=Kd}$。\par
 因此，一条图像直线可以确定一张过摄像机中心的平面，该平面在欧氏空间中的法线方向是$\mathbold{n=K}^T\mathbold{l}$。
+\subsection{摄像机对平面的作用}
+摄像机对空间中的一个平面的作用，例如对平面$Z=z_0$成像，此时摄像机矩阵为$\mathbf{P}$，则有：
+\begin{equation*}
+  \mathbf{x}=\mathbf{P}\mathbf{X}=\begin{bmatrix}
+    p_{11}&p_{12}&p_{13}&p_{14}\\
+    p_{21}&p_{22}&p_{23}&p_{24}\\
+    p_{31}&p_{32}&p_{33}&p_{34}
+  \end{bmatrix}\begin{bmatrix}
+    x\\y\\z_0\\1
+  \end{bmatrix}
+\end{equation*}\par
+由于平面的方程为$Z=z_0$，在该平面上建立二维参数坐标，使用参数方程写出该平面上的点：
+\begin{equation*}
+  \mathbf{X}=\mathbf{M}\begin{bmatrix}
+    x\\y\\1
+  \end{bmatrix}
+\end{equation*}\par
+式中的$\mathbf{M}$是平面$[0,0,1,-z_0]^T$的\textbr{左零空间}，可解为：
+\begin{equation*}
+  \mathbf{M}=\begin{bmatrix}
+    1&0&0\\
+    0&1&0\\
+    0&0&z_0\\
+    0&0&1
+  \end{bmatrix}
+\end{equation*}\par
+因此，平面上的点可以表示为：
+\begin{equation*}
+  \mathbf{X}=\begin{bmatrix}
+    1&0&0\\
+    0&1&0\\
+    0&0&z_0\\
+    0&0&1
+  \end{bmatrix}\begin{bmatrix}
+    x\\y\\1
+  \end{bmatrix}=\mathbf{Mx}_c
+\end{equation*}\par
+代入至摄像机矩阵中，可得：
+\begin{equation*}
+  \mathbf{x}=\mathbf{PMx}_c
+\end{equation*}\par
+注意本方法只能用于空间中与$Z=0$平行的平面，\textbr{其他类型的平面不能被视为一个单应}。特别地，当$Z=0$时，该单应可简单地写为：
+\begin{equation*}
+  \mathbf{H=K[r_\mathrm{1},r_\mathrm{2},t]}
+\end{equation*}\par
+因此在实际使用中，可以在平面处建立世界坐标系，相机坐标系随之建立，这样可以保证相机成像的结果与平面的图像是一个单应（实际上这样使用，也可以使相机对空间中任意平面均得到单应，不过相机投影矩阵可能会比较复杂）。
 \subsection{三个重要公式}
 \subsubsection{直线反投影公式P152}
 图像平面上的一条直线对应原始空间中的一个平面，该平面为：
@@ -538,7 +584,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{equation*}\par
 根据摄像机对空间绝对二次曲线的成像，有：
 \begin{equation*}
-  \mathbold{\omega}=\circbrac{\mathbf{MA(MA)^\mathit{T}}}^{-1}\implies\circbrac{\mathbold{M\omega M^\mathit{T}}}^{-1}=\mathbf{AA}^T
+  \mathbold{\omega}=\rectbrac{\mathbf{MA(MA)^\mathit{T}}}^{-1}\implies\circbrac{\mathbold{M\omega M^\mathit{T}}}^{-1}=\mathbf{AA}^T
 \end{equation*}\par
 \subsection{	度量重构的三种约束方式P211}
 度量重构本质上就是寻找解算绝对二次曲线的方法，因此有：
@@ -911,7 +957,7 @@ $$\par
 \begin{align*}
   \mathbf{l}_\infty\times\mathbf{l}_1 & =b\mathbf{l}_2\times\mathbf{l}_1 \\
   \mathbf{l}_\infty\times\mathbf{l}_2 & =a\mathbf{l}_1\times\mathbf{l}_2
-\end{align*}
+\end{align*}\par
 由此使用内积将矢量转为纯量，可以反解出：
 \begin{align*}
   b & =-\frac{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_1}}{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_2\times\mathbf{l}_1}}            \\
@@ -1074,7 +1120,7 @@ $$\par
 \subsection{一个矩形的标定物体平行移动为什么不能实现摄像机的标定？}
 无论矩形标定板怎么移动，其边框所对应的消隐点都是相同的两个，而两个消隐点仅能够完成对场景仿射的校正，不能够校正绝对对偶二次曲线，因此也就解不出摄像机的内参数矩阵。至少还需要一个与之不平行的矩阵标定板，便可以完成标定。
 \subsection{平面的消隐线和法向量对应的消隐点在图像平面上满足什么关系？}
-{\heiti 图像平面上一条直线$\mathbf{l}$的反投影平面为$\mathbold{\pi}$，$\mathbold{\pi}$的法线为$\mathbf{n}$。证明$\mathbf{n}$的消影点和直线$\mathbf{l}$有极点极线的关系}
+{\heiti 图像平面上一条直线$\mathbf{l}$的反投影平面为$\mathbold{\pi}$，$\mathbold{\pi}$的法线为$\mathbf{n}$。证明$\mathbf{n}$的消影点和直线$\mathbf{l}$有极点极线的关系}\par
 证明思路：取定世界坐标系在相机上，将法向量的消隐点在空间中表示出来，然后经相机成像得到图像消隐点，即可得到在图像平面上，该消隐点与平面的成像线满足共轭关系。
 \subsection{纯旋转摄像机可以进行图像拼接，拼接后会出现黑区，为什么会有黑区？此黑区有什么特点？}
 参见\ref{subsec:平面全景拼图的步骤，为什么会产生黑边（原文：蝴蝶结形状）}，这里可参考往年答案：\par
@@ -1093,9 +1139,9 @@ $$\par
 \textbr{背下来吧！}
 思路：分两条：过世界原点并与主轴垂直的平面上无误差；其余平面有误差，误差满足以下公式：
 \begin{equation*}
-  \mathbf{\tilde{x}_\mathrm{aff}}-\mathbf{\tilde{x}_\mathrm{proj}}=\frac{\Delta}{d_0}\circbrac{\mathbf{\tilde{x}_\mathrm{proj}}-\mathbf{\tilde{x}_\mathrm{0}}}
+  \tilde{\mathbf{x}}_\mathrm{aff}-\tilde{\mathbf{x}}_\mathrm{proj}=\frac{\Delta}{d_0}\circbrac{\tilde{\mathbf{x}}_\mathrm{proj}-\tilde{\mathbf{x}}_\mathrm{0}}
 \end{equation*}
-式中，$d_0$是深度，$\Delta$是当前平面与无误差平面的距离（称为深度的起伏），可见：
+式中，$d_0$是深度，$\Delta$是当前平面与无误差平面的距离（称为深度的起伏），$\tilde{\mathbf{x}}_0$是主点的图像，可见：
 \begin{itemize}
   \item 深度尽量大而起伏尽量小时（分工项），误差小；
   \item 空间点分布在主轴附近时（括号项），误差小；
