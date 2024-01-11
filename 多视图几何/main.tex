@@ -605,7 +605,7 @@ $$\par
 \end{equation*}\par
 在施加射影变换的作用下，绝对对偶二次曲面将变化为：
 \begin{equation*}
-  {\mathbold{Q}^*_\infty}'=\mathbold{H}\mathbold{Q}^*_\infty\mathbold{H}^T
+  {\mathbf{Q'}^*_\infty}=\mathbold{H}\mathbold{Q}^*_\infty\mathbold{H}^T
 \end{equation*}\par
 而无穷远平面将变化为：
 \begin{equation*}
@@ -684,14 +684,14 @@ $$\par
 \end{equation*}\par
 在标准情况下，绝对二次曲线的切线方程为：
 \begin{equation*}
-\mathbold{l}=\mathbold{\Omega}_\infty\mathbold{X}=\begin{bmatrix}
-  \mathbf{I} & 0 \\
-  \mathbf{0}^T         & 0
-\end{bmatrix}\begin{bmatrix}
-  \mathbf{v}\\ 0
-\end{bmatrix}=\begin{bmatrix}
-  \mathbf{v}\\ 0
-\end{bmatrix}
+  \mathbold{l}=\mathbold{\Omega}_\infty\mathbold{X}=\begin{bmatrix}
+    \mathbf{I}   & 0 \\
+    \mathbf{0}^T & 0
+  \end{bmatrix}\begin{bmatrix}
+    \mathbf{v} \\ 0
+  \end{bmatrix}=\begin{bmatrix}
+    \mathbf{v} \\ 0
+  \end{bmatrix}
 \end{equation*}\par
 由于切点在绝对二次曲线上，因此满足：
 \begin{equation*}
@@ -703,7 +703,7 @@ $$\par
 \end{equation*}\par
 说明绝对对偶二次曲线是绝对二次曲线的对偶。当外加射影变换矩阵作用后，无穷远平面产生协变，因此绝对二次曲线产生协变，绝对对偶二次曲面产生变换，分别为：
 \begin{equation*}
-  \mathbold{\Omega}_\infty'=\mathbold{H}^{-T}\mathbold{\Omega}_\infty\mathbold{H}^{-1}\qquad\mathbold{Q}_\infty^{*'}=\mathbold{H}\mathbold{Q}_\infty^*\mathbold{H}^T
+  \mathbold{\Omega}_\infty'=\mathbold{H}^{-T}\mathbold{\Omega}_\infty\mathbold{H}^{-1}\qquad\mathbf{Q'}_\infty^{*}=\mathbold{H}\mathbold{Q}_\infty^*\mathbold{H}^T
 \end{equation*}\par
 因此，绝对二次曲线的切线方程变为：
 \begin{equation*}
@@ -711,7 +711,7 @@ $$\par
 \end{equation*}\par
 其符合变换后的绝对对偶二次曲面方程：
 \begin{equation*}
-  \mathbf{l}'^T\mathbf{Q}_\infty^{*'}\mathbf{l}'=\mathbf{l}^T\mathbf{H}^{-1}\mathbf{H}\mathbf{Q}_\infty^*\mathbf{H}^T\mathbf{H}^{-T}\mathbf{l}=\mathbf{l}^T\mathbf{Q}_\infty^*\mathbf{l}=0
+  \mathbf{l'}^T\mathbf{Q'}_\infty^{*}\mathbf{l'}=\mathbf{l}^T\mathbf{H}^{-1}\mathbf{H}\mathbf{Q}_\infty^*\mathbf{H}^T\mathbf{H}^{-T}\mathbf{l}=\mathbf{l}^T\mathbf{Q}_\infty^*\mathbf{l}=0
 \end{equation*}\par
 因此在任意情况下，绝对对偶二次曲面都是绝对二次曲线的对偶。
 \subsection{证明绝对对偶二次曲面不变射影变换是相似变换，反之也成立。}
@@ -744,8 +744,8 @@ $$\par
 {\heiti 证明在射影摄像机下，图像点的反向投影的射线可以被写成$\mathbf{L}^*=\mathbf{P}^T\mathbf{[x]_\times P}$}\par
 过图像点$\mathbf{x}$，在图像上任作两直线$\mathbf{l}_1,\mathbf{l}_2$，利用射影摄像机对直线的反向投影，可得：
 \begin{align*}
-  \mathbold{\pi}_1=\mathbf{P}^T\mathbf{l}_1&\qquad\mathbold{\pi}_2=\mathbf{P}^T\mathbf{l}_2\\
-  \mathbf{x}=\mathbf{l}_1\times\mathbf{l}_2&\implies\mathbf{[x]_\times}=\mathbf{l}_1\mathbf{l}_2^T-\mathbf{l}_1\mathbf{l}_2^T
+  \mathbold{\pi}_1=\mathbf{P}^T\mathbf{l}_1 & \qquad\mathbold{\pi}_2=\mathbf{P}^T\mathbf{l}_2                                   \\
+  \mathbf{x}=\mathbf{l}_1\times\mathbf{l}_2 & \implies\mathbf{[x]_\times}=\mathbf{l}_1\mathbf{l}_2^T-\mathbf{l}_1\mathbf{l}_2^T
 \end{align*}\par
 因此，利用Plücker坐标的定义，可得：
 \begin{equation*}
@@ -755,7 +755,7 @@ $$\par
 证明思路：任取无穷远平面上的一点$\mathbf{X}_\infty$，对其作投影变换，其在图像平面上的应该也位于无穷远直线上，可得：
 \begin{equation*}
   \mathbf{x}_\infty=\begin{bmatrix}
-    x\\y\\0
+    x \\y\\0
   \end{bmatrix}=\mathbf{P}\mathbf{X}_\infty
 \end{equation*}\par
 因此可知：
@@ -769,9 +769,9 @@ $$\par
 因此证明投影矩阵具有以下形式：
 \begin{equation*}
   \mathbf{P}=\begin{bmatrix}
-    p_{11} & p_{12}&p_{13}&p_{14} \\
-    p_{21} & p_{22}&p_{23}&p_{24} \\
-    0&0&0 & p_{34}
+    p_{11} & p_{12} & p_{13} & p_{14} \\
+    p_{21} & p_{22} & p_{23} & p_{24} \\
+    0      & 0      & 0      & p_{34}
   \end{bmatrix}
 \end{equation*}\par
 说明该摄像机是仿射摄像机。
@@ -793,7 +793,7 @@ $$\par
 证明该结论首先应当证明一个引论，即射影摄像机将图像平面上的点反向投影为直线的方向向量为：
 \begin{equation*}
   \mathbf{x}=\mathbf{K[I\sep 0]}\begin{bmatrix}
-    \lambda\mathbf{d}\\1
+    \lambda\mathbf{d} \\1
   \end{bmatrix}
 \end{equation*}\par
 因此可知该方向向量为：
@@ -815,7 +815,7 @@ $$\par
 空间的绝对二次曲线位于无穷远平面上，因此考虑使用无穷远平面向图像平面的二维单应解决此问题。设无穷远平面上的一点为$\mathbf{X}_\infty$，其在图像平面上的投影为${\mathbf{x}_\infty}'$，则有：
 \begin{equation*}
   {\mathbf{x}_\infty}'=\mathbf{KR[I\sep} -\tilde{\mathbf{C}}]\begin{bmatrix}
-    \mathbf{x}_\infty\\0
+    \mathbf{x}_\infty \\0
   \end{bmatrix}=\mathbf{KRx}_\infty
 \end{equation*}\par
 所以该二维单应是$\mathbf{H=KR}$，根据二维单应情况下的绝对二次曲线协变，可得图像平面上的绝对二次曲线为：
@@ -827,23 +827,23 @@ $$\par
 \textbr{重要前提：}$\mathbf{l_\infty}=a\mathbf{l}_1+b\mathbf{l}_2$\par
 在这个重要前提下，可以待定系数$a,b$解出无穷远直线。首先等距直线在原始图像上满足：
 \begin{align*}
-  \mathbf{l}_1'=\mathbf{l}_0'+{\mathbf{l}_\infty  }'\\
-  \mathbf{l}_2'=\mathbf{l}_0'+{2\mathbf{l}_\infty  }'
+  \mathbf{l}_1'=\mathbf{l}_0'+\mathbf{l'}_\infty \\
+  \mathbf{l}_2'=\mathbf{l}_0'+2\mathbf{l'}_\infty 
 \end{align*}\par
 因此，去除右上标的标记即可得到在失真图像平面上的关系式，即：
 \begin{align*}
-  \mathbf{l}_1=\mathbf{l}_0+{\mathbf{l}_\infty  }\\
+  \mathbf{l}_1=\mathbf{l}_0+{\mathbf{l}_\infty  } \\
   \mathbf{l}_2=\mathbf{l}_0+{2\mathbf{l}_\infty  }
 \end{align*}\par
 叉乘重要前提公式有：
 \begin{align*}
-  \mathbf{l}_\infty\times\mathbf{l}_1&=b\mathbf{l}_2\times\mathbf{l}_1\\
-  \mathbf{l}_\infty\times\mathbf{l}_2&=a\mathbf{l}_1\times\mathbf{l}_2
+  \mathbf{l}_\infty\times\mathbf{l}_1 & =b\mathbf{l}_2\times\mathbf{l}_1 \\
+  \mathbf{l}_\infty\times\mathbf{l}_2 & =a\mathbf{l}_1\times\mathbf{l}_2
 \end{align*}
 由此使用内积将矢量转为纯量，可以反解出：
 \begin{align*}
-  b&=-\frac{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_1}}{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_2\times\mathbf{l}_1}}\\
-  a&=-\frac{1}{2}\frac{\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_2}}{\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_1\times\mathbf{l}_2}}
+  b & =-\frac{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_1}}{\circbrac{\mathbf{l}_2\times\mathbf{l}_1}^T\circbrac{\mathbf{l}_2\times\mathbf{l}_1}}            \\
+  a & =-\frac{1}{2}\frac{\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_0\times\mathbf{l}_2}}{\circbrac{\mathbf{l}_1\times\mathbf{l}_2}^T\circbrac{\mathbf{l}_1\times\mathbf{l}_2}}
 \end{align*}\par
 因此，可以得到无穷远直线的表达式为：
 \begin{equation*}
@@ -869,10 +869,50 @@ $$\par
 因此该图像直线是零向量。
 \subsection{火车为什么远处运动慢而近处运动快？}
 \textbr{提醒：本题需要用到二视图}\par
-设空间中一点的齐次坐标为：$\mathbf{X}=[X,Y,Z,W]^T$，人眼相当于一个摄像机，投影矩阵的模型为$\mathbf{P=K[I\sep 0]}$，因此成像在视网膜上的图像坐标为：
+设空间中一点的非齐次坐标为：$\mathbf{X}=[X,Y,Z]^T$，人眼相当于一个摄像机，投影矩阵的模型为$\mathbf{P=K[I\sep 0]}$，因此成像在视网膜上的图像齐次坐标为：
 \begin{equation*}
-  \mathbf{x}=\mathbf{K[I\sep 0]X}=\mathbf{text}
+  \mathbf{x}=\mathbf{K[I\sep 0]}\begin{bmatrix}
+    X \\Y\\Z\\1
+  \end{bmatrix}\implies \mathbf{K}\begin{bmatrix}
+    X \\Y\\Z
+  \end{bmatrix}=s\begin{bmatrix}
+    x \\y\\1
+  \end{bmatrix}
 \end{equation*}\par
+式中的$s$是齐次因子，如果取定人眼的内参数矩阵$K_{33}=1$，则该齐次因子可定为$s={Z}$。当人沿着X轴方向行进一小段距离后，则人眼摄像机在同一个世界坐标系下产生的平移向量为$\mathbf{t}=\begin{bmatrix}
+    \Delta X \\0\\0
+  \end{bmatrix}$，则有：
+在新的相机投影矩阵下，该点的投影为：
+\begin{equation*}
+  \mathbf{x}'=\mathbf{K[I\sep t]}\begin{bmatrix}
+    X \\Y\\Z\\1
+  \end{bmatrix}\implies \mathbf{K}\begin{bmatrix}
+    X \\Y\\Z
+  \end{bmatrix}=s'\begin{bmatrix}
+    x' \\y'\\1
+  \end{bmatrix}
+\end{equation*}\par
+由于内参数矩阵是上三角阵，因此原式等于：
+\begin{equation*}
+  s'\begin{bmatrix}
+    x' \\y'\\1
+  \end{bmatrix}=\mathbf{K}\begin{bmatrix}
+    X+\Delta X \\Y\\Z
+  \end{bmatrix}
+\end{equation*}
+根据右式右下角元素为$Z$，可计算出$s'=Z$，因此将上式改写为：
+\begin{equation*}
+  \begin{bmatrix}
+    x' \\y'\\1
+  \end{bmatrix}=\begin{bmatrix}
+    x \\y\\1
+  \end{bmatrix}+\frac{1}{Z}\begin{bmatrix}
+    \Delta X \\0\\0
+  \end{bmatrix}
+\end{equation*}\par
+可见，在X轴方向的运动上，当深度越大时，视在的运动量越小，因此坐火车时，火车运动方向相当于是X轴运动，距离车窗较远的场景点深度较大，其视在运动越慢，而距离车窗较近的场景点深度较小，其视在运动越快。
+\subsection{证明虚圆点相对相似变换不变}
+二维的结论是显然的，对于三维：三维的映射不是点点不变的，而是集合不变，因此证明该结论只能通过标准情况+射影变换证得。
 
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
