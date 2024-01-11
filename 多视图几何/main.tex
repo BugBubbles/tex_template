@@ -46,6 +46,29 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 %列出目录
 \newpage
 \pagenumbering{arabic}
+\section{概念性质的东西}
+\subsection{齐次坐标的几何定义}
+点位于直线$\mathbf{l}=[a,b,c]^T$上，满足：
+\begin{equation*}
+  ax+by+c=0
+\end{equation*}\par
+为了将上式写得更加\textbr{紧凑}，在非齐次坐标上增加一维，使用扩展后的坐标$\mathbf{x}=[kx,ky,k]^T$表示该点，因此有：
+\begin{equation*}
+  \mathbf{l}^T\mathbf{x}=0
+\end{equation*}\par
+称扩展坐标$\mathbf{x}=[kx,ky,k]^T$为齐次坐标或齐次向量。
+\subsection{无穷远直线}
+由且仅且无穷远点构成的直线称为无穷远直线。
+\subsection{对偶二次曲线}
+由点定义的二次曲线称为（点）二次曲线；由\textbr{切线}定义的二次曲线称为对偶二次曲线。
+\subsection{退化的对偶二次曲线}
+退化的点二次曲线好写，退化的对偶二次曲线呢？\par
+类似地，秩为2的对偶二次曲线表示为两个\textbr{点}的乘积：
+\begin{equation*}
+  \mathbf{C}=\mathbf{xy}^T+\mathbf{yx}^T
+\end{equation*}\par
+秩为1时包含一个重点。
+
 \section{多视图几何知识点}
 \subsection{齐次坐标二维点、二维线的表示，齐次坐标二维点和线的关系（相交、点在线上、交点交线）P20}
 设齐次点为$\mathbold{x}=(x_1,x_2,x_3)^T$，齐次线为$\mathbold{l}=(l_1,l_2,l_3)^T$，其中点和线都是二维的，则从齐次点退化为非齐次点可用下式：
@@ -188,11 +211,12 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \mathbold{H}'=\mathbold{H}'_P\mathbold{H}'_A\mathbold{H}'_S
 \end{equation*}\par
-\subsection{	两种恢复至仿射变换的方法P37}
+\subsection{恢复至仿射变换的方法P37}
 恢复至仿射变换，需要将无穷远直线校正至规范位置，因此需要求出图像的无穷远直线即可：
 \begin{itemize}
   \item 通过两对平行线的交点求出无穷远直线；
-  \item 通过交比不变，作图求出无穷远直线。
+  \item 通过交比不变，作图求出无穷远直线；
+  \item 两对已知比例的点列（每对至少三个点）；
 \end{itemize}
 \subsection{三种恢复至相似变换的方法P41}
 恢复至仿射变换，需要将绝对对偶二次曲线校正至规范位置，因此需要求出绝对对偶二次曲线：
@@ -263,6 +287,16 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \mathbold{\pi}=\mathbold{L}^T\mathbold{X}
 \end{equation*}\par
+\subsection{Plücker直线表达式的关联变换}
+在点变换$\mathbf{X}'=\mathbf{HX}$作用下，直线的变换为：
+\begin{equation*}
+  \mathbf{L}'=\mathbf{HLH}^{T}
+\end{equation*}\par
+对偶直线的变换为：
+\begin{equation*}
+  \mathbf{L}^{*'}=\mathbf{H}^{-T}\mathbf{L}^{*}\mathbf{H}^{-1}
+\end{equation*}\par
+证明：使用定义式写出即可。
 \subsection{两直线相交的充要条件以及三个推论P54}
 两直线相交的充要条件是两直线的双线性乘积为零，即：
 \begin{equation*}
@@ -739,7 +773,7 @@ $$\par
   \mathbold{X}=\mathbold{L}\mathbold{\pi}
 \end{equation*}\par
 证明该点同时位于直线上和平面上：
-设直线的plücker表达式为：
+设直线的Plücker表达式为：
 \begin{equation*}
   \mathbold{L}=\mathbf{AB}^T-\mathbf{BA}^T\qquad\mathbf{L}^*=\mathbf{PQ}^T-\mathbf{QP}^T
 \end{equation*}\par
@@ -766,7 +800,7 @@ $$\par
   \mathbold{\pi}=\mathbold{L^*}\mathbold{X}
 \end{equation*}\par
 证明方法类似，不再赘述。
-\subsection{利用plucker坐标推导点在直线上和直线在平面上的条件}
+\subsection{利用Plücker坐标推导点在直线上和直线在平面上的条件}
 点在直线上的条件：
 \begin{equation*}
   \mathbf{L^*X}=\mathbf{0}
@@ -777,6 +811,8 @@ $$\par
   \mathbold{L\pi}=\mathbf{0}
 \end{equation*}\par
 证明方法是通过直线上某两点在平面上说明的。
+\subsection{证明Plücker表达式的直线与具体的点和平面无关}
+证明思路：利用定义式和直线的参数方式，在任取两个参数，算出来的形式与参数无关即可说明。说明平面时，稍微复杂一点，需要首先说明相交于同一直线的平面束可以使用其中任意两个不重合平面的线性组合表达，然后与第一种方式相同。
 \subsection{利用Plücker坐标证明平行平面相交在无穷远平面上的一条直线上}
 设两平行平面为：
 \begin{align*}
@@ -787,9 +823,44 @@ $$\par
                                                        \end{bmatrix}
 \end{align*}\par
 然后计算出来即可说明用该两平面生成的直线位于无穷远平面上。
+\subsection{证明极平面与二次曲面的交线是一条二次曲线}
+\label{subsec:证明极平面与二次曲面的交线是一条二次曲线}
+\textbr{关键思路：参数方程}\par
+设极平面和二次曲面分别为：
+\begin{equation*}
+  \mathbold{\pi=QX}
+\end{equation*}\par
+在极平面上建立二维坐标，写出参数方程，则可根据其平面的齐次式的左零空间$\mathbf{M}$求出，注意该矩阵的秩为3：
+\begin{equation*}
+  \mathbf{X}_c=\mathbf{Mx}_c
+\end{equation*}\par
+首先说明$\mathbf{X}_c$都在极平面上：
+\begin{equation*}
+  \mathbold{\pi}^T\mathbf{X}_c=\mathbold{\pi}^T\mathbf{Mx}_c=\mathbf{0}
+\end{equation*}\par
+然后说明$\mathbf{X}_c$都在二次曲面上：
+\begin{equation*}
+  \mathbf{X}_c^T\mathbold{QX}_c=\mathbf{x}_c^T\mathbf{M}^T\mathbold{Q}\mathbf{Mx}_c=\mathbf{0}
+\end{equation*}\par
+则可取$\mathbf{C=M^\mathit{T}QM}$为所有既在极平面又在二次曲面上的点所满足的方程，因此有：
+\begin{equation*}
+  \mathbf{x}_c^T\mathbf{C}\mathbf{x}_c=\mathbf{0}
+\end{equation*}\par
+显然$\mathbf{C}$是实对称的，因此结论得证。
+\subsection{证明过二次曲面外一点作三条切线，三个切点的切面将交于该点}
+\textbr{关键思路：极点极平面关系}\par
+联立三个切点对应的三个切平面，得到方程：
+\begin{equation*}
+  \begin{bmatrix}
+    \mathbf{X}_1^T \mathbf{Q}^T \\\\ \mathbf{X}_2^T \mathbf{Q}^T \\\\ \mathbf{X}_3^T \mathbf{Q}^T
+  \end{bmatrix}\mathbf{X}=\begin{bmatrix}
+    \mathbf{X}_1^T  \\\\ \mathbf{X}_2^T\\\\ \mathbf{X}_3^T
+  \end{bmatrix}\mathbf{QX}=0
+\end{equation*}\par
+上式用到了二次曲线的实对称性。可见，满足该方程的解，必定要求三个点同时位于极平面$\mathbf{QX}$上，而这三个点本身位于极平面$\mathbold{\pi=QX}_0$上，可得上述方程必有解$\mathbf{X=X}_0$，且该解是唯一的。
 \subsection{证明平行线相交在无穷远平面上}
 证明思路：参考自\cite{MultipleViewGeometrya}，两平行直线必定是共面的，因此可构造两个平行平面依次与公共平面相交于两平行直线处，根据上文证明，两平行平面交于无穷远平面，而公共平面与无穷远平面有交线，因此两平行直线与无穷远平面的交点必定是公共平面交线和平行平面交线的交集，因此该点位于无穷远平面上。
-\subsection{证明绝对对偶二次曲面是绝对二次曲线的对偶（对偶即二次曲线的切面被二次曲面的包络）}
+\subsection{证明绝对对偶二次曲面是绝对二次曲线的对偶（对偶即二次曲线的切面被绝对对偶二次曲面包络）}
 在标准情况下绝对二次曲线和绝对对偶二次曲面都是如下的矩阵：
 \begin{equation*}
   \mathbold{\Omega}_\infty=\mathbold{Q}^*_\infty=\begin{bmatrix}
@@ -849,7 +920,7 @@ $$\par
 \end{equation*}\par
 对原始射影场景$I_0$生成得到的图像$I_1$为：
 \begin{equation*}
-  \mathbold{x}_0=\mathbold{KRP}\mathbold{X}_\mathrm{cam}
+  \mathbold{x}_0=\mathbold{P}\mathbold{X}_\mathrm{cam}
 \end{equation*}\par
 而人眼相当于一套双目摄像机，其对图像$I_1$成像，相当于一个二维的单应变换，将该单应叠加至投影成像中，可得：
 \begin{equation*}
@@ -1032,6 +1103,8 @@ $$\par
 可见，在X轴方向的运动上，当深度越大时，视在的运动量越小，因此坐火车时，火车运动方向相当于是X轴运动，距离车窗较远的场景点深度较大，其视在运动越慢，而距离车窗较近的场景点深度较小，其视在运动越快。
 \subsection{证明虚圆点相对相似变换不变}
 二维的结论是显然的，对于三维：三维的映射不是点点不变的，而是集合不变，因此证明该结论只能通过标准情况+射影变换证得。
+\subsection{为什么从图像恢复后，黑边是直线？}
+说明：射影变换不改变直线的性质，因此原始图像的边框是直线，在校正后的图像中边框也是直线。
 \section{练习题答案}
 \subsection{使用一条消影直线和一个消影点对应和基本矩阵可算出仿射重构}
 \textbr{说明：}这里的一条消影直线对应和一个消影点对应分别指的是左右相机各有一条消影直线和同一个消影点的像，消影点不在消影线上（空间无穷远平面不过摄像机中心）。\par
@@ -1136,16 +1209,19 @@ $$\par
 \subsection{从摄像机矩阵出发解释对极点的含义}
 对极点分别是两个摄像机中心被对方成像得到的图像点；当左摄像机为世界坐标系时，右摄像机的第四列为其对极点；反之当右摄像机为世界坐标系时，左摄像机的第四列为其对极点。
 \subsection{  说明仿射摄像机出现误差的原因}
-\textbr{背下来吧！}
+\textbr{背下来吧！}\par
 思路：分两条：过世界原点并与主轴垂直的平面上无误差；其余平面有误差，误差满足以下公式：
 \begin{equation*}
   \tilde{\mathbf{x}}_\mathrm{aff}-\tilde{\mathbf{x}}_\mathrm{proj}=\frac{\Delta}{d_0}\circbrac{\tilde{\mathbf{x}}_\mathrm{proj}-\tilde{\mathbf{x}}_\mathrm{0}}
 \end{equation*}
 式中，$d_0$是深度，$\Delta$是当前平面与无误差平面的距离（称为深度的起伏），$\tilde{\mathbf{x}}_0$是主点的图像，可见：
 \begin{itemize}
-  \item 深度尽量大而起伏尽量小时（分工项），误差小；
+  \item 深度尽量大而起伏尽量小时（分式项），误差小；
   \item 空间点分布在主轴附近时（括号项），误差小；
 \end{itemize}
+\subsection{说明点线的关联性关系}
+{\heiti 证明直线的交点可以表示为$\mathbf{x=l\times m}$，而两点的连线可以写为$\mathbf{l=x\times y}$}\par
+思路：连线可使用公式$\mathbf{x}(\lambda)=\mathbf{x}+\lambda\mathbf{y}$说明两点所在的直线上全部点均满足$\mathbf{l}^T\mathbf{x}(\lambda)=0$；交点可验证$\mathbf{l}^T\mathbf{x}=0$且$\mathbf{m}^T\mathbf{x}=0$同时成立即可。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
