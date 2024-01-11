@@ -138,8 +138,8 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 相似变换，又称等距变换，不改变原始形状的夹角，其变换矩阵为：
 \begin{equation*}
   \mathbold{H}=\begin{bmatrix}
-    s\mathbold{R}  & \mathbold{t} \\
-    \mathbold{0}^T & s
+    s\mathbold{R} & \mathbold{t} \\
+    \mathbold{0}^T & 1
   \end{bmatrix}
 \end{equation*}\par
 其中增加了一项缩放因子$s$，是对整个图像的均匀缩放。\par
@@ -475,7 +475,71 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \mathbold{E}=\mathbold{K}^T_r\mathbold{FK}_l
 \end{equation*}\par
-
+\subsection{射影重构定理P206}
+重构：是指根据两幅有视差的图像上对应的像点，计算出像点反投影在三维空间中的对应位置之间所满足的变换关系，例如，已经两幅图像像点$\mathbf{x}_{i1},\mathbf{x}_{i2}$，其满足极线几何约束：
+\begin{equation*}
+  \mathbf{x}_{i2}^T\mathbf{Fx}_{i1}=0
+\end{equation*}\par
+由每个像点反投影得到的空间点满足关系：
+\begin{equation*}
+  \mathbf{X}_{i2}=\mathbf{HX}_{i1}
+\end{equation*}\par
+则根据\textbr{空间单应}矩阵的特点命名不同的重构，该单应为射影单应，因此称为射影重构；该单应为仿射单应，因此称为仿射重构；该单应为相似单应，可称为度量重构。以上就是射影重构定理的内容，该定理说明，能够在最差为射影单应的条件下，重构出三维空间中的点。注意：重构过程中，不一定需要先验摄像机的投影矩阵以及内外参数等。\par
+射影重构定理得到了另外一个重要的结论，即对于同一个重构中的两个摄像机投影矩阵，如果均规定从左向右的变换，则左右相机的投影矩阵满足：
+\begin{equation*}
+  \mathbf{P}_2=\mathbf{P}_1\mathbf{H}^{-1}
+\end{equation*}\par
+该重构矩阵对任意的两个摄像机投影矩阵都成立。
+\subsection{纯平移运动下的仿射重构以及三种重构方法P208}
+纯平移运动下，两个摄像机投影矩阵可以简单地写为以下式：
+\begin{equation*}
+  \mathbf{P}_l=\begin{bmatrix}
+    \mathbf{I} & \mathbf{0}
+  \end{bmatrix}\qquad\mathbf{P}_r=\begin{bmatrix}
+    \mathbf{I} & \mathbf{t}
+  \end{bmatrix}
+\end{equation*}\par
+根据极线几何约束式：
+\begin{equation*}
+  \mathbf{x}_r^T\mathbf{K}_r^{-T}\mathbf{[t]_\times RK}_l^{-1}x_l=0\implies\mathbf{x}_r^T\mathbf{[t]_\times x}_l=0
+\end{equation*}\par
+可知，此时只需要知道平移量或者某一个摄像机的极点，就可以完成重构，因为有：$\mathbf{[t]_\times=[e_\mathit{l}]_\times=[e_\mathit{r}]_\times}$，通常取左相机为世界坐标系，因此有：$\mathbf{t=e}_\mathit{r}$。\par
+仿射重构需要先验无穷远平面，对应无穷远平面的解算可提出以下三种重构方法：
+\begin{itemize}
+  \item 先验无穷远点：至少先验三个无穷远点即可以完成对无穷远平面的确定，从而完成重构；
+  \item 三组平行线：类似地，这三组平行线不得是相互平行的，但是可以是位于不同的视图中，因为左右摄像机共享同一个无穷远平面和无穷远点；
+  \item 三组先验比例的点列：比例已知的点列可以确定其无穷远点。
+\end{itemize}
+\subsection{在完成仿射重构的基础上如何利用绝对二次曲线的像和某个已知的摄像机投影矩阵，完成度量重构P210}
+已知绝对二次曲线的像为$\mathbold{\omega}$，已知经过仿射重构的摄像机投影矩阵为$\mathbold{[M\sep m]}$，则可以通过形如下式的校正矩阵完成从仿射重构到度量重构的转换：
+\begin{equation*}
+  \mathbold{H}=\begin{bmatrix}
+    \mathbold{A}^{-1} & 0 \\
+    \mathbf{0}^T           & 1
+  \end{bmatrix}
+\end{equation*}\par
+其中，$\mathbold{A}$由以下式的Cholesky分解给出：
+\begin{equation*}
+  \mathbold{AA}^T=\circbrac{\mathbold{M^\mathit{T}\omega M}}^{-1}
+\end{equation*}\par
+证明：只需要证明必要性即可，设已知投影矩阵为左相机，右相机的投影矩阵为$\mathbold{P}_r=\mathbold{P}_l\mathbold{H}^{-1}$，则有：
+\begin{equation*}
+  \mathbold{P}_r=\mathbold{[M\sep m]}\begin{bmatrix}
+    \mathbold{A} & 0 \\
+    \mathbf{0}^T           & 1
+  \end{bmatrix}= \mathbold{[MA\sep m]}
+\end{equation*}\par
+根据摄像机对空间绝对二次曲线的成像，有：
+\begin{equation*}
+  \mathbold{\omega}=\circbrac{\mathbf{MA(MA)^\mathit{T}}}^{-1}\implies\circbrac{\mathbold{M\omega M^\mathit{T}}}^{-1}=\mathbf{AA}^T
+\end{equation*}\par
+\subsection{	度量重构的三种约束方式P211}
+度量重构本质上就是寻找解算绝对二次曲线的方法，因此有：
+\begin{itemize}
+  \item 正交约束：两个正交的方向在绝对二次曲线意义下是共轭的，一个平面的无穷远平面交线和其法向量方向在绝对二次曲线意义下满足极点极线关系，选取五组以上这样的约束即可完成解算绝对二次曲线；
+  \item 内参矩阵约束：如果能够先验内参数矩阵，则直接可以得到绝对二次曲线的像；
+  \item 相同摄像机约束：相当于先验两个摄像机的内参数相同，两个视图中的绝对二次曲线是相同的。 
+\end{itemize}
 \section{简答证明要点}
 \subsection{证明射影变换交比不变}
 方法一：三角形面积法，即证明三角形面积的比值不变；\par
