@@ -24,6 +24,12 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 % \usepackage{math_formulate}%自行编写的数学公式命令库，基于amsmath宏包
 % \usepackage{picture}%集成图形绘制库，主要包括了tikz和pgfplots两大主流宏包
 % \usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}%使用mathtimepro2商业字体作为数学环境，并不推荐
+\usepackage{draftwatermark}         % 所有页加水印
+% \usepackage[firstpage]{draftwatermark} % 只有第一页加水印
+\SetWatermarkText{\yihao{$\mathfrak{Compiled\quad by\quad B\ddot{o}ffee}$}}          % 设置水印内容
+%\SetWatermarkText{\includegraphics{fig/texlion.png}}         % 设置水印logo
+\SetWatermarkLightness{0.9}             % 设置水印透明度 0-1
+\SetWatermarkScale{1}                   % 设置水印大小 0-1 
 
 %biblatex宏包的参考文献数据源加载方式，注意book.bib应当与.tex文件在同一目录下，不然有可能会报错
 \addbibresource[location=local]{book.bib}
@@ -590,7 +596,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{equation*}
   \mathbf{x}_r^T\mathbf{K}_r^{-T}\mathbf{[t]_\times RK}_l^{-1}x_l=0\implies\mathbf{x}_r^T\mathbf{[t]_\times x}_l=0
 \end{equation*}\par
-可知，此时只需要知道平移量或者某一个摄像机的极点，就可以完成重构，因为有：$\mathbf{[t]_\times=[e_\mathit{l}]_\times=[e_\mathit{r}]_\times}$，通常取左相机为世界坐标系，因此有：$\mathbf{t=e}_\mathit{r}$。\par
+可知，此时只需要知道平移量或者某一个摄像机的极点，就可以完成重构，因为有：$\mathbf{[t]_\times=[e_\mathit{l}]_\times=[e_\mathit{r}]_\times}$，通常取左相机为世界坐标系，因此有：$\mathbf{t=e}_{r}$。\par
 仿射重构需要先验无穷远平面，对应无穷远平面的解算可提出以下三种重构方法：
 \begin{itemize}
   \item 先验无穷远点：至少先验三个无穷远点即可以完成对无穷远平面的确定，从而完成重构；
@@ -996,9 +1002,15 @@ $$\par
 \begin{equation*}
   \mathbf{n}=\mathbf{K}^T\mathbf{l}
 \end{equation*}\par
+\subsection{摄像机绕中心纯旋转的用途}
+主要有两点：
+\begin{itemize}
+  \item 图像衍生：获得景物局部的正视图；
+  \item 全景拼图：选择某一视角的图像为参考图像，将所有的图像都转换到该参考图像的视角下成像，相当于摄像机的视场无限大。
+\end{itemize}
 \subsection{平面全景拼图的步骤，为什么会产生黑边（原文：蝴蝶结形状）}
 \label{subsec:平面全景拼图的步骤，为什么会产生黑边（原文：蝴蝶结形状）}
-书上原话：因为所有的图像都是往中间一幅图像配准所得的，因此两侧的图像射影变换产生的拉伸较大，而靠近中间的射影变换拉伸较小，因此两头大中间小，产生了黑边（或蝴蝶结的形状）。
+书上原话：因为所有的图像都是往中间一幅图像配准所得的，因此两侧的图像射影变换产生的拉伸较大，而靠近中间的射影变换拉伸较小，因此两头大中间小，产生了黑边（或蝴蝶结的形状）。\par
 \subsection{空间绝对二次曲线的图像}
 {\heiti 证明空间中绝对二次曲线的图像是$\circbrac{\mathbf{KK}^{T}}^{-1}$}\par
 空间的绝对二次曲线位于无穷远平面上，因此考虑使用无穷远平面向图像平面的二维单应解决此问题。设无穷远平面上的一点为$\mathbf{X}_\infty$，其在图像平面上的投影为${\mathbf{x}_\infty}'$，则有：
