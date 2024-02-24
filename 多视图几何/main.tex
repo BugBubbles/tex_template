@@ -223,7 +223,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \begin{itemize}
   \item 通过五正交直线；
   \item 在仿射校正的基础上，通过两对正交直线即可校正；
-  \item 在仿射校正的基础上，通过一个椭圆或者一个已知长度的交比来计算校正。
+  \item 在仿射校正的基础上，通过一个椭圆或者两个已知的长度比来计算校正。
 \end{itemize}
 \subsection{三维点和平面的齐次式以及关联定义、对偶定义，平面点的参数方程表示P50}
 三维点定义：$\mathbold{X}=(X_1,X_2,X_3,X_4)^T$，平面定义为：$\mathbold{\pi}=(\pi_1,\pi_2,\pi_3,\pi_4)^T$，点在平面上，可有以下关系：
@@ -239,7 +239,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 两个空间点构成矩阵：
 \begin{equation*}
   \begin{bmatrix}
-    \mathbold{X}_1^T \\
+    \mathbold{X}_1^T \\\\
     \mathbold{X}_2^T
   \end{bmatrix}
 \end{equation*}\par
@@ -250,23 +250,23 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 空间直线也可以使用两个平面的零空间表示，即：
 \begin{equation*}
   \begin{bmatrix}
-    \mathbold{\pi}_1^T \\
+    \mathbold{\pi}_1^T \\\\
     \mathbold{\pi}_2^T
   \end{bmatrix} \mathbold{l}=0
 \end{equation*}\par
 平面与直线的交点，相当于三个平面交于一点，需要使用零空间表示，即：
 \begin{equation*}
   \begin{bmatrix}
-    \mathbold{\pi}_1^T \\
-    \mathbold{\pi}_2^T \\
+    \mathbold{\pi}_1^T \\\\
+    \mathbold{\pi}_2^T \\\\
     \mathbold{\pi}_3^T
   \end{bmatrix} \mathbold{X}=0
 \end{equation*}\par
 直线与一点共面，相当于三个点位于平面上，需要使用生成子空间表示 ，即：
 \begin{equation*}
   \begin{bmatrix}
-    \mathbold{X}_1^T \\
-    \mathbold{X}_2^T \\
+    \mathbold{X}_1^T \\\\
+    \mathbold{X}_2^T \\\\
     \mathbold{X}_3^T
   \end{bmatrix} \mathbold{\pi}=0
 \end{equation*}\par
@@ -309,7 +309,7 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   \item 使用两平面表示的直线也可以得到相同的双线性乘积结果：\\
         $\mathcal{L_1\sep L_2}=\det\circbrac{\mathbold{\pi}_1,\mathbold{\pi}_2,\mathbold{\pi}_3,\mathbold{\pi}_4}=0
         $
-  \item 六维向量$\mathcal{L}=[l_{12},l_{12},l_[14],l_{23},l_{24},l_{34}]^T$仅表示一条三维直线，当且仅当双线性乘积为零。
+  \item 六维向量$\mathcal{L}=[l_{12},l_{12},l_{14},l_{23},l_{24},l_{34}]^T$仅表示一条三维直线，当且仅当双线性乘积为零。
 \end{itemize}
 \subsection{	绝对二次曲线、度量两空间直线的夹角，四个关于绝对二次曲线的性质P61}
 绝对二次曲线定义为符合以下公式的全部点的集合：
@@ -332,8 +332,9 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{equation*}\par
 求解两空间直线的夹角，可以使用以下公式：
 \begin{equation*}
-  \cos\theta=\frac{\mathbold{L}_1^T\mathbold{\Omega}_\infty\mathbold{L}_2}{\sqrt{\mathbold{L}_1^T\mathbold{\Omega}_\infty\mathbold{L}_1}\sqrt{\mathbold{L}_2^T\mathbold{\Omega}_\infty\mathbold{L}_2}}
+  \cos\theta=\frac{\mathbold{d}_1^T\mathbold{\Omega}_\infty\mathbold{d}_2}{\sqrt{\mathbold{d}_1^T\mathbold{\Omega}_\infty\mathbold{d}_1}\sqrt{\mathbold{d}_2^T\mathbold{\Omega}_\infty\mathbold{d}_2}}
 \end{equation*}\par
+式中，$\mathbf{d}_1,\mathbf{d}_2$是两个直线的方向（与无穷远平面的交点）。\par
 四点关于绝对二次曲线的性质：
 \begin{itemize}
   \item 绝对二次曲线与直线交于两个虚球点；
@@ -360,8 +361,8 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 投影中心称为摄像机的中心，记为$\mathbold{C}$；\par
 摄像机的主轴定义为，过摄像机中心且与摄像机光轴平行的矢量方向；\par
 图像平面定义为，与摄像机中心保持焦距位置处，与主轴垂直的平面；\par
-摄像机的主点定义为，摄像机主轴与图像平面的交点；\par
-摄像机的主平面定义为，经过摄像机\textbf{中心}且与摄像机主轴垂直的平面。\par
+摄像机的主点定义为，摄像机主轴与\textbr{图像平面}的交点；\par
+摄像机的主平面定义为，经过摄像机\textbr{中心}且与图像平面平行的平面。\par
 \subsection{摄像机投影矩阵P的四种写法、内参数和外参数P118}
 摄像机投影矩阵可以写为以下四种形式：
 \begin{itemize}
@@ -389,9 +390,9 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{equation*}\par
 投影矩阵的行向量$P_1^T,P_2^T$代表图像上x轴和y轴的与相机主轴形成的两个平面，称为轴平面；第三行$P_3^T$代表相机的主平面；\par
 投影矩阵的列向量$p_1,p_2,p_3$代表相机对世界坐标系x轴、y轴、z轴成像所得到的像点；第四列向量$p_4$代表相机对世界坐标系坐标原点的图像；\par
-相机的中心是两个轴平面与主平面的交点，因此可以使用标定矩阵$\mathbold{P}$的零空间来表示：$\mathbold{C}=\mathcal{N}(\mathbold{P})$；\par
-摄像机的主点是主轴向量对主平面的交点，主轴向量是主平面的法向量，因此是投影矩阵第三行的无穷远点，即$[p_{31},p_{32},p_{33},0]^T$，相机对该无穷远点成像即为主点，书上取前三项为$m_3$，因此简写为$\mathbold{M}m_3$；\par
-相机的主射线是主平面正向的方向，摄像机主点中$m_3$提供了方向，但是不包含正负号，因此主轴方向上指向摄像机前方的向量为$\det(\mathbold{M})m_3$。
+相机的中心是两个轴平面与主平面的交点，因此可以使用标定矩阵$\mathbold{P}$的零空间来表示：$\mathbold{C}=\mathcal{N}(\mathbold{P})\Leftrightarrow\mathbf{PC=0}$；\par
+摄像机的主点是主轴向量对主平面的交点，主轴向量是主平面的法向量，因此是投影矩阵第三行的无穷远点，即$[p_{31},p_{32},p_{33},0]^T$，相机对该无穷远点成像即为主点，书上取前三项为$\mathbf{m}_3$，因此简写为$\mathbold{Mm}_3$；\par
+相机的主射线是主平面正向的方向，摄像机主点中$\mathbf{m}_3$提供了方向，但是不包含正负号，因此主轴方向上指向摄像机前方的向量为$\det(\mathbold{M})\mathbf{m}_3$。
 \subsection{	仿射摄像机P矩阵的特点P127}
 仿射摄像机相当于对有限摄像机的焦距调整至无穷大，同时将相机置于无穷远处，因此其主平面位于无穷远平面，标定矩阵最后一行为$[0,0,0,1]$。
 \subsection{仿射摄像机与有限摄像机的三个区别P131}
@@ -408,8 +409,8 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   \item 主点位于无穷远处，即主点无定义。
 \end{itemize}
 \subsection{摄像机将二次曲线反向投影成锥面、将二次曲面映射为二次曲线P153}
-对于某个图像上的二次曲线$\mathbold{Q}$，其在空间中的反向投影为$\mathbold{Q}'=\mathbold{P}^T\mathbold{QP}$，证明该反向投影为锥面（即不满秩）：由于$\mathbold{PC}=0$，对反向投影右乘摄像机中心坐标可得：$\mathbold{Q}'\mathbold{C}=\mathbold{P}^T\mathbold{QPC}=0$，即矩阵$\mathbold{Q}'$一定是不满秩的，因此该反向投影是锥面。\par
-摄像机将二次曲面映射为二次曲线，证明该结论使用到了对偶二次曲面。设空间二次曲面的对偶二次曲线为$\mathbold{Q}^*$，其满足二次曲面上的全部切平面均有：$\mathbold{\pi}^T\mathbold{Q}^*\mathbold{\pi}=0$。根据外形线轮廓，切平面在图像平面上均成像为一条直线，因此有：$\mathbold{\pi}=\mathbold{P}^T\mathbold{l}$，将其代入上式可得：$\mathbold{l}^T\mathbold{PQ^*P}^T\mathbold{l}=0$，因此中间的$\mathbold{PQ^*P}^T$就是像平面上的二次曲线，其满足对所有外形线轮廓投影线$\mathbold{l}$均相切。
+对于某个图像上的二次曲线$\mathbold{\Omega}$，使用点在二次曲线上的方程$\mathbf{x^\mathit{T}Cx=0}$推导可得其在空间中的反向投影为$\mathbold{Q}'=\mathbold{P}^T\mathbold{\Omega P}$，证明该反向投影为锥面（即不满秩）：由于$\mathbold{PC}=0$，对反向投影右乘摄像机中心坐标可得：$\mathbold{Q}'\mathbold{C}=\mathbold{P}^T\mathbold{\Omega PC}=0$，即矩阵$\mathbold{Q}'$一定是不满秩的，因此该反向投影是锥面。\par
+摄像机将二次曲面映射为二次曲线，证明该结论使用到了对偶二次曲面。设空间二次曲面的对偶二次曲面为$\mathbold{Q}^*$，其满足二次曲面上的全部切平面均有：$\mathbold{\pi}^T\mathbold{Q}^*\mathbold{\pi}=0$。根据外形线轮廓，切平面在图像平面上均成像为一条直线，因此有：$\mathbold{\pi}=\mathbold{P}^T\mathbold{l}$，将其代入上式可得：$\mathbold{l}^T\mathbold{PQ^*P}^T\mathbold{l}=0$，因此中间的$\mathbold{PQ^*P}^T$就是像平面上的二次曲线，其满足对所有外形线轮廓投影线$\mathbold{l}$均相切。
 \subsection{摄像机同中心缩放、纯旋转的单应矩阵P156}
 摄像机同中心缩放，相当于其左乘一个倍缩变换矩阵，即有：
 \begin{equation*}
@@ -424,43 +425,48 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   \mathbold{P}'=\mathbold{K[R\sep 0]}=\mathbold{KRK^{-1}K[I\sep 0]}=\mathbold{KRK^{-1}P}
 \end{equation*}\par
 \subsection{摄像机标定矩阵K是图像点与欧氏坐标系下的射线方向的一个单应（仿射变换）P161}
-这一点是公理性质的结论，书上也并未给出证明，以$\mathbold{d}$代表\textbf{欧氏坐标系}下测量得到的射线方向，其在图像平面上的像点满足：$\mathbold{x=Kd}$。\par
+以$\mathbold{d}$代表\textbf{欧氏坐标系}下测量得到的射线方向，其在图像平面上的像点满足：$\mathbold{x=Kd}$。证明方法：取标准摄像机矩阵对方向成像（无穷远点）：
+\begin{equation*}
+  \mathbf{x=K[I\sep 0]}\begin{bmatrix}
+    \mathbf{d}^T \\0
+  \end{bmatrix}=\mathbf{Kd}
+\end{equation*}\par
 因此，一条图像直线可以确定一张过摄像机中心的平面，该平面在欧氏空间中的法线方向是$\mathbold{n=K}^T\mathbold{l}$。
-\subsection{摄像机对平面的作用}
+\subsection{摄像机对平面的作用P151}
 摄像机对空间中的一个平面的作用，例如对平面$Z=z_0$成像，此时摄像机矩阵为$\mathbf{P}$，则有：
 \begin{equation*}
   \mathbf{x}=\mathbf{P}\mathbf{X}=\begin{bmatrix}
-    p_{11}&p_{12}&p_{13}&p_{14}\\
-    p_{21}&p_{22}&p_{23}&p_{24}\\
-    p_{31}&p_{32}&p_{33}&p_{34}
+    p_{11} & p_{12} & p_{13} & p_{14} \\
+    p_{21} & p_{22} & p_{23} & p_{24} \\
+    p_{31} & p_{32} & p_{33} & p_{34}
   \end{bmatrix}\begin{bmatrix}
-    x\\y\\z_0\\1
+    x \\y\\z_0\\1
   \end{bmatrix}
 \end{equation*}\par
 由于平面的方程为$Z=z_0$，在该平面上建立二维参数坐标，使用参数方程写出该平面上的点：
 \begin{equation*}
   \mathbf{X}=\mathbf{M}\begin{bmatrix}
-    x\\y\\1
+    x \\y\\1
   \end{bmatrix}
 \end{equation*}\par
 式中的$\mathbf{M}$是平面$[0,0,1,-z_0]^T$的\textbr{左零空间}，可解为：
 \begin{equation*}
   \mathbf{M}=\begin{bmatrix}
-    1&0&0\\
-    0&1&0\\
-    0&0&z_0\\
-    0&0&1
+    1 & 0 & 0   \\
+    0 & 1 & 0   \\
+    0 & 0 & z_0 \\
+    0 & 0 & 1
   \end{bmatrix}
 \end{equation*}\par
 因此，平面上的点可以表示为：
 \begin{equation*}
   \mathbf{X}=\begin{bmatrix}
-    1&0&0\\
-    0&1&0\\
-    0&0&z_0\\
-    0&0&1
+    1 & 0 & 0   \\
+    0 & 1 & 0   \\
+    0 & 0 & z_0 \\
+    0 & 0 & 1
   \end{bmatrix}\begin{bmatrix}
-    x\\y\\1
+    x \\y\\1
   \end{bmatrix}=\mathbf{Mx}_c
 \end{equation*}\par
 代入至摄像机矩阵中，可得：
@@ -489,13 +495,13 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   \mathbold{[l]_\times}=\mathbold{P}\mathbold{LP}^T
 \end{equation*}
 \subsection{绝对二次曲线的图像P161}
-三维空间中的绝对二次曲线定义为无穷远平面\textbf{的}绝对二次曲线，其图像求法通过无穷远平面间接求解。无穷远平面上的点可以表示为$\mathbold{X}_\infty=\begin{pmatrix}
+三维空间中的绝对二次曲线定义为无穷远平面\textbf{的}绝对二次曲线，其图像求法通过无穷远平面间接求解。无穷远平面上的点可以表示为$\mathbold{X}_\infty=\begin{bmatrix}
     \mathbold{d} \\ 0
-  \end{pmatrix}$，因此可经过摄像机投影为：
+  \end{bmatrix}$，因此可经过摄像机投影为：
 \begin{equation*}
-  \mathbold{x}=\mathbold{KR[I\sep 0]}\begin{pmatrix}
+  \mathbold{x}=\mathbold{KR[I\sep 0]}\begin{bmatrix}
     \mathbold{d} \\ 0
-  \end{pmatrix}=\mathbold{KRd}
+  \end{bmatrix}=\mathbold{KRd}
 \end{equation*}\par
 绝对二次曲线位于无穷远平面上，将无穷远平面也看作是一个二维平面，其向图像平面的变换将符合二维射影，这个变换就是$\mathbold{KR}$，因此图像平面上的绝对二次曲线将符合二维变换下的协变：
 \begin{equation*}
@@ -506,17 +512,19 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
   \mathbold{\omega}^*=\mathbold{KK}^T
 \end{equation*}\par
 \subsection{三维空间的消影点在图像的位置P165}
-三维空间中相互平行的直线拥有相同的消影点，设这个消影点为$\mathbf{D}=\begin{pmatrix}
+三维空间中相互平行的直线拥有相同的消影点，设这个消影点为$\mathbf{D}=\begin{bmatrix}
     \mathbold{d} \\ 0
-  \end{pmatrix}$因此，可以将直线记为$\mathbold{X}(\lambda)=\mathbold{A}+\lambda\mathbf{D}$，对该直线上每一点施加摄像机投影，可得：
+  \end{bmatrix}$因此，可以将直线记为$\mathbold{X}(\lambda)=\mathbold{A}+\lambda\mathbf{D}$，对该直线上每一点施加摄像机投影，可得：
 \begin{equation*}
   \lim_{\lambda\to\infty}\mathbold{x}(\lambda)=\lim_{\lambda\to\infty}\circbrac{\mathbold{PA}+\lambda\mathbf{PD}}=\mathbold{Kd}
 \end{equation*}\par
-因此摄像机将消影点$\mathbf{D}=\begin{pmatrix}
+因此摄像机将消影点$\mathbf{D}=\begin{bmatrix}
     \mathbold{d} \\ 0
-  \end{pmatrix}$映射到了图像平面上的同一点$\mathbold{v=Kd}$。
+  \end{bmatrix}$映射到了图像平面上的同一点$\mathbold{v=Kd}$。
 \subsection{对极点、对极平面和对极线的概念P185}
-两个摄像机的中心与空间中一点形成的平面称为对极平面；中心的连线与图像平面的交点称为对极点；两个摄像机各自图像平面与对极平面的交线称为对极线。
+两个摄像机的中心与空间中一点形成的平面称为对极平面；\par
+中心的连线与图像平面的交点称为对极点；\par
+两个摄像机各自图像平面与对极平面的交线称为对极线。
 \subsection{基本矩阵的四项几何含义P189}
 基本矩阵有多种表现形式，推导方法可根据图像点反投影得到直线$\mathbf{X}(\lambda)=\mathbf{P^+x}+\lambda\mathbf{C}$，对这两条线上两个特殊点$\mathbf{P^+x}$和$\mathbf{C}$成像，得到对极线，然后化简即可写出基本矩阵的定义式：
 \begin{equation*}
@@ -580,11 +588,9 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \subsection{纯平移运动下的仿射重构以及三种重构方法P208}
 纯平移运动下，两个摄像机投影矩阵可以简单地写为以下式：
 \begin{equation*}
-  \mathbf{P}_l=\begin{bmatrix}
-    \mathbf{I} & \mathbf{0}
-  \end{bmatrix}\qquad\mathbf{P}_r=\begin{bmatrix}
-    \mathbf{I} & \mathbf{t}
-  \end{bmatrix}
+  \mathbf{P}_l=
+    [\mathbf{I\sep 0}]
+\qquad\mathbf{P}_r=[\mathbf{I\sep t}]
 \end{equation*}\par
 根据极线几何约束式：
 \begin{equation*}
@@ -630,10 +636,10 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \section{简答证明要点}
 \subsection{证明射影变换交比不变}
 方法一：三角形面积法，即证明三角形面积的比值不变；\par
-方法二：使用齐次坐标，如下图：
+方法二：使用齐次坐标，\textbr{关键在于齐次化因子}，如下图：
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\linewidth]{证明题1.png}
+  \includegraphics[width=0.3\linewidth]{证明题1.png}
   \caption{射影变换交比不变证明}
 \end{figure}\par
 交比定义为距离比的比值，在一维空间中的齐次坐标系下，可以使用行列式表示：
@@ -680,13 +686,12 @@ $$\par
 根据二次曲线的仿射分类可知，与无穷远直线没有交点的二次曲线是椭圆或者圆，有一个交点的二次曲线是抛物线，有两个交点的二次曲线是双曲线。仿射变换不改变无穷远直线，而交点性质是射影变换都不会改变的，因此经过仿射变换后，曲线与无穷远直线的交点数量不会变化，所以圆不会变成双曲线和抛物线，而可能变成椭圆。
 \subsection{证明仿射变换下平行的两条线段长度之比不变，而不平行的则不然}
 设平行线段$AB$和$CD$，则有：
-$$
+\begin{equation}
   \begin{aligned}
     \mathbold{A-B}=                    & \lambda(\mathbold{C-D}) \\
-    \frac{\sep AB\sep }{\sep CD\sep }= & \lambda
-    \label{eq:证明题3}
-  \end{aligned}
-$$\par
+    \frac{\sep CD\sep }{\sep AB\sep }= & \lambda
+  \end{aligned}\label{eq:证明题3}
+\end{equation}\par
 其中$\lambda$为常数，设仿射变换为$\mathbold{X}'=\mathbold{HX}$，则有：
 $$
   \mathbold{H}=\begin{bmatrix}
@@ -823,6 +828,8 @@ $$\par
                                                        \end{bmatrix}
 \end{align*}\par
 然后计算出来即可说明用该两平面生成的直线位于无穷远平面上。
+\subsection{证明平行线相交在无穷远平面上}
+证明思路：参考自\cite{MultipleViewGeometrya}，两平行直线必定是共面的，因此可\textbr{构造}两个平行平面依次与公共平面相交于两平行直线处，根据上文证明，两平行平面交于无穷远平面，而公共平面与无穷远平面有交线，因此两平行直线与无穷远平面的交点必定是公共平面交线和平行平面交线的交集，因此该点位于无穷远平面上。
 \subsection{证明极平面与二次曲面的交线是一条二次曲线}
 \label{subsec:证明极平面与二次曲面的交线是一条二次曲线}
 \textbr{关键思路：参数方程}\par
@@ -854,12 +861,10 @@ $$\par
   \begin{bmatrix}
     \mathbf{X}_1^T \mathbf{Q}^T \\\\ \mathbf{X}_2^T \mathbf{Q}^T \\\\ \mathbf{X}_3^T \mathbf{Q}^T
   \end{bmatrix}\mathbf{X}=\begin{bmatrix}
-    \mathbf{X}_1^T  \\\\ \mathbf{X}_2^T\\\\ \mathbf{X}_3^T
+    \mathbf{X}_1^T \\\\ \mathbf{X}_2^T\\\\ \mathbf{X}_3^T
   \end{bmatrix}\mathbf{QX}=0
 \end{equation*}\par
 上式用到了二次曲线的实对称性。可见，满足该方程的解，必定要求三个点同时位于极平面$\mathbf{QX}$上，而这三个点本身位于极平面$\mathbold{\pi=QX}_0$上，可得上述方程必有解$\mathbf{X=X}_0$，且该解是唯一的。
-\subsection{证明平行线相交在无穷远平面上}
-证明思路：参考自\cite{MultipleViewGeometrya}，两平行直线必定是共面的，因此可构造两个平行平面依次与公共平面相交于两平行直线处，根据上文证明，两平行平面交于无穷远平面，而公共平面与无穷远平面有交线，因此两平行直线与无穷远平面的交点必定是公共平面交线和平行平面交线的交集，因此该点位于无穷远平面上。
 \subsection{证明绝对对偶二次曲面是绝对二次曲线的对偶（对偶即二次曲线的切面被绝对对偶二次曲面包络）}
 在标准情况下绝对二次曲线和绝对对偶二次曲面都是如下的矩阵：
 \begin{equation*}
@@ -870,24 +875,19 @@ $$\par
     0 & 0 & 0 & 0
   \end{bmatrix}
 \end{equation*}\par
-在标准情况下，绝对二次曲线的切线方程为：
+在标准情况下，在无穷远平面上，绝对二次曲线的切线方程为：
 \begin{equation*}
-  \mathbold{l}=\mathbold{\Omega}_\infty\mathbold{X}=\begin{bmatrix}
-    \mathbf{I}   & 0 \\
-    \mathbf{0}^T & 0
-  \end{bmatrix}\begin{bmatrix}
-    \mathbf{v} \\ 0
-  \end{bmatrix}=\begin{bmatrix}
-    \mathbf{v} \\ 0
-  \end{bmatrix}
+  \mathbold{l}=\mathbold{\Omega}_\infty\mathbold{x}=\mathbf{I}\mathbf{v}=\mathbf{v}
 \end{equation*}\par
 由于切点在绝对二次曲线上，因此满足：
 \begin{equation*}
-  \mathbold{v}^T\mathbold{v}=0
+  \mathbold{v}^T\mathbold{Iv}=\mathbold{v}^T\mathbold{v}=0
 \end{equation*}\par
-因此，切线满足以下方程：
+因此，切线对应的切平面$\mathbold{\pi}=\begin{bmatrix}
+  \mathbf{v} \\k
+\end{bmatrix}$满足以下方程：
 \begin{equation*}
-  \mathbf{l}^T\mathbf{Q}_\infty^*\mathbf{l}=\mathbf{v}^T\mathbf{v}=0
+  \mathbold{\pi}^T\mathbf{Q}_\infty^*\mathbold{\pi}=\mathbf{v}^T\mathbf{v}=0
 \end{equation*}\par
 说明绝对对偶二次曲线是绝对二次曲线的对偶。当外加射影变换矩阵作用后，无穷远平面产生协变，因此绝对二次曲线产生协变，绝对对偶二次曲面产生变换，分别为：
 \begin{equation*}
@@ -914,7 +914,7 @@ $$\par
 与上一问的证明方式一模一样，不再赘述。
 \subsection{蒙娜丽莎的眼睛}
 {\heiti 设是$I_0$射影图像，而$I_1$是$I_0$的图像，其合成图像为$I'$，证明$I'$的视在摄像机中心与$I_0$的一样，并验证$I'$和$I_0$的其他参数可能不同。}\par
-这个题题意不明，查阅资料\cite{MultipleViewGeometry}后才知道，合成图像应该就是从$I_0$重构出的直接图像，即不经过$I_1$直接对原始场景（蒙娜丽莎）成像的结果。一般的射影摄像机模型为：
+这个题题意不明，查阅资料\cite{MultipleViewGeometry}后才知道，合成图像应该就是从$I_0$重构出的直接图像，即不经过$I_1$直接对原始场景（蒙娜丽莎）成像的结果。一般的射影摄像机模型满足：
 \begin{equation*}
   \mathbold{P}=\mathbold{KR[I\sep -\tilde{C}]}
 \end{equation*}\par
@@ -927,6 +927,7 @@ $$\par
   \mathbold{x}_1=\mathbold{HKR[I\sep -\tilde{C}]}\mathbold{X}_\mathrm{cam}
 \end{equation*}\par
 可见，合成图像中的摄像机中心仍然与原始摄像机中心一致，在世界坐标系下均为$\tilde{\mathbf{C}}$，而其他参数如摄像机矩阵等均受到二次投影的影响，因此可能不同。\par
+书上给出的证明方式是：原始图像满足$\mathbf{PC=0}$，引入的第二个相机相当于在原摄像机图像上增加了一个二维单应，由此可知新的投影矩阵$\mathbf{P}'=\mathbf{HP}$仍然过原始摄像机中心，因此合成图像的摄像机中心与原始摄像机中心一致。\par
 因此，蒙娜丽莎的眼睛始终看着观察者，原因在于，观察者的眼睛相当于一个射影摄像机，蒙娜丽莎图像本身可以相当于一幅射影摄像机的图像，画中蒙娜丽莎的眼睛始终看着摄像机的中心，而观察者对该图像的二次成像不改变摄像机中心，所以看起来蒙娜丽莎在观察者眼中成像后的图像中的眼睛始终看着观察者。
 \subsection{射影摄像机反向投影}
 {\heiti 证明在射影摄像机下，图像点的反向投影的射线可以被写成$\mathbf{L}^*=\mathbf{P}^T\mathbf{[x]_\times P}$}\par
@@ -1098,7 +1099,7 @@ $$\par
     x \\y\\1
   \end{bmatrix}+\frac{1}{Z}\begin{bmatrix}
     \Delta X \\0\\0
-  \end{bmatrix}
+  \end{bmatrix}\Leftrightarrow\mathbf{x}'=\mathbf{x}+\frac{\mathbf{Kt}}{Z}
 \end{equation*}\par
 可见，在X轴方向的运动上，当深度越大时，视在的运动量越小，因此坐火车时，火车运动方向相当于是X轴运动，距离车窗较远的场景点深度较大，其视在运动越慢，而距离车窗较近的场景点深度较小，其视在运动越快。
 \subsection{证明虚圆点相对相似变换不变}
@@ -1122,7 +1123,7 @@ $$\par
 \textbr{提醒：对结论\ref{subsec:火车为什么远处运动慢而近处运动快？}的扩展，牢记双目推导法。}\par
 设旋转木马上旋转前后的人眼摄像机的投影矩阵分别为$\mathbf{P}_1,\mathbf{P}_2$，则有：
 \begin{equation*}
-  \mathbf{P}_1=\mathbf{K[I\sep 0]}\qquad\mathbf{P}_2=\mathbf{K[R\sep t ]} 
+  \mathbf{P}_1=\mathbf{K[I\sep 0]}\qquad\mathbf{P}_2=\mathbf{K[R\sep t ]}
 \end{equation*}\par
 图像点为$\mathbf{x}=[x,y,1]^T$，则在世界坐标系下的世界点为：
 \begin{equation*}
@@ -1132,8 +1133,8 @@ $$\par
 \end{equation*}\par
 则在旋转后的成像为：
 \begin{align*}
-  Z\mathbf{x}'=\mathbf{P}_2\mathbf{X}=\mathbf{K[R\sep t ]}\mathbf{X}&=Z\mathbf{KRK^\mathrm{-1}x}+Z\mathbf{Kt}\\
-  \mathbf{x}'=\mathbf{KRK^\mathrm{-1}x}+\frac{\mathbf{K^\mathrm{-1}t}}{Z}
+  Z\mathbf{x}'=\mathbf{P}_2\mathbf{X}&=\mathbf{K[R\sep t ]}\mathbf{X}  =Z\mathbf{KRK^\mathrm{-1}x}+Z\mathbf{Kt} \\
+  \mathbf{x}'&=\mathbf{KRK^\mathrm{-1}x}+\frac{\mathbf{Kt}}{Z}
 \end{align*}\par
 因此世界点的视在旋转量相同，但是视在平移量与深度呈反比，距离人越远的点，给人的感觉是运动越慢，越近的人运动越快。
 \subsection{提出一种利用标定二次曲线标定摄像机的方法}
@@ -1142,14 +1143,14 @@ $$\par
 在摄像机的作用下，标定板到图像存在一个二维单应，即：
 \begin{equation}
   \mathbf{H=KR}=\begin{bmatrix}
-    \mathbf{I}&\mathbf{0}\\
-    \mathbf{v}^T&v_3
+    \mathbf{I}   & \mathbf{0} \\
+    \mathbf{v}^T & v_3
   \end{bmatrix}\begin{bmatrix}
-    \mathbf{K}&\mathbf{0}\\
-    \mathbf{0}^T&1
+    \mathbf{K}   & \mathbf{0} \\
+    \mathbf{0}^T & 1
   \end{bmatrix}\begin{bmatrix}
-    s\mathbf{R}&\mathbf{t}\\
-    \mathbf{0}^T&1
+    s\mathbf{R}  & \mathbf{t} \\
+    \mathbf{0}^T & 1
   \end{bmatrix}
   \label{eq:标定板到图像的二维单应}
 \end{equation}\par
@@ -1157,25 +1158,25 @@ $$\par
   \centering
   \includegraphics[width=0.8\linewidth]{练习题5.png}
   \caption{两个标定圆求解无穷远直线}
-\label{fig:两个标定圆求解无穷远直线}
+  \label{fig:两个标定圆求解无穷远直线}
 \end{figure}\par
 如图\ref{fig:两个标定圆求解无穷远直线}，在图像平面上，作两个圆长轴的连线，作内公切线得到四个切线，连接对应的切点，可得两条平行线。这两条平行线在世界坐标系下应该是相交的，因此可以求出无穷远直线，使用该无穷远直线和任意一个圆的影像求出虚圆点，使用虚圆点还原绝对二次曲线，从而获取绝对对偶二次曲线，使用奇异值分解可算出单应矩阵$\mathbf{H}$，对单应矩阵作QR分解可得标定矩阵$\mathbf{K}$。（本方法将求解非线性方程）\par
 为了避免求解非线性方程，可选取两对正交直线，使用仿射校正矩阵$\begin{bmatrix}
-  \mathbf{I}&\mathbf{0}\\
-  \mathbf{v}^T&v_3
-\end{bmatrix}$
+    \mathbf{I}   & \mathbf{0} \\
+    \mathbf{v}^T & v_3
+  \end{bmatrix}$
 将直线校正后，通过下式解出矩阵$\mathbf{K}$：
 \begin{equation*}
   \rectbrac{l_1,l_2,l_3}\begin{bmatrix}
-    \mathbf{KK}^T&\mathbf{0}\\
-    \mathbf{0}^T&1
+    \mathbf{KK}^T & \mathbf{0} \\
+    \mathbf{0}^T  & 1
   \end{bmatrix}\begin{bmatrix}
-    m_1\\
-    m_2\\
+    m_1 \\
+    m_2 \\
     m_3
-  \end{bmatrix}
+  \end{bmatrix}=0
 \end{equation*}\par
-然后作Cholesky分解可求得矩阵$K$，从而利用公式\ref{eq:标定板到图像的二维单应}可在相差一个相似变换的情况下求得$\mathbf{H}$，该结果对QR分解不影响，因此完成标定。
+然后作Cholesky分解可求得矩阵$\mathbf{K}$，从而利用公式\ref{eq:标定板到图像的二维单应}可在相差一个相似变换的情况下求得$\mathbf{H}$，该结果对QR分解不影响，因此完成标定。
 \subsection{给出一种用消隐线求解摄像机旋转的方法}
 以旋转前的相机为世界坐标系，旋转后所得的图像可由单应矩阵$\mathbf{H}$联系，即：
 \begin{equation*}
@@ -1205,7 +1206,7 @@ $$\par
   \item 黑区的左右边一定是直线段，因为身影变换不改变直线属性。
 \end{itemize}
 \subsection{从视差角度说明为什么纯旋转摄像机不能实现三维重构}
-要实现三维重构，必须要知道各占间的三维结构关系。纯旋转相机只移动图像平面而摄像机中心未移动，在旋转前图像中重合的点在旋转后的图像中仍然重合，没有运动视差的产生，不能获得关于空间结构 的新的信息，因此无法确定其与摄像机中心的深度信息，因此无法完成三维重构。
+要实现三维重构，必须要知道各点间的三维结构关系。纯旋转相机只移动图像平面而摄像机中心未移动，在旋转前图像中重合的点在旋转后的图像中仍然重合，没有运动视差的产生，不能获得关于空间结构任何新的信息，从而无法确定其与摄像机中心的深度信息，因此无法完成三维重构。
 \subsection{从摄像机矩阵出发解释对极点的含义}
 对极点分别是两个摄像机中心被对方成像得到的图像点；当左摄像机为世界坐标系时，右摄像机的第四列为其对极点；反之当右摄像机为世界坐标系时，左摄像机的第四列为其对极点。
 \subsection{  说明仿射摄像机出现误差的原因}
