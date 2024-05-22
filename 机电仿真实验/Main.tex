@@ -89,7 +89,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 本应用是控制一个通风烤箱的温度，热量由热电阻产生，控制电压为$V_c$温度由放在测量孔中的热电偶测量，仪表放大器产生电压$V_m $显示温度$ \theta_m$ 。在烤箱温度范围内，假定传感器和仪表放大器装置是线性的 。
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{烤箱结构图.png}
+  \includegraphics[width=0.8\textwidth]{烤箱结构图.png}
   \caption{烤箱结构图}
   \label{fig:烤箱结构图}
 \end{figure}
@@ -115,7 +115,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \end{table}
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{等价电路图.png}
+  \includegraphics[width=0.8\textwidth]{等价电路图.png}
   \caption{等价电路图}
   \label{fig:等价电路图}
 \end{figure}
@@ -157,9 +157,9 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
   V_m(s)      & =\Theta_m(s)k_2
   \label{eq:烤箱热力学方程拉普拉斯}
 \end{align*}\par
-联立以上式子，得到烤箱控制系统的传递函数：
+联立以上式子，得到烤箱控制系统的各个量的复频域响应函数：
 \begin{align*}
-  \Theta_m(s) & =\frac{\Theta_e(s)+Q(s)}{1+(C_aR_f+C_mR_f+R_mC_m)s+C_aR_mC_mR_fs^2}              \\
+  \Theta_m(s) & =\frac{\Theta_e(s)+Q(s)R_f}{1+(C_aR_f+C_mR_f+R_mC_m)s+C_aR_mC_mR_fs^2}              \\
   \Theta_a(s) & =\frac{[\Theta_e(s)+Q(s)R_f](1+sR_mC_m)}{1+(C_aR_f+C_mR_f+R_mC_m)s+C_aR_mC_mR_fs^2} \\
   V_m(s)      & =\frac{\Theta_e(s)+Q(s)R_f}{1+(C_aR_f+C_mR_f+R_mC_m)s+C_aR_mC_mR_fs^2}k_2           \\
   V_c(s)      & =\frac{Q(s)}{k_1}
@@ -169,7 +169,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
   \Theta_m(s) & =\frac{\Theta_e(s)+Q(s)R_f}{1+531s+15000s^2}\approx\frac{\Theta_e(s)+\frac{1}{10}Q(s)}{(1+500s)(1+30s)} \\
   \Theta_a(s) & =\frac{(1+30s)[\Theta_e(s)+Q(s)R_f]}{1+531s+15000s^2}\approx\frac{\Theta_e(s)+\frac{1}{10}Q(s)}{1+500s}     \\
   V_m(s)      & =\frac{\Theta_e(s)+Q(s)R_f}{1+531s+15000s^2}\frac{1}{10}   \approx\frac{\Theta_e(s)+\frac{1}{10}Q(s)}{(1+500s)(1+30s)}\frac{1}{10} \\
-  V_c(s)      & =\frac{Q(s)}{10}
+  V_c(s)      & =\frac{Q(s)}{100}
 \end{align*}\par
 由此可知系统的框图如图\ref{fig:系统框图}所示：
 \begin{figure}[H]
@@ -188,8 +188,9 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
       vh path/.style={to path={|- (\tikztotarget)}}]
 
       \matrix[row sep=5mm,column sep=5mm] {
+        & \node(Q_input) [point]     {$Q(s)$     }    ;                                   & \node(k1) [terminal] {$\displaystyle \frac{1}{100} $}; & \node(Vc_s)[point]{$\quad\quad$}; &  & &  &  &   & \\
         % First row:
-                                                  & \node(Q_input) [point]     {$Q(s)R_f$     }    ;                                   & \node(k1) [terminal] {$\displaystyle \frac{1}{100} $}; & \node(Vc_s)[point]{$\quad\quad$}; &  & \node(theta_a){$\Theta_a(s)$}; &  &  &   & \\
+                                                  &\node(Rf) [terminal] {$\displaystyle \frac{1}{10} $};                                    &  &  &  & \node(theta_a){$\Theta_a(s)$}; &  &  &   & \\
         % Second row:
         \node(theta_input)[point]{$\Theta_e(s)$}; & \node(error)[terminal]{};                                                          & \node(second_imped) [terminal] {$\displaystyle\frac{1}{500s+1}$};   & \node(theta_a_south)[point]{};
                                                   &
@@ -208,8 +209,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
       \draw [color=black!50,very thick] (southeast_error)--($ (southeast_error) ! 8mm ! (error) $);
       \graph{
       (theta_input)->(error)->(second_imped)->(first_imped)->(k2)->(Vm_s);
-      % (theta_a_south)->[vh path](feedback_1)->[hv path](error);
-      (Q_input)->(error);
+      (Q_input)->(Rf)->(error);
       (theta_a_south)->[vh path](theta_a);
       (Q_input)->(k1)->(Vc_s);
       ()
@@ -240,9 +240,9 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
   \label{fig:阶跃输入仿真}
 \end{figure}
 \subsection{正弦温度输入}
-选取功率为正弦输入函数，其波动范围为$20\unit{W}$，波动频率为$0.001\unit{Hz}$，而外界温度$\theta_e(t)$仍保持为阶跃函数，则有：
+选取功率为正弦输入函数，其波动范围为$500\unit{W}$，波动频率为$0.001\unit{Hz}$，而外界温度$\theta_e(t)$仍保持为阶跃函数，则有：
 \begin{align*}
-  \theta_e(t)=20U(t),\quad Q(t)=1000+50\sin(50t)U(t)
+  \theta_e(t)=20U(t),\quad Q(t)=1000+500\sin(\frac{2\pi}{1000}t)U(t)
 \end{align*}\par
 仿真软件构建的框图如图\ref{fig:正弦仿真框图}所示：
 \begin{figure}[H]
@@ -254,18 +254,28 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 仿真结果为：
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{正弦温度输入仿真.png}
-  \caption{正弦温度输入仿真结果}
-  \label{fig:正弦温度输入仿真}
+  \includegraphics[width=1.0\textwidth]{正弦温度输入仿真50,0.001.png}
+  \caption{正弦温度输入仿真结果$500\unit{W},1\unit{mHz}$}
+  \label{fig:正弦温度输入仿真50,0.001}
 \end{figure}
-修改输入的正弦温度波动范围为$100\unit{W}$，仿真结果如图\ref{fig:正弦温度输入仿真100W}所示：
+修改输入的正弦温度波动范围为$100\unit{W}$，仿真结果如图\ref{fig:正弦温度输入仿真100,0.001}所示：
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{正弦温度输入仿真100W.png}
-  \caption{正弦温度输入仿真结果100W}
-  \label{fig:正弦温度输入仿真100W}
+  \includegraphics[width=1.0\textwidth]{正弦温度输入仿真100,0.001.png}
+  \caption{正弦温度输入仿真结果$100\unit{W},1\unit{mHz}$}
+  \label{fig:正弦温度输入仿真100,0.001}
 \end{figure}
+修改正弦输入的频率为$10\unit{Hz}$，仿真结果如图\ref{fig:正弦温度输入仿真100,10}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{正弦温度输入仿真100,10.png}
+  \caption{正弦温度输入仿真结果$500\unit{W},10\unit{Hz}$}
+  \label{fig:正弦温度输入仿真100,10}
+\end{figure}
+\section{结论}
+经过上述仿真，可以发现国产软件Mworks在电气仿真方面的功能比较强大，用户界面也友好易于使用，极大地兼容了Matlab的Simulink的使用习惯。但是也存在一定的问题，例如在图\ref{fig:正弦温度输入仿真100,10}中可以看到，当仿真输入的正弦波动曲线频率较高时，在大步长时间范围内的显示结果不全；且图窗用户界面难以调整放缩分辨率，不能查看响应曲线的细节。
 
+因此仿真软件国产化仍然有着较多的工作需要完成。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
