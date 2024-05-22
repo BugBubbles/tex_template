@@ -1,0 +1,127 @@
+\documentclass[11pt]{article}
+%基于北京航空航天大学仪器科学与光电工程学院实验报告及课程报告排版得来，类似于毕业论文排版格式
+%后续将更新毕业论文排版格式
+\usepackage{graphicx,float}%使用图的宏包，使用图的浮动体宏包，引入参数H使图像紧跟当前文字
+\usepackage{caption} %使用图表标题的宏包
+\usepackage[colorlinks=true,pdfstartview=FitH,%
+linkcolor=black,anchorcolor=violet,citecolor=magenta]{hyperref}%加载hyperref宏包，使用超链接
+\usepackage{setspace}%用于设置行间距列间距等命令的宏包
+\usepackage{array}%设置列表高度宽度的宏包
+\usepackage{zhnumber}%使用中文数字编号的宏包
+\usepackage{titlesec,titletoc}%使用标题自定义形式的宏包和使用目录自定义形式的宏包
+\usepackage{siunitx}%物理学单位宏包
+\usepackage{tabularx}%让表格宽度等于页面宽度
+\usepackage{makecell}%单个表格单元调整的宏包
+\usepackage{subfigure} %%使用子图的宏包
+\usepackage[backend=biber,bibstyle=gb7714-2015,%nature,%%加载biblatex宏包，使用参考文献
+citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
+,url=false,doi=false
+]{biblatex}%标注(引用)样式citestyle，著录样式bibstyle都采用gb7714-2015样式
+% \usepackage{pgfplots}%类似tikz的一个画图库，主要画统计图
+\usepackage{../customStyle}
+% \usepackage{customFont}%自行编写的字体命令库，基于CJK宏包
+% \usepackage{bh_style}%自行编写的风格文件，基于使用习惯和格式要求
+% \usepackage{math_formulate}%自行编写的数学公式命令库，基于amsmath宏包
+% \usepackage{picture}%集成图形绘制库，主要包括了tikz和pgfplots两大主流宏包
+% \usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}%使用mathtimepro2商业字体作为数学环境，并不推荐
+
+%biblatex宏包的参考文献数据源加载方式，注意book.bib应当与.tex文件在同一目录下，不然有可能会报错
+\addbibresource[location=local]{book.bib}
+% % \bibliographystyle{gbt7714-numerical}
+%%% 下面的命令重定义页面边距，使其符合中文刊物习惯 %%%%
+% \addtolength{\topmargin}{2.5cm}
+\setlength{\oddsidemargin}{0.63cm}  % 3.17cm - 1 inch
+\setlength{\evensidemargin}{\oddsidemargin}
+% \setlength{\textwidth}{14.66cm}
+% \setlength{\textheight}{24.00cm}    % 24.62
+
+\graphicspath{{./fig}}
+
+\begin{document}
+{
+\pagestyle{empty}
+\begin{figure}
+  \includegraphics{title.jpg}
+\end{figure}
+\begin{center}
+
+  \begin{figure}[h]
+
+    \centering
+    \includegraphics[]{title.png}\par
+    \vspace{4em}
+    \large{\yihao\lishu{2023－2024学年第二学期}}
+    \vspace{6em}
+  \end{figure}
+
+  \large{\erhao\lishu{图像分析与识别}}\par
+  \large{\erhao\lishu{课程大作业}}
+  \vspace{8em}
+
+  \begin{spacing}{2.0}
+    \begin{tabular}{cc}
+
+
+      {\xiaoerhao\lishu{班\quad \quad 级}} & {\heiti{\dlmu{SY23173}}}    \\
+      {\xiaoerhao\lishu{学\quad \quad 号}} & {\heiti{\dlmu{SY2317301} }} \\
+      {\xiaoerhao\lishu{姓\quad \quad 名}} & {\heiti{\dlmu{陈博非} }}       \\
+      {\xiaoerhao\lishu{日\quad \quad 期}} & {\heiti{\dlmu{\today} } }   \\
+    \end{tabular}
+  \end{spacing}
+\end{center}
+\thispagestyle{empty}
+}
+
+
+\newpage
+%手动分页
+\pagenumbering{roman}
+
+\setcounter{tocdepth}{3}
+%设定目录深度                      
+\tableofcontents
+%列出目录
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{背景介绍}
+图像检测是计算机视觉的重要应用分支，按输入的模态可以分为单图像检测和视频检测。本文选择进行单图像检测，其主要的技术要求是给定一张输入的二维图像，由处理算法给出该二维图像上的所有可能的物体位置（用矩形框标注出）和物体种类（用标签标注出）。
+\subsection{相关工作}
+随着深度学习技术的迅猛发展，基于深度学习的方法已经牢牢占据了图像检测的绝对优势地位。检测原理早已摆脱了从一众手工标注的特征中筛选并精简的手工”检测“\cite{wangRegionletsGenericObject2013}。目前主流的实现技术途径有二，其一是以区域提取算法为代表的两步检测算法，如最早的基于区域提取（Regional Proposal）的两步检测网络如区域CNN\cite{girshickRichFeatureHierarchies2014}（Regional CNN，R-CNN）、Fast R-CNN\cite{girshickFastRCNN}和Faster R-CNN网络\cite{renFasterRCNNRealTime2016}，甚至到如今占据最先进榜首（state of the art，SOTA）的基于Transformer的检测算法如检测Transformer\cite{carionEndtoEndObjectDetection2020}（DEtection TRansformer，DETR）、弹性DETR（Deformable DETR）和协同DETR（Co-DETR）系列，其思想都是将检测框的回归计算与物体标签信息的分类计算分开处理。两步检测网络能够更充分地利用输入图像的区域信息，从输入图像中提取得到的特征经过精心处理后送至检测头后，便于得到更高平均准确率（mAP）的检测结果和更小的检测框误差，但是，两步的处理流程也极大制约了算法的处理速度，基于两步的检测算法每秒仅能输出数帧的检测结果，不利于算法的实施与部署。
+
+另一种主流检测框架则是以YOLO\cite{redmonYouOnlyLook2016}系列为代表的一步检测网络，如YOLO9000\cite{redmonYOLO9000BetterFaster2017}，YOLOv3\cite{redmonYOLOv3IncrementalImprovement2018}和YOLOX\cite{geYOLOXExceedingYOLO2021}等，通过在输入图像上预设一系列坐标已知的锚点，直接比较检测框与各个锚点处的位置偏移即可完成对物体位置的计算，同时完成不同锚点位置处的物体置信度分数预测，由回归网络完成对结果的输出，这样一步就完成了检测对位置和标签的计算要求。显而易见，基于一步检测原理的网络能够在检测的速度上击败两步检测网络，其训练的时间也得以大幅减少，模型部署成本得到显著下降；但速度的提升也带来了计算准确度的下降，一步网络在多个物体和重叠较多的情况下，检测的准确度仍然亟待提升。
+\subsection{本文工作}
+综合考虑本课程大作业的具体要求和个人的研究兴趣，本文的主要工作是在Chen\cite{chenDiffusionDetDiffusionModel2023}等人的工作基础上，进一步挖掘了扩散模型\cite{hoDenoisingDiffusionProbabilistic2020}在计算机视觉领域的巨大潜力而改进得来。本文的主要工作分为以下几个方面：
+\begin{itemize}
+  \item 设计了一种基于去噪扩散原理训练的检测网络。该网络将扩散模型中加噪的元素由图像更改为待检测的位置矩形框和分类标签，在扩散模型内部实现了端到端的检测网络；
+  \item 设计了通用交并集的损失函数用于模型训练的，在COCO2017\cite{linMicrosoftCOCOCommon2014}检测数据集上完成模型的训练和推理。
+  \item 自行构建了带有较高噪声和较低拍摄质量的测试数据集，用于测试检测模型在极端条件下的稳健性。
+\end{itemize}
+\section{技术方案}
+本文工作设计的检测算法工作流如图\ref{fig:workflow}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{workflow.png}
+  \caption{检测算法工作流程}
+  \label{fig:workflow}
+\end{figure}
+下面简要地介绍各个部分的工作过程。
+\subsection{数据加载环节}
+
+\subsection{扩散网络环节}
+
+\subsection{后处理环节}
+
+\section{算法原理}
+
+\section{程序设计流程与说明}
+
+\section{实验结果与分析}
+
+\section{结论}
+
+\newpage
+\printbibliography[heading=bibliography,title=参考文献]
+\end{document}
