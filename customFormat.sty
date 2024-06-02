@@ -48,25 +48,24 @@
 % \setlength\parskip{.5\baselineskip}%正文的行间距
 %%目录行间距的设定
 \renewcommand\tableofcontents{%
-    \setlength\parskip{1.5\baselineskip}% 控制目录内的行间距
+    \setlength\parskip{.5\baselineskip}% 控制目录内的行间距
     \centerline{\normalfont\Large\bfseries\sffamily\contentsname
         \@mkboth{%
            \MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
         \vskip 2ex%
     \@starttoc{toc}% 恢复正文的行间距
-    \setlength\parskip{1.5\baselineskip}% 注意，这里需要与下面的行间距设置保持一致
-    }
-
+    \setlength\parskip{.5\baselineskip}% 注意，这里需要与下面的行间距设置保持一致
+}
 
 %用计数器成功实现section和subsection不相同标号的办法
 \newcounter{mycounter}
 \setcounter{mycounter}{1}
 
 %%目录行间距的设定
-\titlecontents{section}[2em]{\heiti\wuhao\vspace{0em}}{\contentslabel[\zhnum{mycounter}\stepcounter{mycounter}.]{2em}}{\hspace*{-4em}}{~\titlerule*[0.6pc]{ }~\contentspage}
-\titlecontents{subsection}[4em]{\wuhao\vspace{-1em}}{\contentslabel{2em}}{\hspace*{2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
+\titlecontents{section}[2em]{\heiti\wuhao\vspace{0em}}{\contentslabel[第\zhnum{mycounter}章\stepcounter{mycounter}]{4em}}{\hspace*{-4em}}{~\titlerule*[0.6pc]{.}~\contentspage}
+\titlecontents{subsection}[2em]{\wuhao\vspace{-1em}}{\contentslabel{2em}}{\hspace*{2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
 
-\titlecontents{subsubsection}[6em]{\wuhao\vspace{-2em}}{\contentslabel{3em}}{\hspace*{-2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
+\titlecontents{subsubsection}[4em]{\wuhao\vspace{-2em}}{\contentslabel{3em}}{\hspace*{-2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
 
 % \titlecontents{paragraph}[11em]{\wuhao}{\contentslabel{4em}}{\hspace*{-2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
 % %%%% 设置 part 属性 %%%%
@@ -84,9 +83,10 @@
 % {.5ex \@plus .1ex}%
 % {\normalfont\sihao\heiti}}
 % \makeatother
+\renewcommand{\sectionmark}[1]{\markboth{第\zhnum{section}章\ #1}{}}
 \titleformat{\section}[block]{\sanhao\heiti\centering}{第\zhnum{section}章}{0.5em}{}[]
 % 设置章标题左边距、上下间距
-\titlespacing{\section}{0pt}{\baselineskip}{\baselineskip}
+% \titlespacing{\section}{0pt}{\baselineskip}{\baselineskip}
 % %%%% 设置 subsection 属性 %%%%
 % \makeatletter
 % \renewcommand\subsection{\@startsection{subsection}{1}{\z@}%
@@ -94,10 +94,10 @@
 % {.4ex \@plus .1ex}%
 % {\normalfont\xiaosihao\hwzs}}
 % \makeatother
-
+\renewcommand{\subsectionmark}[1]{\markboth{\arabic{section}.\arabic{subsection}\ #1}{}}
 \titleformat{\subsection}[block]{\sihao\heiti}{\arabic{section}.\arabic{subsection}}{0.5em}{}[]
 % 设置节标题左边距、上下间距
-\titlespacing{\subsection}{0pt}{\baselineskip}{\baselineskip}
+% \titlespacing{\subsection}{0pt}{\baselineskip}{\baselineskip}
 % %%%% 设置 subsubsection 属性 %%%%
 % \makeatletter
 % \renewcommand\subsubsection{\@startsection{subsubsection}{1}{\z@}%
@@ -105,16 +105,13 @@
 % {.3ex \@plus .1ex}%
 % {\normalfont\xiaosihao\textbf\songti}}
 % \makeatother
+\renewcommand{\subsubsectionmark}[1]{\markboth{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\ #1}{}}
 \titleformat{\subsubsection}[block]{\xiaosihao\songti\bfseries}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}{0.5em}{}[]
 % 设置小节标题左边距、上下间距
-\titlespacing{\subsubsection}{0pt}{\baselineskip}{\baselineskip}
+% \titlespacing{\subsubsection}{0pt}{\baselineskip}{\baselineskip}
 
 %%对enumerate类型的编号的设定
 \renewcommand{\labelenumi}{\theenumi 、}
-% 字体族设置：通过命令设置，{} 内为参数，即需要设置格式的文本
-%  \textrm{Roman Family} 
-%  \textsf{Sans Serif Family}
-%  \texttt{Typewriter Family} \par
 
 %------------------------------------------%
 %页面
@@ -135,7 +132,6 @@
 %------------------------------------------%
 %页眉页脚
 %------------------------------------------%
-\renewcommand{\sectionmark}[1]{\markboth{第\zhnum{section}章\ #1}{}}
 \fancypagestyle{beihang}{%
 \fancyhf{}%
 \fancyhead[CO]{北京航空航天大学硕士学位论文}%
