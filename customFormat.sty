@@ -5,8 +5,10 @@
   xcolor,			    % Use Colors
   abstract,
   geometry,
-  booktabs, %提供三线表命令
-  zhnumber%使用中文数字编号的宏包
+  booktabs,    %提供三线表命令
+  zhnumber,    %使用中文数字编号的宏包
+  titlesec,   %使用自定义的标题格式和间距
+  fancyhdr,   %使用页眉页脚
 }
 %%%% 设置Python风格的伪代码格式 %%%%
 \usepackage[formats]{listings}
@@ -52,7 +54,7 @@
            \MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
         \vskip 2ex%
     \@starttoc{toc}% 恢复正文的行间距
-    \setlength\parskip{.5\baselineskip}%
+    \setlength\parskip{1.5\baselineskip}% 注意，这里需要与下面的行间距设置保持一致
     }
 
 
@@ -60,6 +62,7 @@
 \newcounter{mycounter}
 \setcounter{mycounter}{1}
 
+%%目录行间距的设定
 \titlecontents{section}[2em]{\heiti\wuhao\vspace{0em}}{\contentslabel[\zhnum{mycounter}\stepcounter{mycounter}.]{2em}}{\hspace*{-4em}}{~\titlerule*[0.6pc]{ }~\contentspage}
 \titlecontents{subsection}[4em]{\wuhao\vspace{-1em}}{\contentslabel{2em}}{\hspace*{2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
 
@@ -81,7 +84,9 @@
 % {.5ex \@plus .1ex}%
 % {\normalfont\sihao\heiti}}
 % \makeatother
-\titleformat{\section}[block]{\xiaosanhao\heiti}{\zhnum{section}.}{0.5em}{}[]
+\titleformat{\section}[block]{\sanhao\heiti\centering}{第\zhnum{section}章}{0.5em}{}[]
+% 设置章标题左边距、上下间距
+\titlespacing{\section}{0pt}{\baselineskip}{\baselineskip}
 % %%%% 设置 subsection 属性 %%%%
 % \makeatletter
 % \renewcommand\subsection{\@startsection{subsection}{1}{\z@}%
@@ -90,7 +95,9 @@
 % {\normalfont\xiaosihao\hwzs}}
 % \makeatother
 
-\titleformat{\subsection}[block]{\sihao\heiti}{\arabic{section}.\arabic{subsection}.}{0.5em}{}[]
+\titleformat{\subsection}[block]{\sihao\heiti}{\arabic{section}.\arabic{subsection}}{0.5em}{}[]
+% 设置节标题左边距、上下间距
+\titlespacing{\subsection}{0pt}{\baselineskip}{\baselineskip}
 % %%%% 设置 subsubsection 属性 %%%%
 % \makeatletter
 % \renewcommand\subsubsection{\@startsection{subsubsection}{1}{\z@}%
@@ -98,7 +105,9 @@
 % {.3ex \@plus .1ex}%
 % {\normalfont\xiaosihao\textbf\songti}}
 % \makeatother
-\titleformat{\subsubsection}[block]{\xiaosihao\songti\bfseries}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}.}{0.5em}{}[]
+\titleformat{\subsubsection}[block]{\xiaosihao\songti\bfseries}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}{0.5em}{}[]
+% 设置小节标题左边距、上下间距
+\titlespacing{\subsubsection}{0pt}{\baselineskip}{\baselineskip}
 
 %%对enumerate类型的编号的设定
 \renewcommand{\labelenumi}{\theenumi 、}
@@ -109,10 +118,11 @@
 
 %------------------------------------------%
 %页面
-%------------------------------------------%
-\geometry{left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm}
-%%%% 下面的命令设置行间距与段落间距 %%%%
-\linespread{1}
+%------------------------------------------%\
+% 设置页边距
+\geometry{left=25mm,right=25mm,top=25mm,bottom=25mm}
+%%%% 设置行间距与段落间距 %%%%
+\linespread{1.5}
 % \setlength{\parskip}{1ex}
 \setlength{\parskip}{0.5\baselineskip}
 
@@ -122,7 +132,16 @@
 \@afterindenttrue
 \makeatother
 \setlength{\parindent}{2em}  %中文缩进两个汉字位
-%页码位置
+%------------------------------------------%
+%页眉页脚
+%------------------------------------------%
+\renewcommand{\sectionmark}[1]{\markboth{第\zhnum{section}章\ #1}{}}
+\fancypagestyle{beihang}{%
+\fancyhf{}%
+\fancyhead[CO]{北京航空航天大学硕士学位论文}%
+\fancyhead[CE]{\leftmark}%
+\renewcommand{\headrulewidth}{0.5pt} % 设置页眉线宽度
+}
 %------------------------------------------%
 %图表框名设置
 %------------------------------------------%
@@ -142,7 +161,10 @@
 \makeatletter
 \newcommand\dlmu[2][8cm]{\hskip1pt\underline{\hb@xt@ #1{\hss#2\hss}}\hskip3pt}
 \makeatother
-% \renewcommand{\arraystretch}{1.5}%调行距
+%------------------------------------------%
+%数学公式编号
+%------------------------------------------%
+
 %------------------------------------------%
 %参考文献
 %------------------------------------------%
