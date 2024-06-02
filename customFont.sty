@@ -1,6 +1,9 @@
 \ProvidesPackage{customFont}
 \usepackage[CheckSingle=true,AutoFakeBold=true,AutoFakeSlant=true]{xeCJK}         % 中文支持宏包
-\usepackage{zhnumber}
+\usepackage{
+    zhnumber,
+    % lmodern, % 加入对部分字号的支持
+    }
 
 %------------------------------------------%
 %字体库设置
@@ -35,22 +38,24 @@
 %字体系列
 %-------------------------------------------------%
 %%%%%% 设置字号 %%%%%%
-\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}
-\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont}
-\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}
-\newcommand{\xiaoyihao}{\fontsize{24pt}{\baselineskip}\selectfont}
-\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}
-\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}
-\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}
-\newcommand{\xiaosanhao}{\fontsize{14.8pt}{\baselineskip}\selectfont}
-\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}
-\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}
-\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}
-\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}
-\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}
-\newcommand{\xiaoliuhao}{\fontsize{6.5pt}{\baselineskip}\selectfont}
-\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}
-\newcommand{\xiaoqihao}{\fontsize{4pt}{\baselineskip}\selectfont}
+\newcommand{\dateuhao}{\fontsize{63pt}{\baselineskip}\selectfont} % 大特号
+\newcommand{\tehao}{\fontsize{54pt}{\baselineskip}\selectfont} % 特号
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont} % 初号
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont} % 小初号
+\newcommand{\yihao}{\fontsize{26pt}{\baselineskip}\selectfont} % 一号
+\newcommand{\xiaoyihao}{\fontsize{24pt}{\baselineskip}\selectfont} % 小一号
+\newcommand{\erhao}{\fontsize{22pt}{\baselineskip}\selectfont}  % 二号
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont} % 小二号
+\newcommand{\sanhao}{\fontsize{16pt}{\baselineskip}\selectfont} % 三号
+\newcommand{\xiaosanhao}{\fontsize{15pt}{\baselineskip}\selectfont}   % 小三号
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont} % 四号
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont} % 小四号 
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}  % 五号
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont} % 小五号
+\newcommand{\liuhao}{\fontsize{7.5pt}{\baselineskip}\selectfont}  % 六号
+\newcommand{\xiaoliuhao}{\fontsize{6.5pt}{\baselineskip}\selectfont}  % 小六号
+\newcommand{\qihao}{\fontsize{5.5pt}{\baselineskip}\selectfont} % 七号
+\newcommand{\bahao}{\fontsize{5pt}{\baselineskip}\selectfont} % 八号
 %%%%%% 设置常用字体格式 %%%%%%
 \newcommand{\textbr}[1]{\textcolor{red}{\textbf{#1}}}
 \newcommand{\test}[1]{\underline{\textcolor{blue}{\textbf{#1}}}}
