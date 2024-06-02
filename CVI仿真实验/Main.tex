@@ -97,14 +97,15 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 式中，$e_L$表示线性度（非线性误差），$\abs{\Delta L_\mathrm{max}}$表示在整体测量范围内绝对值最大的非线性误差，$y_\mathrm{FS}$表示传感器的满量程输出值。由定义可知，传感器的线性度是以基准直线为参考的，实际测量中采用的是最小二乘线性度。
 \subsection{重复性}
 在相同的工作条件下，在一段短的时间间隔内，输入量从同一方向作满量程变化时，同一输入量值所对应的多次测量所得到的一组输出量值，他们之间的相互偏离的程度便称为传感器的重复性。当传感器在全量程范围内多次重复测试时，同是正行程或同是反行程上对应同一输入量，其输出量之间的差值称为重复性偏差。正、反行程的重复性偏差分别为：
-\begin{align}
+\begin{align*}
   \Delta R^{(c)}_j &= \max\curlbrac{y_j^{(c)}} - \min\curlbrac{y_j^{(c)}}\\
   \Delta R^{(f)}_j &= \max\curlbrac{y_j^{(f)}} - \min\curlbrac{y_j^{(f)}}
-\end{align}\par
+\end{align*}\par
 在全量程内，重复性偏差的绝对值 的最大值与基准直线上满量程输出之比称为重复性误差，定义如下：
 \begin{equation*}
   e_L= \frac{\abs{\Delta R_\mathrm{max}}}{y_\mathrm{FS}} \times 100\%
 \end{equation*}\par
+\newpage
 \section{实验数据}
 现有两个虚拟传感器的标定数据，分别存储为a.cld和b.cld两个文件中，其数据定义为结构体CalibrateData，声明如下：
 \begin{lstlisting}[language=C]
@@ -119,17 +120,33 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
                                    //第二循环正行程，第二循环反行程，
                                    //以此类推。数据长度为inputnum*2*roundnum
   } CALIDATA;
-\end{lstlisting}
+\end{lstlisting}\par
+在回调函数中利用LinFit函数计算传感器的基准直线，其函数原型如下：
+\begin{lstlisting}[language=C]
+  int status = LinFit (double arrayX[], double arrayY[], int numberOfElements, 
+                        double outputArray[], double *slope, double *intercept, 
+                        double *meanSquaredError);
+\end{lstlisting}\par
+设数组X，Y为用以计算拟合直线的点的x轴和y轴的坐标值，数组Z为得到的拟合直线值，数组X，Y，Z的长度均为n，斜率为slope，截距为intercept，均方误差为meanSquaredError。Z，X满足如下关系：
+\begin{equation*}
+  \mathrm{Z[i]} = \mathrm{X[i]} \times \mathrm{slope} + \mathrm{intercept}
+\end{equation*}\par
+其中meanSquaredError计算公式如下：
+\begin{equation*}
+  \mathrm{meanSquaredError} = \frac{1}{n-1} \sqrt{\sum_{i=1}^{n} \curlbrac{\mathrm{Z[i]} - \mathrm{Y[i]}}^2}
+\end{equation*}\par
+
+\newpage
+\section{实验要求}
+
+\newpage
+\section{实验结果与分析}
 % \begin{figure}[H]
 %   \centering
 %   \includegraphics[width=0.8\textwidth]{workflow.png}
 %   \caption{检测算法工作流程}
 %   \label{fig:workflow}
 % \end{figure}
-
-\section{实验要求}
-\newpage
-\section{实验结果与分析}
 \newpage
 \section{结论}
 
