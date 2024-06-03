@@ -9,7 +9,11 @@
   zhnumber,    %使用中文数字编号的宏包
   titlesec,   %使用自定义的标题格式和间距
   fancyhdr,   %使用页眉页脚
+  appendix,  %使用附录
 }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% 所有的格式设置都在这里 %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% 设置Python风格的伪代码格式 %%%%
 \usepackage[formats]{listings}
 \lstset{
@@ -41,8 +45,29 @@
 }
 % %%%% 设置 摘要 属性 %%%%
 \renewcommand{\abstractname}{摘\quad 要}
-\renewcommand{\abstractnamefont}{\xiaoerhao\lishu}
+\renewcommand{\abstractnamefont}{\sanhao\heiti}
 \renewcommand{\abstracttextfont}{\xiaosihao\songti}
+% %%%% 设置 附录 属性 %%%%
+\renewcommand{\appendixname}{附\quad 录}
+\renewcommand{\appendixtocname}{附\quad 录}
+\renewcommand{\appendixpagename}{\rm\sanhao\heiti\centering{附\quad 录}}
+% 设置 附录的section 属性
+%% 注意：子附录的标题将不出现在目录中
+\newcounter{subappendix}
+\setcounter{subappendix}{1}
+\renewcommand{\subsectionmark}[1]{\markboth{\Alph{subappendix}\ #1}{}}
+\newcommand{\subappendix}[1]{
+  \par
+  {\sihao\heiti 附录\Alph{subappendix}\quad #1}
+  \stepcounter{subappendix}
+  \par
+  }
+
+% \titlecontents{subappendix}[2em]{\wuhao\vspace{-1em}}{\contentslabel{2em}}{\hspace*{2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
+% \titleformat{\subappendix}[block]{\sanhao\heiti\centering}{\Alph{subappendix}}{0.5em}{}[]
+% \titlespacing{\subappendix}{0pt}{0\baselineskip}{0\baselineskip}
+
+
 % %%%% 设置 目录 属性 %%%%
 %%目录标题格式的设定
 \renewcommand{\contentsname}{\sanhao\heiti 目\qquad 录}
@@ -59,11 +84,11 @@
 }
 
 %用计数器成功实现section和subsection不相同标号的办法
-\newcounter{mycounter}
-\setcounter{mycounter}{1}
+\newcounter{mysection}
+\setcounter{mysection}{1}
 
-%%目录行间距的设定
-\titlecontents{section}[2em]{\heiti\wuhao\vspace{0em}}{\contentslabel[第\zhnum{mycounter}章\stepcounter{mycounter}]{4em}}{\hspace*{-4em}}{~\titlerule*[0.6pc]{.}~\contentspage}
+%%目录缩进的设定
+\titlecontents{section}[2em]{\heiti\wuhao\vspace{0em}}{\contentslabel[第\zhnum{mysection}章\stepcounter{mysection}]{4em}}{\hspace*{-4em}}{~\titlerule*[0.6pc]{.}~\contentspage}
 \titlecontents{subsection}[2em]{\wuhao\vspace{-1em}}{\contentslabel{2em}}{\hspace*{2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
 
 \titlecontents{subsubsection}[4em]{\wuhao\vspace{-2em}}{\contentslabel{3em}}{\hspace*{-2em}}{~\titlerule*[0.6pc]{.}~\contentspage}
@@ -86,8 +111,8 @@
 % \makeatother
 \renewcommand{\sectionmark}[1]{\markboth{第\zhnum{section}章\ #1}{}}
 \titleformat{\section}[block]{\sanhao\heiti\centering}{第\zhnum{section}章}{0.5em}{}[]
-% 设置章标题左边距、上下间距
-% \titlespacing{\section}{0pt}{\baselineskip}{\baselineskip}
+% 设置章标题左边距、上下空行间距
+\titlespacing{\section}{0pt}{0\baselineskip}{0\baselineskip}
 % %%%% 设置 subsection 属性 %%%%
 % \makeatletter
 % \renewcommand\subsection{\@startsection{subsection}{1}{\z@}%
@@ -97,8 +122,8 @@
 % \makeatother
 \renewcommand{\subsectionmark}[1]{\markboth{\arabic{section}.\arabic{subsection}\ #1}{}}
 \titleformat{\subsection}[block]{\sihao\heiti}{\arabic{section}.\arabic{subsection}}{0.5em}{}[]
-% 设置节标题左边距、上下间距
-% \titlespacing{\subsection}{0pt}{\baselineskip}{\baselineskip}
+% 设置节标题左边距、上下空行间距
+\titlespacing{\subsection}{0pt}{0\baselineskip}{0\baselineskip}
 % %%%% 设置 subsubsection 属性 %%%%
 % \makeatletter
 % \renewcommand\subsubsection{\@startsection{subsubsection}{1}{\z@}%
@@ -108,8 +133,8 @@
 % \makeatother
 \renewcommand{\subsubsectionmark}[1]{\markboth{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}\ #1}{}}
 \titleformat{\subsubsection}[block]{\xiaosihao\songti\bfseries}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}{0.5em}{}[]
-% 设置小节标题左边距、上下间距
-% \titlespacing{\subsubsection}{0pt}{\baselineskip}{\baselineskip}
+% 设置小节标题左边距、上下空行间距
+\titlespacing{\subsubsection}{0pt}{0\baselineskip}{0\baselineskip}
 
 %%对enumerate类型的编号的设定
 \renewcommand{\labelenumi}{\theenumi 、}
@@ -121,8 +146,7 @@
 \geometry{left=25mm,right=25mm,top=25mm,bottom=25mm}
 %%%% 设置行间距与段落间距 %%%%
 \linespread{1.5}
-% \setlength{\parskip}{1ex}
-\setlength{\parskip}{0.5\baselineskip}
+% \setlength{\parskip}{0.5\baselineskip}
 
 %%%% 段落首行缩进两个字 %%%%
 \makeatletter
@@ -152,6 +176,11 @@
 \renewcommand{\p@subfigure}{}
 \renewcommand{\@thesubfigure}{\thesubfigure. \hskip\subfiglabelskip}
 \makeatother
+%------------------------------------------%
+%数学公式编号
+%按章号.公式号编号
+%------------------------------------------%
+\numberwithin{equation}{section}
 %------------------------------------------%
 %下划线
 %------------------------------------------%
