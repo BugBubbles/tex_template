@@ -57,8 +57,10 @@
 \setcounter{subappendix}{1}
 \renewcommand{\subsectionmark}[1]{\markboth{\Alph{subappendix}\ #1}{}}
 \newcommand{\subappendix}[1]{
-  \par
-  {\sihao\heiti 附录\Alph{subappendix}\quad #1}
+  \ifnum\value{subappendix}>1
+    \newpage
+  \fi
+  {\noindent\sihao\heiti 附录\Alph{subappendix}\quad #1}
   \stepcounter{subappendix}
   \par
   }

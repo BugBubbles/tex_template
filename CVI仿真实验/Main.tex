@@ -74,21 +74,22 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \newpage
 %% ----------- 封面部分结束 ------------ %%
 
-%% ----------- 摘要部分 ------------ %%
-\begin{abstract}
-  本实验通过NI Labwindows/CVI软件，实现了对传感器的静态特性进行标定的功能。通过读取数据文件，计算传感器的线性度和重复性误差，并将结果输出至图形界面和文本报表中。
-\end{abstract}
-%% ----------- 摘要部分结束 ------------ %%
+% %% ----------- 摘要部分 ------------ %%
+% \begin{abstract}
+%   本实验通过NI Labwindows/CVI软件，实现了对传感器的静态特性进行标定的功能。通过读取数据文件，计算传感器的线性度和重复性误差，并将结果输出至图形界面和文本报表中。
+% \end{abstract}
+% %% ----------- 摘要部分结束 ------------ %%
 
-%% ----------- 目录部分 ------------ %%
-\pagenumbering{roman}
+% %% ----------- 目录部分 ------------ %%
+% \pagenumbering{roman}
 
-\setcounter{tocdepth}{3}
-%设定目录深度                      
-\tableofcontents
-%列出目录
-\newpage
-%% ----------- 目录部分结束 ------------ %%
+% \setcounter{tocdepth}{3}
+% %设定目录深度                      
+% \tableofcontents
+% %列出目录
+% \newpage
+% %% ----------- 目录部分结束 ------------ %%
+
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
@@ -197,14 +198,396 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \section{结论}
 
 %% ----------- 附录部分 ------------ %%
+\newpage
 \appendix
 \appendixpage
 \addappheadtotoc
 \subappendix{ADT源代码}
-这里是源代码
+\begin{lstlisting}[language=C]
+/// 关于CalibrateData的ADT，实现从二进制文件中读取数据
+// 新建结构体
+CALIDATA* CLDNew(int input_num, double* input, char* input_unit, int loop_num, char* output_unit, double* output)
+{
+	CALIDATA *cld = (CALIDATA*)malloc(sizeof(CALIDATA));
+	cld->input_num = input_num;
+	memcpy(cld->input_unit, input_unit, 10 * sizeof(char));
+	memcpy(cld->output_unit, output_unit, 10 * sizeof(char));
+	cld->loop_num = loop_num;
+	cld->input = (double*)malloc(DOUBLE(input_num));
+	cld->output = (double*)malloc(DOUBLE(2 * input_num * loop_num));
+	memcpy(cld->input, input, DOUBLE(input_num));
+	memcpy(cld->output, output, DOUBLE(2 * input_num * loop_num));
+	return cld;
+}
+// 销毁结构体
+void CLDfree(CALIDATA* p)
+{
+	free(p->input);
+	free(p->output);
+	free(p);
+}
+// 从数据文件中读取二进制数据，并将其写入至以结构体列表中
+CALIDATA** CLDRead(const char *file_names[], int num_file, int MAX_BUFFER)
+{
+	int handle;
+	char * cldata = (char *)malloc(MAX_BUFFER * sizeof(char));
+	CALIDATA** cali_dataset = (CALIDATA**)malloc(num_file * sizeof(CALIDATA*));
+	while(num_file--)
+	{
+		if(~(handle = OpenFile (file_names[num_file], VAL_READ_ONLY, VAL_OPEN_AS_IS, VAL_BINARY)))
+		{
+			if(~ReadFile (handle, cldata, MAX_BUFFER))
+			{
+				char * p_data = cldata;
+				int input_num, loop_num;
+				char input_unit[10], output_unit[10];
+				
+				memcpy(&input_num, p_data, sizeof(int));
+				p_data += sizeof(int);
+				
+				double* input = (double*)malloc(DOUBLE(input_num));
+				memcpy(input, p_data, DOUBLE(input_num));
+				p_data += DOUBLE(input_num);
+				
+				memcpy(input_unit, p_data, 10 * sizeof(char));
+				p_data += 10 * sizeof(char);
+				
+				memcpy(&loop_num, p_data, sizeof(int));
+				p_data += sizeof(int);
+				
+				memcpy(output_unit, p_data, 10 * sizeof(char));
+				p_data += 10 * sizeof(char);
+				
+				double* output = (double*)malloc(DOUBLE(2 * input_num * loop_num));
+				memcpy(output, p_data, DOUBLE(2 * loop_num * input_num));
+				
+				CALIDATA* cali_data = CLDNew(input_num, input, input_unit, loop_num, output_unit, output);
+				cali_dataset[num_file] = cali_data;
+			}
+		}
+	}
+	return cali_dataset;
+}
+// 销毁结构体列表
+void freeDataList(CALIDATA** data, int num)
+{
+	while(num--)
+	{
+		CLDfree(data[num]);
+	}
+}
+// 将所有结构体列表拼合成同一个数据列表
+// 仅针对有多个相同传感器加载情况
+double** CLD2Arr(const CALIDATA** data, int num, int* arr_len)
+{
+	*arr_len = 0;
+	int num_data = num, input_num;
+	// 获取所有文件下测量点数据长度
+	while(num--)
+	{
+		*arr_len += data[num]->input_num * data[num]->loop_num * 2;
+	}
+	double* arr_x = (double*)malloc(DOUBLE(*arr_len));
+	double* arr_y = (double*)malloc(DOUBLE(*arr_len));
+	// 将所有文件下的测量点和正反行程按对应关系，压缩成一个double数组
+	num = num_data;
+	while(num--)
+	{	
+		input_num = data[num]->input_num;
+		int len = input_num * data[num]->loop_num * 2;
+		double * p_arr_x = arr_x + num * len;
+		double * p_arr_y = arr_y + num * len;
+		for(int i = 0; i < data[num]->loop_num * 2; i++)
+		{	
+			// 经过验证，正反行程的数据存储顺序都是按从小到大的顺序存储的，不需取反顺序
+			memcpy(p_arr_x + i * input_num, data[num]->input, DOUBLE(input_num));
+		}
+		memcpy(p_arr_y, data[num]->output, DOUBLE(len));
+	}
+	double** arr = (double**)malloc(2 * sizeof(double*));
+	arr[0] = arr_x;
+	arr[1] = arr_y;
+	return arr;
+}
+\end{lstlisting}
 \subappendix{数据处理模块源代码}
-
-
-\newpage
-\printbibliography[heading=bibliography,title=参考文献]
+\begin{lstlisting}[language=C]
+  /// 完成线性拟合
+  /// 输入值是结构体数据列表，以及数据列表的长度，通过指针地址实现对拟合直接的斜率、截距、直线度和重复度误差的同时计算，并输出拼合后的double数据列表。
+  /// 返回值是arr_x和arr_y的指针
+  double** my_LinearFit(const CALIDATA** data, int num, double *slope, double *intercept, double *meanSquaredError, double *linear, double *repeat, int *arr_len)
+  {
+    double** arr = CLD2Arr(data, num, arr_len);
+    double* arr_output = (double*)malloc(DOUBLE(*arr_len));
+    LinFit(arr[0], arr[1], *arr_len, arr_output, slope, intercept, meanSquaredError);
+    double f_s = arr[0][(*arr_len) - 1] * (*slope) + (*intercept);
+    *linear = Linear (arr_output, arr[1], *arr_len, f_s);
+    *repeat = Repeat(data, num, f_s);
+    return arr;
+  }
+  
+  /// 计算线性度
+  double Linear (double arr_output[], double arr_y[], int arr_len, double f_s)
+  {	
+    double max = -100000.0, temp;
+    while(arr_len--)
+    {
+      temp = fabs(arr_y[arr_len] - arr_output[arr_len]);
+      if (temp > max)
+      {
+        max = temp;
+      }
+    }
+    return max / f_s * 100.0;
+  }
+  
+  /// 计算重复性误差
+  double Repeat (const CALIDATA** data, int num, double f_s)
+  {	
+    double max = -100000.0, temp;
+    // 如果有多个文件
+    while(num--)
+    {	
+      // 单个行程内，逐位置比较
+      for(int i = 0; i < data[num]->input_num; i++)
+      {	
+        // 不同重复试验次数间，必须是两两作差，因此还得有一重循环
+        for(int j1 = 0; j1 < data[num]->loop_num; j1++)
+        {	
+          for(int j2 = 0; j2 < data[num]->loop_num; j2++)
+          {
+            // 正行程
+            temp = fabs(data[num]->output[i + data[num]->input_num * j1 * 2] - data[num]->output[i + data[num]->input_num * j2 * 2]);
+            if (temp > max)
+            {
+              max = temp;
+            }
+            // 反行程
+            temp = fabs(data[num]->output[i + data[num]->input_num * j1 * 2 + 1] - data[num]->output[i + data[num]->input_num * j2 * 2 + 1]);
+            if (temp > max)
+            {
+              max = temp;
+            }
+          }
+        }
+      }
+    }
+    return max / f_s * 100.0;
+  }
+\end{lstlisting}
+\subappendix{界面模块源代码}
+\begin{lstlisting}[language=C]
+  #include <formatio.h>
+  #include <utility.h>
+  #include <ansi_c.h>
+  #include <cvirte.h>		
+  #include <userint.h>
+  #include "Calibrate.h"
+  #include "LinFit.h"
+  
+  #define MAX_BUFFER 512
+  static int panelHandle;
+  int is_data_free = 1;
+  CALIDATA** p_data;
+  
+  enum panels {
+    __PANEL,
+    TEXTOR,
+    READER,
+    QUIT,
+    __QUIT,
+    REPEAT,
+    LINEAR,
+    MEAN_VAR,
+    INTERCEPT,
+    SLOPE,
+    GRAPH,
+    CLEAR,
+  };
+  
+  int main (int argc, char *argv[])
+  {
+    if (InitCVIRTE (0, argv, 0) == 0)
+      return -1;	/* out of memory */
+    if ((panelHandle = LoadPanel (0, "Calibrate.uir", PANEL)) < 0)
+      return -1;
+    DisplayPanel (panelHandle);
+    RunUserInterface ();
+    DiscardPanel (panelHandle);
+    return 0;
+  }
+  
+  
+  int CVICALLBACK panelCB (int panel, int event, void *callbackData,
+               int eventData1, int eventData2)
+  {
+    switch (event)
+    {
+      case EVENT_GOT_FOCUS:
+  
+        break;
+      case EVENT_LOST_FOCUS:
+  
+        break;
+      case EVENT_CLOSE:
+  
+        break;
+    }
+    return 0;
+  }
+  
+  int CVICALLBACK TextCallback (int panel, int control, int event,
+                    void *callbackData, int eventData1, int eventData2)
+  {
+    int writer_len = 128;
+    char file_name[MAX_BUFFER], buffer[writer_len];
+    int writer_handle;
+    switch (event)
+    {
+      case EVENT_COMMIT:
+        if (~FileSelectPopup (".", "*.txt", "txt, log", "Select Saving Path", VAL_SAVE_BUTTON, 0, 0, 1, 1, file_name))
+        {
+          if (!is_data_free)
+          {
+            writer_handle = OpenFile (file_name, VAL_WRITE_ONLY, VAL_APPEND, VAL_ASCII);
+            memset(buffer, '\0', writer_len);
+            // 写入头					
+            sprintf(buffer, "------------------------------Header------------------------------\n\0");
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|  变量类型 |     变量名     |          物理含义        |  变量取值  |\n\0");
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|    int   |    input_num   |         输入测量点数      |    %d    |\n\0", p_data[0]->input_num);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|    char   |    input_unit |       输入物理量的单位     |    %s    |\n\0", p_data[0]->input_unit);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|    char   |  output_unit  |     测量所得物理量的单位    |    %s    |\n\0", p_data[0]->output_unit);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|    int   |    loop_num    |         测量的循环数       |    %d    |\n\0", p_data[0]->loop_num);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "------------------------------Dataset------------------------------\n\0");
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|测量点(%s)|正行程一测量值(%s)|反行程一测量值(%s)|正行程二测量值(%s)|反行程二测量值(%s)|\n\0", p_data[0]->input_unit, 
+                p_data[0]->output_unit, p_data[0]->output_unit, p_data[0]->output_unit, p_data[0]->output_unit);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            int input_num = p_data[0]->input_num;
+            for(int i = 0; i < input_num; i++)
+            {
+              sprintf(buffer, "| %.4f | %.4f | %.4f | %.4f | %.4f |\n\0", p_data[0]->input[i], p_data[0]->output[i], p_data[0]->output[i + input_num * 1], p_data[0]->output[i + input_num * 2], p_data[0]->output[i + input_num * 3]);
+              WriteFile (writer_handle, buffer, strlen(buffer));
+              memset(buffer, '\0', writer_len);
+            }
+          }
+          else
+          {
+            MessagePopup ("Error", "错误！请先读取数据后显示报表");
+          }
+        }
+        break;
+    }
+    return 0;
+  }
+  
+  int CVICALLBACK ReaderCallback (int panel, int control, int event,
+                  void *callbackData, int eventData1, int eventData2)
+  {
+    char * file_list = (char *)malloc(MAX_BUFFER * sizeof(char));
+    int num_files = 1, arr_len;
+    double slope, intercept, mean_var, repeat, linear;
+    switch (event)
+    {
+      case EVENT_COMMIT:
+        if (~FileSelectPopupEx (".", "*.cld", "cld", "Select CalibrateData", VAL_LOAD_BUTTON, 0, 0, file_list))
+        {
+          if (is_data_free)
+          {
+            p_data = CLDRead(&file_list, num_files, MAX_BUFFER);
+            is_data_free = 0;
+          }
+          else
+          {
+            freeDataList(p_data, num_files);
+            p_data = CLDRead(&file_list, num_files, MAX_BUFFER);
+            is_data_free = 0;
+          }
+          // 求值
+          double** arr = my_LinearFit(p_data, num_files, &slope, &intercept, &mean_var, &linear, &repeat, &arr_len);
+          char c_slope[20], c_intercept[20], c_mean_var[20], c_repeat[20], c_linear[20];
+          sprintf(c_slope, "%.4f", slope);
+          sprintf(c_intercept, "%.4f", intercept);
+          sprintf(c_mean_var, "%.4f", mean_var);
+          sprintf(c_repeat, "%.4f", repeat);
+          sprintf(c_linear, "%.4f", linear);
+          InsertTextBoxLine(panelHandle, SLOPE, 0, c_slope);
+          InsertTextBoxLine(panelHandle, INTERCEPT, 0, c_intercept);
+          InsertTextBoxLine(panelHandle, MEAN_VAR, 0 ,c_mean_var);
+          InsertTextBoxLine(panelHandle, REPEAT, 0 ,c_repeat);
+          InsertTextBoxLine(panelHandle, LINEAR, 0 ,c_linear);
+          // 绘图
+          for(int i = 0; i < arr_len; i++)
+          {
+            PlotPoint (panelHandle, GRAPH, arr[0][i], arr[1][i], VAL_EMPTY_SQUARE, VAL_YELLOW);
+          }
+          PlotLine(panelHandle, GRAPH, arr[0][0], arr[0][0] * slope + intercept, arr[0][arr_len - 1], arr[0][arr_len - 1] * slope + intercept, VAL_GREEN);
+          // freeDataList(p_data, num_files);
+          free(arr[0]);
+          free(arr[1]);
+          free(arr);
+          }
+        break;
+    }
+    free(file_list);
+    return 0;
+  }
+  
+  
+  int CVICALLBACK ClearCallback (int panel, int control, int event,
+                  void *callbackData, int eventData1, int eventData2)
+  {
+    switch (event)
+    {
+      case EVENT_COMMIT:
+        DeleteGraphPlot (panelHandle, GRAPH, -1, VAL_IMMEDIATE_DRAW);
+        InsertTextBoxLine(panelHandle, SLOPE, 0, "\0");
+        InsertTextBoxLine(panelHandle, INTERCEPT, 0, "\0");
+        InsertTextBoxLine(panelHandle, MEAN_VAR, 0 ,"\0");
+        InsertTextBoxLine(panelHandle, REPEAT, 0 ,"\0");
+        InsertTextBoxLine(panelHandle, LINEAR, 0 ,"\0");
+        if(!is_data_free)
+        {
+          freeDataList(p_data, 1);
+          is_data_free = 1;
+        }
+        break;
+    }
+    return 0;
+  }
+  
+  int CVICALLBACK QuitCallback (int panel, int control, int event,
+                  void *callbackData, int eventData1, int eventData2)
+  {
+    switch (event)
+    {
+      case EVENT_COMMIT:
+        QuitUserInterface (0);
+        break;
+    }
+    return 0;
+  }
+\end{lstlisting}  
+% \newpage
+% \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
