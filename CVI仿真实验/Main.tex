@@ -151,6 +151,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
   \item 计算斜率、截距、均方误差、线性度、重复性误差并显示；
   \item 生成.txt报表。
 \end{enumerate}
+\newpage
 \section{程序设计逻辑}
 利用NI Labwindows/CVI软件，编写程序实现数据读取和处理、并实现显示结果的可视化界面输出，程序设计代码的主要流程也遵照这一逻辑。
 \subsection{数据读取模块}
@@ -194,6 +195,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
   \item 清除界面：清除坐标图和输出框，将缓冲区的数据清空；
   \item 退出：关闭程序。
 \end{enumerate}
+\newpage
 \section{实验结果}
 实验结果为展示对虚拟传感器的二进制标定数据的读取和处理。
 \subsection{运行界面}
@@ -213,9 +215,85 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \end{figure}
 此举可以防止用户的误操作导致界面崩溃。
 \subsection{实时处理}
-
+点击读取数据，界面将弹出文件选择窗口，用户可浏览目录自行选择文件加载，可以选择加载多个文件，需要注意的是，如果加载多个文件，则每个文件应当对应同一个虚拟仪器所标定的数据。弹出窗口如图\ref{fig:reader}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{数据读取窗口.png}
+  \caption{数据读取窗口}
+  \label{fig:reader}
+\end{figure}
+选中文件后，界面后端自动完成处理，并将结果可视化显示至界面上。本实验提供了两个虚拟仪器标定数据，经验证，两组数据各不相同，应该不是同一个仪器的标定数据，两组数据各自的处理结果如下图\ref{fig:a}和图\ref{fig:b}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{a.png}
+  \caption{虚拟仪器a标定数据处理结果}
+  \label{fig:a}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{b.png}
+  \caption{虚拟仪器b标定数据处理结果}
+  \label{fig:b}
+\end{figure}
+仪器a的重复性误差和线性度误差明显优于仪器b，仪器b在不同行程处产生的重复性误差较大，两者在测量点处的输出值接近，可以认为是同种类型的仪器。\par
+点击显示报表，将弹出文件选择窗口，用户可选择报表输出路径，程序将自动将结果输出至txt文件中，如图\ref{fig:report}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{报表输出窗口.png}
+  \caption{报表输出窗口}
+  \label{fig:report}
+\end{figure}
+\subsection{报表输出}
+两个虚拟仪器各自处理结果，包括基准直线参数和误差，如表\ref{tab:report}所示：
+\begin{table}[H]
+  \centering
+  \caption{虚拟仪器a和b的标定数据处理结果}
+  \begin{tabular}{cccccc}
+    \toprule
+    \multirow{2}*{仪器名} & 斜率 & 截距 & 均方误差 & 线性度& 重复性误差\\
+    ~& （$\unit{mV/kg\cdot cm^{-2}}$）&（$\unit{mV}$）& （$\unit{mV^2}$）&（\%）&（\%）\\
+    \midrule
+    a & 22.1368 & 55.6944&125.1375&0.5653&0.1462\\
+    b & 23.3201&85.6389&113021.6190&15.0296&18.0555\\
+    \bottomrule
+  \end{tabular}
+  \label{tab:report}
+\end{table}
+两个虚拟仪器标定数据的报表分别如表\ref{tab:txt}所示：
+\begin{table}[H]
+  \centering
+  \caption{虚拟仪器的标定数据}
+  \begin{tabular}{cccccc}
+    \toprule
+    \multirow{2}*{仪器名}&测量点& 正行程一& 反行程一 & 正行程二 & 反行程二\\
+   ~ &（$\unit{kg/cm^{2}}$） &测量值（mV） &测量值（mV） &测量值（mV） &测量值（mV） \\
+    \hline
+    \multirow{9}*{a}&0.0000 &50.0000 &51.0000 &51.0000 &53.0000 \\
+    ~&30.0000 &730.0000 &749.0000 &733.0000 &757.0000 \\
+    ~& 60.0000 &1430.0000 &1468.0000 &1436.0000 &1470.0000 \\
+    ~& 90.0000 &2129.0000 &2160.0000 &2135.0000 &2159.0000 \\
+    ~& 120.0000 &2822.0000 &2843.0000 &2830.0000 &2850.0000 \\
+    ~&  150.0000 &3514.0000 &3533.0000 &3522.0000 &3538.0000 \\
+    ~& 180.0000 &4208.0000 &4221.0000 &4213.0000 &4223.0000 \\
+    ~& 210.0000 &4909.0000 &4913.0000 &4910.0000 &4914.0000 \\
+    ~& 240.0000 &5608.0000 &5608.0000 &5608.0000 &5608.0000 \\
+    \hline
+    \multirow{9}*{b}& 0.0000 & 60.0000 & 1.0000 & 151.0000 & 103.0000 \\
+    ~& 30.0000 & 750.0000 & 809.0000 & 1033.0000 & 797.0000 \\
+  ~  & 60.0000 & 1410.0000 & 1898.0000 & 1036.0000 & 1110.0000 \\
+   ~ & 90.0000 & 1509.0000 & 2090.0000 & 2535.0000 & 2809.0000 \\
+  ~  & 120.0000 & 2842.0000 & 3073.0000 & 2030.0000 & 3500.0000 \\
+   ~ & 150.0000 & 3034.0000 & 3563.0000 & 4022.0000 & 3808.0000 \\
+   ~ & 180.0000 & 4028.0000 & 4201.0000 & 4713.0000 & 4573.0000 \\
+  ~  & 210.0000 & 4929.0000 & 5203.0000 & 4510.0000 & 4984.0000 \\
+  ~  & 240.0000 & 5328.0000 & 5678.0000 & 5908.0000 & 5798.0000 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:txt}
+\end{table}
+\newpage
 \section{结论}
-
+本次实验介绍引进了Labwindows/CVI软件，该软件有着良好的用户界面，极大地方便了使用C语言完成仪器仿真、测试等相关工作的图形用户界面应用，内置了大量的界面模块和功能接口，使得设计时能够兼顾C语言的灵活内存访问、高处理速度与图形界面的用户友好和易于展示优点。本次实验中，使用的CVI编写用户界面完成了对虚拟仪器的标定和报表输出，适合于应用于高处理速度、大批量数据处理和自定义数据结构类型的情况。
 %% ----------- 附录部分 ------------ %%
 \newpage
 \appendix
@@ -549,6 +627,8 @@ double** CLD2Arr(const CALIDATA** data, int num, int* arr_len)
           // 求值
           double** arr = my_LinearFit(p_data, num_files, &slope, &intercept, &mean_var, &linear, &repeat, &arr_len);
           char c_slope[20], c_intercept[20], c_mean_var[20], c_repeat[20], c_linear[20];
+          InsertAxisItem (panelHandle, GRAPH, VAL_BOTTOM_XAXIS, -1, p_data[0]->input_unit, 0.0);
+          InsertAxisItem (panelHandle, GRAPH, VAL_LEFT_YAXIS, -1, p_data[0]->output_unit, 0.0);
           sprintf(c_slope, "%.4f", slope);
           sprintf(c_intercept, "%.4f", intercept);
           sprintf(c_mean_var, "%.4f", mean_var);
@@ -589,6 +669,8 @@ double** CLD2Arr(const CALIDATA** data, int num, int* arr_len)
         InsertTextBoxLine(panelHandle, MEAN_VAR, 0 ,"\0");
         InsertTextBoxLine(panelHandle, REPEAT, 0 ,"\0");
         InsertTextBoxLine(panelHandle, LINEAR, 0 ,"\0");
+        InsertAxisItem (panelHandle, GRAPH, VAL_BOTTOM_XAXIS, -1, "\0", 0.0);
+        InsertAxisItem (panelHandle, GRAPH, VAL_LEFT_YAXIS, -1, "\0", 0.0);
         if(!is_data_free)
         {
           freeDataList(p_data, 1);
@@ -609,7 +691,7 @@ double** CLD2Arr(const CALIDATA** data, int num, int* arr_len)
         break;
     }
     return 0;
-  }
+  }  
 \end{lstlisting}  
 % \newpage
 % \printbibliography[heading=bibliography,title=参考文献]

@@ -2,6 +2,7 @@
 \usepackage{
   enumitem,			% Custom Item Bullets
   multicol,			% Use Multi-columns
+  multirow,      % Use Multi-rows
   xcolor,			    % Use Colors
   abstract,
   geometry,
@@ -176,7 +177,7 @@
 \renewcommand{\thesubfigure}{图\hspace{0.5em}\thefigure.\arabic{subfigure}}
 \makeatletter
 \renewcommand{\p@subfigure}{}
-\renewcommand{\@thesubfigure}{\thesubfigure. \hskip\subfiglabelskip}
+\renewcommand{\@thesubfigure}{\thesubfigure\quad\hskip\subfiglabelskip}
 \makeatother
 %------------------------------------------%
 %数学公式编号

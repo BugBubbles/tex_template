@@ -1,4 +1,4 @@
-\documentclass[a4paper,10.5pt,twoside]{article}%方框内设置默认的正文字体大小
+\documentclass[a4paper,12pt,twoside]{article}%方框内设置默认的正文字体大小
 %基于北京航空航天大学仪器科学与光电工程学院实验报告及课程报告排版得来，类似于毕业论文排版格式
 %后续将更新毕业论文排版格式
 \usepackage{graphicx,float}%使用图的宏包，使用图的浮动体宏包，引入参数H使图像紧跟当前文字
@@ -27,8 +27,8 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \setlength{\oddsidemargin}{0.63cm}  % 3.17cm - 1 inch
 \setlength{\evensidemargin}{\oddsidemargin}
 % 重定义页眉
-\pagestyle{beihang}
-\fancyhead[CO]{机电仿真实验报告}%
+% \pagestyle{beihang}
+% \fancyhead[CO]{机电仿真实验报告}%
 
 \graphicspath{{./fig}}
 
@@ -69,13 +69,18 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \end{center}
 
 \thispagestyle{empty}
+\newpage
 }
 
-\newpage
 %% ----------- 封面部分结束 ------------ %%
 
+% %% ----------- 摘要部分 ------------ %%
+% \begin{abstract}
+%   本实验通过NI Labwindows/CVI软件，实现了对传感器的静态特性进行标定的功能。通过读取数据文件，计算传感器的线性度和重复性误差，并将结果输出至图形界面和文本报表中。
+% \end{abstract}
+% %% ----------- 摘要部分结束 ------------ %%
 
-%% ----------- 目录部分 ------------ %%
+% %% ----------- 目录部分 ------------ %%
 % \pagenumbering{roman}
 
 % \setcounter{tocdepth}{3}
@@ -83,7 +88,8 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 % \tableofcontents
 % %列出目录
 % \newpage
-%% ----------- 目录部分结束 ------------ %%
+% %% ----------- 目录部分结束 ------------ %%
+
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
@@ -91,21 +97,27 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 测试系统的静态特性就是指当被测量$x$不随时间变化或随时间的变化程度远缓慢于系统固有的最低阶运动模式的变化速度时，测试系统的输出量$y$与输入量$x$之间的函数关系。测试系统的静态特性，是通过静态标定的过程获取的。
 \subsection{线性度}
 一般情况下，要求传感器具有线性特性，但传感器的实际特性却是非线性的曲线，这种实际特性曲线与基准直线间的偏差称为非线性误差。传感器的非线性误差指标通常用线性度表示，线性度的定义为：
-\begin{equation*}
+\begin{equation}
   e_L= \frac{\abs{\Delta L_\mathrm{max}}}{y_\mathrm{FS}} \times 100\%
-\end{equation*}\par
+  \label{eq:linearity}
+\end{equation}\par
 式中，$e_L$表示线性度（非线性误差），$\abs{\Delta L_\mathrm{max}}$表示在整体测量范围内绝对值最大的非线性误差，$y_\mathrm{FS}$表示传感器的满量程输出值。由定义可知，传感器的线性度是以基准直线为参考的，实际测量中采用的是最小二乘线性度。
 \subsection{重复性}
 在相同的工作条件下，在一段短的时间间隔内，输入量从同一方向作满量程变化时，同一输入量值所对应的多次测量所得到的一组输出量值，他们之间的相互偏离的程度便称为传感器的重复性。当传感器在全量程范围内多次重复测试时，同是正行程或同是反行程上对应同一输入量，其输出量之间的差值称为重复性偏差。正、反行程的重复性偏差分别为：
-\begin{align}
+\begin{equation}
+\begin{aligned}
   \Delta R^{(c)}_j &= \max\curlbrac{y_j^{(c)}} - \min\curlbrac{y_j^{(c)}}\\
   \Delta R^{(f)}_j &= \max\curlbrac{y_j^{(f)}} - \min\curlbrac{y_j^{(f)}}
-\end{align}\par
+\end{aligned}
+\label{eq:repeatability}
+\end{equation}\par
 在全量程内，重复性偏差的绝对值 的最大值与基准直线上满量程输出之比称为重复性误差，定义如下：
 \begin{equation*}
   e_L= \frac{\abs{\Delta R_\mathrm{max}}}{y_\mathrm{FS}} \times 100\%
 \end{equation*}\par
-\section{实验数据}
+\newpage
+\section{实验要求}
+\subsection{实验数据}
 现有两个虚拟传感器的标定数据，分别存储为a.cld和b.cld两个文件中，其数据定义为结构体CalibrateData，声明如下：
 \begin{lstlisting}[language=C]
   typedef struct CalibrateData{
@@ -119,27 +131,568 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
                                    //第二循环正行程，第二循环反行程，
                                    //以此类推。数据长度为inputnum*2*roundnum
   } CALIDATA;
-\end{lstlisting}
-% \begin{figure}[H]
-%   \centering
-%   \includegraphics[width=0.8\textwidth]{workflow.png}
-%   \caption{检测算法工作流程}
-%   \label{fig:workflow}
-% \end{figure}
-\subsection{数据加载环节}
+\end{lstlisting}\par
+在回调函数中利用LinFit函数计算传感器的基准直线，其函数原型如下：
+\begin{lstlisting}[language=C]
+  int status = LinFit (double arrayX[], double arrayY[], int numberOfElements, double outputArray[], double *slope, double *intercept, double *meanSquaredError);
+\end{lstlisting}\par
+设数组X，Y为用以计算拟合直线的点的x轴和y轴的坐标值，数组Z为得到的拟合直线值，数组X，Y，Z的长度均为n，斜率为slope，截距为intercept，均方误差为meanSquaredError。Z，X满足如下关系：
+\begin{equation*}
+  \mathrm{Z[i]} = \mathrm{X[i]} \times \mathrm{slope} + \mathrm{intercept}
+\end{equation*}\par
+其中meanSquaredError计算公式如下：
+\begin{equation*}
+  \mathrm{meanSquaredError} = \frac{1}{n-1} \sqrt{\sum_{i=1}^{n} \curlbrac{\mathrm{Z[i]} - \mathrm{Y[i]}}^2}
+\end{equation*}\par
 
-\subsection{扩散网络环节}
-
-\subsection{后处理环节}
-
-\section{算法原理}
-
-\section{程序设计流程与说明}
+\subsection{实验内容}
+\begin{enumerate}
+  \item 读取数据，显示散点图及拟合直线；
+  \item 计算斜率、截距、均方误差、线性度、重复性误差并显示；
+  \item 生成.txt报表。
+\end{enumerate}
 \newpage
-\section{实验结果与分析}
+\section{程序设计逻辑}
+利用NI Labwindows/CVI软件，编写程序实现数据读取和处理、并实现显示结果的可视化界面输出，程序设计代码的主要流程也遵照这一逻辑。
+\subsection{数据读取模块}
+由于实验所提供的数据文件为二进制文件.cld，不能直接读取其内容，必须通过操作文件流，读取内存实现二进制数据的解码，首先完成带有特殊数据结构CalibrateData的抽象数据类型（Abstract Data Type，ADT）编写。本实验中不包含修改ADT的功能，因此只需要包括以下函数：
+\begin{lstlisting}[language=C]
+  // 新建一个CalibrateData结构体“对象”
+  CALIDATA* CLDNew(int input_num, double* input, char* input_unit, int loop_num, char* output_unit, double* output);
+  // 销毁一个CalibrateData结构体“对象”
+  void CLDfree(CALIDATA* p);
+  // 销毁一个CalibrateData结构体数组
+  void freeDataList(CALIDATA** data, int num);
+  // 从文件名列表中读取数据，并写入至CalibrateData结构体数组中
+  CALIDATA** CLDRead(const char *file_names[], int num_file, int MAX_BUFFER);
+  // 从CalibrateData结构体数组中提取数据，写入至double类型二维数组中
+  // 匹配LinFit函数的接口
+  double** CLD2Arr(const CALIDATA** data, int num, int* arr_len);
+\end{lstlisting}\par
+以上内容在工程文件的“LinFit.h”头文件中有定义，用于方便地管理特殊数据结构。
+\subsection{数据处理模块}
+数据处理模块主要是调用CVI软件的接口函数LinFit实现基准直线的回归计算，同时，应用公式\ref{eq:linearity}和\ref{eq:repeatability}计算线性度和重复性误差，头文件中定义的接口如下：
+\begin{lstlisting}[language=C]
+  // 基准直线回归计算
+  double** my_LinearFit(const CALIDATA** data, int num, double *slope, double *intercept, double *meanSquaredError, double *linear, double *repeat, int *arr_len);
+  // 计算线性度
+  double Linear (double arr_output[], double arr_y[], int arr_len, double f_s);
+  // 计算重复性误差
+  double Repeat (const CALIDATA** data, int num, double f_s);
+\end{lstlisting}
+\subsection{界面模块}
+实验的最后一个部分是设计图形用户界面，方便使用者便捷地操作数据完成可视化结果显示。界面设计如图\ref{fig:ui}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{图形用户界面设计示意图.png}
+  \caption{图形用户界面设计示意图}
+  \label{fig:ui}
+\end{figure}
+其中共有四个功能按键，分别为：
+\begin{enumerate}
+  \item 显示报表：将图形界面的数据以格式化文本形式输出至txt文件中；
+  \item 读取数据：弹出文件选择对话框，选择数据文件，程序将自动实现解码与处理，并将结果可视化至坐标图中，将回归直线参数、线性度和重复性误差结果显示至右侧输出框中；
+  \item 清除界面：清除坐标图和输出框，将缓冲区的数据清空；
+  \item 退出：关闭程序。
+\end{enumerate}
+\newpage
+\section{实验结果}
+实验结果为展示对虚拟传感器的二进制标定数据的读取和处理。
+\subsection{运行界面}
+点击CVI软件的运行按键，将自动完成源代码文件的编译和链接，得到可执行程序，运行可执行程序，弹出界面框如图\ref{fig:run}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{运行界面.png}
+  \caption{运行界面}
+  \label{fig:run}
+\end{figure}
+此时如果点击显示报表，界面将弹出报错框，提示用户需要先读取数据，如图\ref{fig:err}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{报错界面.png}
+  \caption{报错界面}
+  \label{fig:err}
+\end{figure}
+此举可以防止用户的误操作导致界面崩溃。
+\subsection{实时处理}
+点击读取数据，界面将弹出文件选择窗口，用户可浏览目录自行选择文件加载，可以选择加载多个文件，需要注意的是，如果加载多个文件，则每个文件应当对应同一个虚拟仪器所标定的数据。弹出窗口如图\ref{fig:reader}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{数据读取窗口.png}
+  \caption{数据读取窗口}
+  \label{fig:reader}
+\end{figure}
+选中文件后，界面后端自动完成处理，并将结果可视化显示至界面上。本实验提供了两个虚拟仪器标定数据，经验证，两组数据各不相同，应该不是同一个仪器的标定数据，两组数据各自的处理结果如下图\ref{fig:a}和图\ref{fig:b}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{a.png}
+  \caption{虚拟仪器a标定数据处理结果}
+  \label{fig:a}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{b.png}
+  \caption{虚拟仪器b标定数据处理结果}
+  \label{fig:b}
+\end{figure}
+仪器a的重复性误差和线性度误差明显优于仪器b，仪器b在不同行程处产生的重复性误差较大，两者在测量点处的输出值接近，可以认为是同种类型的仪器。\par
+点击显示报表，将弹出文件选择窗口，用户可选择报表输出路径，程序将自动将结果输出至txt文件中，如图\ref{fig:report}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{报表输出窗口.png}
+  \caption{报表输出窗口}
+  \label{fig:report}
+\end{figure}
+\subsection{报表输出}
+两个虚拟仪器各自处理结果，包括基准直线参数和误差，如表\ref{tab:report}所示：
+\begin{table}[H]
+  \centering
+  \caption{虚拟仪器a和b的标定数据处理结果}
+  \begin{tabular}{cccccc}
+    \toprule
+    \multirow{2}*{仪器名} & 斜率 & 截距 & 均方误差 & 线性度& 重复性误差\\
+    ~& （$\unit{mV/kg\cdot cm^{-2}}$）&（$\unit{mV}$）& （$\unit{mV^2}$）&（\%）&（\%）\\
+    \midrule
+    a & 22.1368 & 55.6944&125.1375&0.5653&0.1462\\
+    b & 23.3201&85.6389&113021.6190&15.0296&18.0555\\
+    \bottomrule
+  \end{tabular}
+  \label{tab:report}
+\end{table}
+两个虚拟仪器标定数据的报表分别如表\ref{tab:txt}所示：
+\begin{table}[H]
+  \centering
+  \caption{虚拟仪器的标定数据}
+  \begin{tabular}{cccccc}
+    \toprule
+    \multirow{2}*{仪器名}&测量点& 正行程一& 反行程一 & 正行程二 & 反行程二\\
+   ~ &（$\unit{kg/cm^{2}}$） &测量值（mV） &测量值（mV） &测量值（mV） &测量值（mV） \\
+    \hline
+    \multirow{9}*{a}&0.0000 &50.0000 &51.0000 &51.0000 &53.0000 \\
+    ~&30.0000 &730.0000 &749.0000 &733.0000 &757.0000 \\
+    ~& 60.0000 &1430.0000 &1468.0000 &1436.0000 &1470.0000 \\
+    ~& 90.0000 &2129.0000 &2160.0000 &2135.0000 &2159.0000 \\
+    ~& 120.0000 &2822.0000 &2843.0000 &2830.0000 &2850.0000 \\
+    ~&  150.0000 &3514.0000 &3533.0000 &3522.0000 &3538.0000 \\
+    ~& 180.0000 &4208.0000 &4221.0000 &4213.0000 &4223.0000 \\
+    ~& 210.0000 &4909.0000 &4913.0000 &4910.0000 &4914.0000 \\
+    ~& 240.0000 &5608.0000 &5608.0000 &5608.0000 &5608.0000 \\
+    \hline
+    \multirow{9}*{b}& 0.0000 & 60.0000 & 1.0000 & 151.0000 & 103.0000 \\
+    ~& 30.0000 & 750.0000 & 809.0000 & 1033.0000 & 797.0000 \\
+  ~  & 60.0000 & 1410.0000 & 1898.0000 & 1036.0000 & 1110.0000 \\
+   ~ & 90.0000 & 1509.0000 & 2090.0000 & 2535.0000 & 2809.0000 \\
+  ~  & 120.0000 & 2842.0000 & 3073.0000 & 2030.0000 & 3500.0000 \\
+   ~ & 150.0000 & 3034.0000 & 3563.0000 & 4022.0000 & 3808.0000 \\
+   ~ & 180.0000 & 4028.0000 & 4201.0000 & 4713.0000 & 4573.0000 \\
+  ~  & 210.0000 & 4929.0000 & 5203.0000 & 4510.0000 & 4984.0000 \\
+  ~  & 240.0000 & 5328.0000 & 5678.0000 & 5908.0000 & 5798.0000 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:txt}
+\end{table}
 \newpage
 \section{结论}
-
+本次实验介绍引进了Labwindows/CVI软件，该软件有着良好的用户界面，极大地方便了使用C语言完成仪器仿真、测试等相关工作的图形用户界面应用，内置了大量的界面模块和功能接口，使得设计时能够兼顾C语言的灵活内存访问、高处理速度与图形界面的用户友好和易于展示优点。本次实验中，使用的CVI编写用户界面完成了对虚拟仪器的标定和报表输出，适合于应用于高处理速度、大批量数据处理和自定义数据结构类型的情况。
+%% ----------- 附录部分 ------------ %%
 \newpage
-\printbibliography[heading=bibliography,title=参考文献]
+\appendix
+\appendixpage
+\addappheadtotoc
+\subappendix{ADT源代码}
+\begin{lstlisting}[language=C]
+/// 关于CalibrateData的ADT，实现从二进制文件中读取数据
+// 新建结构体
+CALIDATA* CLDNew(int input_num, double* input, char* input_unit, int loop_num, char* output_unit, double* output)
+{
+	CALIDATA *cld = (CALIDATA*)malloc(sizeof(CALIDATA));
+	cld->input_num = input_num;
+	memcpy(cld->input_unit, input_unit, 10 * sizeof(char));
+	memcpy(cld->output_unit, output_unit, 10 * sizeof(char));
+	cld->loop_num = loop_num;
+	cld->input = (double*)malloc(DOUBLE(input_num));
+	cld->output = (double*)malloc(DOUBLE(2 * input_num * loop_num));
+	memcpy(cld->input, input, DOUBLE(input_num));
+	memcpy(cld->output, output, DOUBLE(2 * input_num * loop_num));
+	return cld;
+}
+// 销毁结构体
+void CLDfree(CALIDATA* p)
+{
+	free(p->input);
+	free(p->output);
+	free(p);
+}
+// 从数据文件中读取二进制数据，并将其写入至以结构体列表中
+CALIDATA** CLDRead(const char *file_names[], int num_file, int MAX_BUFFER)
+{
+	int handle;
+	char * cldata = (char *)malloc(MAX_BUFFER * sizeof(char));
+	CALIDATA** cali_dataset = (CALIDATA**)malloc(num_file * sizeof(CALIDATA*));
+	while(num_file--)
+	{
+		if(~(handle = OpenFile (file_names[num_file], VAL_READ_ONLY, VAL_OPEN_AS_IS, VAL_BINARY)))
+		{
+			if(~ReadFile (handle, cldata, MAX_BUFFER))
+			{
+				char * p_data = cldata;
+				int input_num, loop_num;
+				char input_unit[10], output_unit[10];
+				
+				memcpy(&input_num, p_data, sizeof(int));
+				p_data += sizeof(int);
+				
+				double* input = (double*)malloc(DOUBLE(input_num));
+				memcpy(input, p_data, DOUBLE(input_num));
+				p_data += DOUBLE(input_num);
+				
+				memcpy(input_unit, p_data, 10 * sizeof(char));
+				p_data += 10 * sizeof(char);
+				
+				memcpy(&loop_num, p_data, sizeof(int));
+				p_data += sizeof(int);
+				
+				memcpy(output_unit, p_data, 10 * sizeof(char));
+				p_data += 10 * sizeof(char);
+				
+				double* output = (double*)malloc(DOUBLE(2 * input_num * loop_num));
+				memcpy(output, p_data, DOUBLE(2 * loop_num * input_num));
+				
+				CALIDATA* cali_data = CLDNew(input_num, input, input_unit, loop_num, output_unit, output);
+				cali_dataset[num_file] = cali_data;
+			}
+		}
+	}
+	return cali_dataset;
+}
+// 销毁结构体列表
+void freeDataList(CALIDATA** data, int num)
+{
+	while(num--)
+	{
+		CLDfree(data[num]);
+	}
+}
+// 将所有结构体列表拼合成同一个数据列表
+// 仅针对有多个相同传感器加载情况
+double** CLD2Arr(const CALIDATA** data, int num, int* arr_len)
+{
+	*arr_len = 0;
+	int num_data = num, input_num;
+	// 获取所有文件下测量点数据长度
+	while(num--)
+	{
+		*arr_len += data[num]->input_num * data[num]->loop_num * 2;
+	}
+	double* arr_x = (double*)malloc(DOUBLE(*arr_len));
+	double* arr_y = (double*)malloc(DOUBLE(*arr_len));
+	// 将所有文件下的测量点和正反行程按对应关系，压缩成一个double数组
+	num = num_data;
+	while(num--)
+	{	
+		input_num = data[num]->input_num;
+		int len = input_num * data[num]->loop_num * 2;
+		double * p_arr_x = arr_x + num * len;
+		double * p_arr_y = arr_y + num * len;
+		for(int i = 0; i < data[num]->loop_num * 2; i++)
+		{	
+			// 经过验证，正反行程的数据存储顺序都是按从小到大的顺序存储的，不需取反顺序
+			memcpy(p_arr_x + i * input_num, data[num]->input, DOUBLE(input_num));
+		}
+		memcpy(p_arr_y, data[num]->output, DOUBLE(len));
+	}
+	double** arr = (double**)malloc(2 * sizeof(double*));
+	arr[0] = arr_x;
+	arr[1] = arr_y;
+	return arr;
+}
+\end{lstlisting}
+\subappendix{数据处理模块源代码}
+\begin{lstlisting}[language=C]
+  /// 完成线性拟合
+  /// 输入值是结构体数据列表，以及数据列表的长度，通过指针地址实现对拟合直接的斜率、截距、直线度和重复度误差的同时计算，并输出拼合后的double数据列表。
+  /// 返回值是arr_x和arr_y的指针
+  double** my_LinearFit(const CALIDATA** data, int num, double *slope, double *intercept, double *meanSquaredError, double *linear, double *repeat, int *arr_len)
+  {
+    double** arr = CLD2Arr(data, num, arr_len);
+    double* arr_output = (double*)malloc(DOUBLE(*arr_len));
+    LinFit(arr[0], arr[1], *arr_len, arr_output, slope, intercept, meanSquaredError);
+    double f_s = arr[0][(*arr_len) - 1] * (*slope) + (*intercept);
+    *linear = Linear (arr_output, arr[1], *arr_len, f_s);
+    *repeat = Repeat(data, num, f_s);
+    return arr;
+  }
+  
+  /// 计算线性度
+  double Linear (double arr_output[], double arr_y[], int arr_len, double f_s)
+  {	
+    double max = -100000.0, temp;
+    while(arr_len--)
+    {
+      temp = fabs(arr_y[arr_len] - arr_output[arr_len]);
+      if (temp > max)
+      {
+        max = temp;
+      }
+    }
+    return max / f_s * 100.0;
+  }
+  
+  /// 计算重复性误差
+  double Repeat (const CALIDATA** data, int num, double f_s)
+  {	
+    double max = -100000.0, temp;
+    // 如果有多个文件
+    while(num--)
+    {	
+      // 单个行程内，逐位置比较
+      for(int i = 0; i < data[num]->input_num; i++)
+      {	
+        // 不同重复试验次数间，必须是两两作差，因此还得有一重循环
+        for(int j1 = 0; j1 < data[num]->loop_num; j1++)
+        {	
+          for(int j2 = 0; j2 < data[num]->loop_num; j2++)
+          {
+            // 正行程
+            temp = fabs(data[num]->output[i + data[num]->input_num * j1 * 2] - data[num]->output[i + data[num]->input_num * j2 * 2]);
+            if (temp > max)
+            {
+              max = temp;
+            }
+            // 反行程
+            temp = fabs(data[num]->output[i + data[num]->input_num * j1 * 2 + 1] - data[num]->output[i + data[num]->input_num * j2 * 2 + 1]);
+            if (temp > max)
+            {
+              max = temp;
+            }
+          }
+        }
+      }
+    }
+    return max / f_s * 100.0;
+  }
+\end{lstlisting}
+\subappendix{界面模块源代码}
+\begin{lstlisting}[language=C]
+  #include <formatio.h>
+  #include <utility.h>
+  #include <ansi_c.h>
+  #include <cvirte.h>		
+  #include <userint.h>
+  #include "Calibrate.h"
+  #include "LinFit.h"
+  
+  #define MAX_BUFFER 512
+  static int panelHandle;
+  int is_data_free = 1;
+  CALIDATA** p_data;
+  
+  enum panels {
+    __PANEL,
+    TEXTOR,
+    READER,
+    QUIT,
+    __QUIT,
+    REPEAT,
+    LINEAR,
+    MEAN_VAR,
+    INTERCEPT,
+    SLOPE,
+    GRAPH,
+    CLEAR,
+  };
+  
+  int main (int argc, char *argv[])
+  {
+    if (InitCVIRTE (0, argv, 0) == 0)
+      return -1;	/* out of memory */
+    if ((panelHandle = LoadPanel (0, "Calibrate.uir", PANEL)) < 0)
+      return -1;
+    DisplayPanel (panelHandle);
+    RunUserInterface ();
+    DiscardPanel (panelHandle);
+    return 0;
+  }
+  
+  
+  int CVICALLBACK panelCB (int panel, int event, void *callbackData,
+               int eventData1, int eventData2)
+  {
+    switch (event)
+    {
+      case EVENT_GOT_FOCUS:
+  
+        break;
+      case EVENT_LOST_FOCUS:
+  
+        break;
+      case EVENT_CLOSE:
+  
+        break;
+    }
+    return 0;
+  }
+  
+  int CVICALLBACK TextCallback (int panel, int control, int event,
+                    void *callbackData, int eventData1, int eventData2)
+  {
+    int writer_len = 128;
+    char file_name[MAX_BUFFER], buffer[writer_len];
+    int writer_handle;
+    switch (event)
+    {
+      case EVENT_COMMIT:
+        if (!is_data_free)
+        {
+          if (~FileSelectPopup (".", "*.txt", "txt, log", "Select Saving Path", VAL_SAVE_BUTTON, 0, 0, 1, 1, file_name))
+          {
+            writer_handle = OpenFile (file_name, VAL_WRITE_ONLY, VAL_APPEND, VAL_ASCII);
+            memset(buffer, '\0', writer_len);
+            // 写入头					
+            sprintf(buffer, "------------------------------Header------------------------------\n\0");
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|  变量类型 |     变量名     |          物理含义        |  变量取值  |\n\0");
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|    int   |    input_num   |         输入测量点数      |    %d    |\n\0", p_data[0]->input_num);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|    char   |    input_unit |       输入物理量的单位     |    %s    |\n\0", p_data[0]->input_unit);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|    char   |  output_unit  |     测量所得物理量的单位    |    %s    |\n\0", p_data[0]->output_unit);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|    int   |    loop_num    |         测量的循环数       |    %d    |\n\0", p_data[0]->loop_num);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "------------------------------Dataset------------------------------\n\0");
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            memset(buffer, '\0', writer_len);
+            
+            sprintf(buffer, "|测量点(%s)|正行程一测量值(%s)|反行程一测量值(%s)|正行程二测量值(%s)|反行程二测量值(%s)|\n\0", p_data[0]->input_unit, 
+                p_data[0]->output_unit, p_data[0]->output_unit, p_data[0]->output_unit, p_data[0]->output_unit);
+            WriteFile (writer_handle, buffer, strlen(buffer));
+            int input_num = p_data[0]->input_num;
+            for(int i = 0; i < input_num; i++)
+            {
+              sprintf(buffer, "| %.4f | %.4f | %.4f | %.4f | %.4f |\n\0", p_data[0]->input[i], p_data[0]->output[i], p_data[0]->output[i + input_num * 1], p_data[0]->output[i + input_num * 2], p_data[0]->output[i + input_num * 3]);
+              WriteFile (writer_handle, buffer, strlen(buffer));
+              memset(buffer, '\0', writer_len);
+            }
+          }
+          else
+          {
+            MessagePopup ("Error", "错误！请先读取数据后显示报表");
+          }
+        }
+        else
+        {
+          MessagePopup ("Error", "错误！请先读取数据后显示报表");
+        }
+        break;
+    }
+    return 0;
+  }
+  
+  int CVICALLBACK ReaderCallback (int panel, int control, int event,
+                  void *callbackData, int eventData1, int eventData2)
+  {
+    char * file_list = (char *)malloc(MAX_BUFFER * sizeof(char));
+    int num_files = 1, arr_len;
+    double slope, intercept, mean_var, repeat, linear;
+    switch (event)
+    {
+      case EVENT_COMMIT:
+        if (~FileSelectPopupEx (".", "*.cld", "cld", "Select CalibrateData", VAL_LOAD_BUTTON, 0, 0, file_list))
+        {
+          if (is_data_free)
+          {
+            p_data = CLDRead(&file_list, num_files, MAX_BUFFER);
+            is_data_free = 0;
+          }
+          else
+          {
+            freeDataList(p_data, num_files);
+            p_data = CLDRead(&file_list, num_files, MAX_BUFFER);
+            is_data_free = 0;
+          }
+          // 求值
+          double** arr = my_LinearFit(p_data, num_files, &slope, &intercept, &mean_var, &linear, &repeat, &arr_len);
+          char c_slope[20], c_intercept[20], c_mean_var[20], c_repeat[20], c_linear[20];
+          InsertAxisItem (panelHandle, GRAPH, VAL_BOTTOM_XAXIS, -1, p_data[0]->input_unit, 0.0);
+          InsertAxisItem (panelHandle, GRAPH, VAL_LEFT_YAXIS, -1, p_data[0]->output_unit, 0.0);
+          sprintf(c_slope, "%.4f", slope);
+          sprintf(c_intercept, "%.4f", intercept);
+          sprintf(c_mean_var, "%.4f", mean_var);
+          sprintf(c_repeat, "%.4f", repeat);
+          sprintf(c_linear, "%.4f", linear);
+          InsertTextBoxLine(panelHandle, SLOPE, 0, c_slope);
+          InsertTextBoxLine(panelHandle, INTERCEPT, 0, c_intercept);
+          InsertTextBoxLine(panelHandle, MEAN_VAR, 0 ,c_mean_var);
+          InsertTextBoxLine(panelHandle, REPEAT, 0 ,c_repeat);
+          InsertTextBoxLine(panelHandle, LINEAR, 0 ,c_linear);
+          // 绘图
+          for(int i = 0; i < arr_len; i++)
+          {
+            PlotPoint (panelHandle, GRAPH, arr[0][i], arr[1][i], VAL_EMPTY_SQUARE, VAL_YELLOW);
+          }
+          PlotLine(panelHandle, GRAPH, arr[0][0], arr[0][0] * slope + intercept, arr[0][arr_len - 1], arr[0][arr_len - 1] * slope + intercept, VAL_GREEN);
+          // freeDataList(p_data, num_files);
+          free(arr[0]);
+          free(arr[1]);
+          free(arr);
+          }
+        break;
+    }
+    free(file_list);
+    return 0;
+  }
+  
+  
+  int CVICALLBACK ClearCallback (int panel, int control, int event,
+                  void *callbackData, int eventData1, int eventData2)
+  {
+    switch (event)
+    {
+      case EVENT_COMMIT:
+        DeleteGraphPlot (panelHandle, GRAPH, -1, VAL_IMMEDIATE_DRAW);
+        InsertTextBoxLine(panelHandle, SLOPE, 0, "\0");
+        InsertTextBoxLine(panelHandle, INTERCEPT, 0, "\0");
+        InsertTextBoxLine(panelHandle, MEAN_VAR, 0 ,"\0");
+        InsertTextBoxLine(panelHandle, REPEAT, 0 ,"\0");
+        InsertTextBoxLine(panelHandle, LINEAR, 0 ,"\0");
+        InsertAxisItem (panelHandle, GRAPH, VAL_BOTTOM_XAXIS, -1, "\0", 0.0);
+        InsertAxisItem (panelHandle, GRAPH, VAL_LEFT_YAXIS, -1, "\0", 0.0);
+        if(!is_data_free)
+        {
+          freeDataList(p_data, 1);
+          is_data_free = 1;
+        }
+        break;
+    }
+    return 0;
+  }
+  
+  int CVICALLBACK QuitCallback (int panel, int control, int event,
+                  void *callbackData, int eventData1, int eventData2)
+  {
+    switch (event)
+    {
+      case EVENT_COMMIT:
+        QuitUserInterface (0);
+        break;
+    }
+    return 0;
+  }  
+\end{lstlisting}  
+% \newpage
+% \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
