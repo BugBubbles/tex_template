@@ -69,9 +69,9 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \end{center}
 
 \thispagestyle{empty}
+\newpage
 }
 
-\newpage
 %% ----------- 封面部分结束 ------------ %%
 
 % %% ----------- 摘要部分 ------------ %%
@@ -116,7 +116,8 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
   e_L= \frac{\abs{\Delta R_\mathrm{max}}}{y_\mathrm{FS}} \times 100\%
 \end{equation*}\par
 \newpage
-\section{实验数据}
+\section{实验要求}
+\subsection{实验数据}
 现有两个虚拟传感器的标定数据，分别存储为a.cld和b.cld两个文件中，其数据定义为结构体CalibrateData，声明如下：
 \begin{lstlisting}[language=C]
   typedef struct CalibrateData{
@@ -144,7 +145,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
   \mathrm{meanSquaredError} = \frac{1}{n-1} \sqrt{\sum_{i=1}^{n} \curlbrac{\mathrm{Z[i]} - \mathrm{Y[i]}}^2}
 \end{equation*}\par
 
-\section{实验要求}
+\subsection{实验内容}
 \begin{enumerate}
   \item 读取数据，显示散点图及拟合直线；
   \item 计算斜率、截距、均方误差、线性度、重复性误差并显示；
@@ -182,7 +183,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 实验的最后一个部分是设计图形用户界面，方便使用者便捷地操作数据完成可视化结果显示。界面设计如图\ref{fig:ui}所示：
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{图形用户界面设计示意图.png}
+  \includegraphics[width=\textwidth]{图形用户界面设计示意图.png}
   \caption{图形用户界面设计示意图}
   \label{fig:ui}
 \end{figure}
