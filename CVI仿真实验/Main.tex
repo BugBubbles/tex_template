@@ -194,6 +194,24 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
   \item 退出：关闭程序。
 \end{enumerate}
 \section{实验结果}
+实验结果为展示对虚拟传感器的二进制标定数据的读取和处理。
+\subsection{运行界面}
+点击CVI软件的运行按键，将自动完成源代码文件的编译和链接，得到可执行程序，运行可执行程序，弹出界面框如图\ref{fig:run}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{运行界面.png}
+  \caption{运行界面}
+  \label{fig:run}
+\end{figure}
+此时如果点击显示报表，界面将弹出报错框，提示用户需要先读取数据，如图\ref{fig:err}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{报错界面.png}
+  \caption{报错界面}
+  \label{fig:err}
+\end{figure}
+此举可以防止用户的误操作导致界面崩溃。
+\subsection{实时处理}
 
 \section{结论}
 
@@ -445,9 +463,9 @@ double** CLD2Arr(const CALIDATA** data, int num, int* arr_len)
     switch (event)
     {
       case EVENT_COMMIT:
-        if (~FileSelectPopup (".", "*.txt", "txt, log", "Select Saving Path", VAL_SAVE_BUTTON, 0, 0, 1, 1, file_name))
+        if (!is_data_free)
         {
-          if (!is_data_free)
+          if (~FileSelectPopup (".", "*.txt", "txt, log", "Select Saving Path", VAL_SAVE_BUTTON, 0, 0, 1, 1, file_name))
           {
             writer_handle = OpenFile (file_name, VAL_WRITE_ONLY, VAL_APPEND, VAL_ASCII);
             memset(buffer, '\0', writer_len);
@@ -495,6 +513,10 @@ double** CLD2Arr(const CALIDATA** data, int num, int* arr_len)
           {
             MessagePopup ("Error", "错误！请先读取数据后显示报表");
           }
+        }
+        else
+        {
+          MessagePopup ("Error", "错误！请先读取数据后显示报表");
         }
         break;
     }
