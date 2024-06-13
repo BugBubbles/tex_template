@@ -153,7 +153,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \end{enumerate}
 \newpage
 \section{程序设计逻辑}
-利用NI Labwindows/CVI软件，编写程序实现数据读取和处理、并实现显示结果的可视化界面输出，程序设计代码的主要流程也遵照这一逻辑。
+利用NI Labwindows/CVI软件（2020年版），编写程序实现数据读取和处理、并实现显示结果的可视化界面输出，程序设计代码的主要流程也遵照这一逻辑。
 \subsection{数据读取模块}
 由于实验所提供的数据文件为二进制文件.cld，不能直接读取其内容，必须通过操作文件流，读取内存实现二进制数据的解码，首先完成带有特殊数据结构CalibrateData的抽象数据类型（Abstract Data Type，ADT）编写。本实验中不包含修改ADT的功能，因此只需要包括以下函数：
 \begin{lstlisting}[language=C]
@@ -300,6 +300,7 @@ citestyle=gb7714-2015%,backref=true%%其中后端backend使用biber
 \appendixpage
 \addappheadtotoc
 \subappendix{ADT源代码}
+说明，全部源代码程序应当在兼容Labwindows/CVI 2020版本的环境下运行。
 \begin{lstlisting}[language=C]
 /// 关于CalibrateData的ADT，实现从二进制文件中读取数据
 // 新建结构体
