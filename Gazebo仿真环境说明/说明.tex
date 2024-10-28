@@ -1,0 +1,64 @@
+\documentclass{article}
+%基于北京航空航天大学仪器科学与光电工程学院实验报告及课程报告排版得来，类似于毕业论文排版格式
+%后续将更新毕业论文排版格式
+\usepackage{graphicx,float}%使用图的宏包，使用图的浮动体宏包，引入参数H使图像紧跟当前文字
+\usepackage{caption} %使用图表标题的宏包
+\usepackage[colorlinks=true,pdfstartview=FitH,%
+linkcolor=black,anchorcolor=violet,citecolor=magenta]{hyperref}%加载hyperref宏包，使用超链接
+\usepackage{setspace}%用于设置行间距列间距等命令的宏包
+\usepackage{array}%设置列表高度宽度的宏包
+\usepackage{zhnumber}%使用中文数字编号的宏包
+\usepackage{titlesec,titletoc}%使用标题自定义形式的宏包和使用目录自定义形式的宏包
+\usepackage{siunitx}%物理学单位宏包
+\usepackage{tabularx}%让表格宽度等于页面宽度
+\usepackage{makecell}%单个表格单元调整的宏包
+\usepackage{subfigure} %%使用子图的宏包
+\usepackage[backend=biber,bibstyle=gb7714-1987,%nature,%%加载biblatex宏包，使用参考文献
+citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
+,url=true
+]{biblatex}%标注(引用)样式citestyle，著录样式bibstyle都采用gb7714-2015样式
+% \usepackage{pgfplots}%类似tikz的一个画图库，主要画统计图
+\usepackage{../customStyle}
+\addbibresource[location=local]{bibliography.bib}
+\graphicspath{{./fig}}
+% 加入页眉页脚
+\pagestyle{casual}
+\chead{Gazebo仿真环境说明}
+% 表格行间距调整为1.5
+\renewcommand{\arraystretch}{1.5}
+
+\begin{document}
+\section{环境概况}
+我之前专门为搭建这个环境写过一个博客，可能非常啰嗦也词不达意，请先速阅全貌，然后再考虑环境搭建。请参照此处：
+\begin{enumerate}
+  \item \href{https://bugbubbles.github.io/2024/04/%E9%99%A8%E7%9F%B3%E5%9D%91/ros%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/}{ROS安装与使用心得}
+  \item \href{https://bugbubbles.github.io/2024/04/%E9%99%A8%E7%9F%B3%E5%9D%91/%E5%9F%BA%E4%BA%8Egazebo%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E4%BA%8B%E4%BB%B6%E7%9B%B8%E6%9C%BA%E6%8E%A2%E6%B5%8B/}{基于gazebo的无人机事件相机探测}
+  \item \href{https://bugbubbles.github.io/2024/04/%E9%99%A8%E7%9F%B3%E5%9D%91/%E6%9C%88%E7%90%83%E8%A1%A8%E9%9D%A2%E4%B8%89%E7%BB%B4%E7%8E%AF%E5%A2%83%E6%9E%84%E5%BB%BA/}{月球表面三维环境构建}
+\end{enumerate}\par
+其中最后一个博客，月球表面三维环境构建，有成品示意图，顺利的话，搭建得到的仿真环境就长那个样子。但是实际搭建过程还是有非常多的细节，尤其是对于ROS初学者，我建议首先阅读第一步ROS安装，大致熟悉ROS系统的操作指令。然后再尝试安装PX4和XTDrone，保证前两步都没有出现异常后，再考虑进行第三个博客的环境搭建。\par
+\textbr{这里，我已经制作好了环境，事实上也在Modelscope上开源了当前环境需要用到的全部遥感图像及数据集，见于}\href{https://www.modelscope.cn/datasets/BugBubbles/KaguyaLORC}{Modelscope开源数据集}。
+\subsection{配置要求}
+搭建该仿真环境，至少需要在Ubuntu操作系统下进行，由于实时渲染的要求，至少需要有4GB以上独立显存，最好当前设备内存32GB（否则仿真环境的范围不能取得太大）。作为参考，这里提供我的设备参数：
+\begin{table}[H]
+  \caption{设备参数}
+  \centering
+  \begin{tabular}{cccc}
+    \toprule
+    CPU & 内存 & 显卡& 存储\\
+    \hline
+     13代i5 &32GB      & 12GB   & 1T \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:device}
+\end{table}
+使用基于\code{WSL2}的虚拟机搭建\code{Ubuntu2004}版本的子系统，在当前Windows环境下运行仿真，渲染占用最高时内存使用达到\textbr{28G}，显存占用为\textbr{40\%/8GB}。
+\subsection{仿真器细节}
+事件相机的仿真模型，请见文献\cite{kaiser_towards_2016,rebecq_esim_2018,joubert_event_2021}。其中文献\cite{kaiser_towards_2016}是最简单的两帧图像作差取阈值。文献\cite{rebecq_esim_2018}是著名的ESIM仿真器，即自适应速度或者光照变化改变采样周期，得到的事件更真实，但是没有考虑噪声。文献\cite{joubert_event_2021}是加入对像元噪声、读出噪声和带宽仿真的经验仿真器，事件流在形式上更逼真。能够直接得到事件流的仿真器基本上就这仨了，自此之后的仿真器都是基于视频、基于轨迹仿真的，要查看更多更新的仿真器，可参考文献\cite{chakravarthi_recent_2024}。\par
+在实现上，我把这三种仿真器都实现了，其中\cite{rebecq_esim_2018,joubert_event_2021}是直接改编自作者提供的源码，而\cite{kaiser_towards_2016}原理最简单，就自己加了个高斯噪声实现了。
+\section{注意事项}
+\begin{enumerate}
+  \item 暂无
+\end{enumerate}
+\newpage
+\printbibliography[heading=bibliography,title=参考文献]
+\end{document}

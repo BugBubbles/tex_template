@@ -161,10 +161,22 @@
 %------------------------------------------%
 %页眉页脚
 %------------------------------------------%
+%%% 北航学位论文系列
 \fancypagestyle{beihang}{%
 \fancyhf{}%
 \fancyhead[CO]{北京航空航天大学硕士学位论文}%
 \fancyhead[CE]{\leftmark}%
+\renewcommand{\headrulewidth}{0.5pt} % 设置页眉线宽度
+}
+%%% 北航学位论文系列
+\fancypagestyle{casual}{%
+\fancyhf{}%
+\lhead{陈博非}
+\chead{}
+\rhead{\today}
+\cfoot{\thepage}
+\rfoot{}
+\lfoot{}
 \renewcommand{\headrulewidth}{0.5pt} % 设置页眉线宽度
 }
 %------------------------------------------%
