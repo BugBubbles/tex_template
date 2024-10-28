@@ -53,8 +53,8 @@ citestyle=gb7714-1987%,backref=true%%其中后端backend使用biber
 \end{table}
 使用基于\code{WSL2}的虚拟机搭建\code{Ubuntu2004}版本的子系统，在当前Windows环境下运行仿真，渲染占用最高时内存使用达到\textbr{28G}，显存占用为\textbr{40\%/8GB}。
 \subsection{仿真器细节}
-事件相机的仿真模型，请见文献\cite{kaiser_towards_2016,rebecq_esim_2018,joubert_event_2021}。其中文献\cite{kaiser_towards_2016}是最简单的两帧图像作差取阈值。文献\cite{rebecq_esim_2018}是著名的ESIM仿真器，即自适应速度或者光照变化改变采样周期，得到的事件更真实，但是没有考虑噪声。文献\cite{joubert_event_2021}是加入对像元噪声、读出噪声和带宽仿真的经验仿真器，事件流在形式上更逼真。能够直接得到事件流的仿真器基本上就这仨了，自此之后的仿真器都是基于视频、基于轨迹仿真的，要查看更多更新的仿真器，可参考文献\cite{chakravarthi_recent_2024}。\par
-在实现上，我把这三种仿真器都实现了，其中\cite{rebecq_esim_2018,joubert_event_2021}是直接改编自作者提供的源码，而\cite{kaiser_towards_2016}原理最简单，就自己加了个高斯噪声实现了。
+事件相机的仿真模型，请见文献\cite{kaiserFrameworkEndtoendControl2016,rebecq_esim_2018,joubert_event_2021}。其中文献\cite{kaiserFrameworkEndtoendControl2016}是最简单的两帧图像作差取阈值。文献\cite{rebecq_esim_2018}是著名的ESIM仿真器，即自适应速度或者光照变化改变采样周期，得到的事件更真实，但是没有考虑噪声。文献\cite{joubert_event_2021}是加入对像元噪声、读出噪声和带宽仿真的经验仿真器，事件流在形式上更逼真。能够直接得到事件流的仿真器基本上就这仨了，自此之后的仿真器都是基于视频、基于轨迹仿真的，要查看更多更新的仿真器，可参考文献\cite{chakravarthiRecentEventCamera2024}。\par
+在实现上，我把这三种仿真器都实现了，其中\cite{rebecq_esim_2018,joubert_event_2021}是直接改编自作者提供的源码，而\cite{kaiserFrameworkEndtoendControl2016}原理最简单，就自己加了个高斯噪声实现了。
 \section{注意事项}
 \begin{enumerate}
   \item 暂无
