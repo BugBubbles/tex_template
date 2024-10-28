@@ -2,6 +2,8 @@
 \usepackage[CheckSingle=true,AutoFakeBold=true,AutoFakeSlant=true]{xeCJK}         % 中文支持宏包
 \usepackage{
     zhnumber,
+    color,
+    xcolor
     }
 
 %------------------------------------------%
@@ -58,3 +60,6 @@
 %%%%%% 设置常用字体格式 %%%%%%
 \newcommand{\textbr}[1]{\textcolor{red}{\textbf{#1}}}
 \newcommand{\test}[1]{\underline{\textcolor{blue}{\textbf{#1}}}}
+%% 底框代码字体
+\definecolor{light-orange}{RGB}{249,215,112} 
+\newcommand{\code}[1]{\colorbox{light-orange}{\texttt{#1}}}
