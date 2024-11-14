@@ -14,14 +14,18 @@ linkcolor=black,anchorcolor=violet,citecolor=magenta]{hyperref}%加载hyperref�
 \usepackage{makecell}%单个表格单元调整的宏包
 \usepackage{subfigure} %%使用子图的宏包
 \usepackage[backend=biber,%后端backend使用biber
-gbnamefmt=lowercase,%将文献作者姓氏区分大小写
-bibstyle=gb7714-2015,%加载参考文献样式表
+gbnamefmt=quanpin,%将文献作者姓氏区分大小写
+bibstyle=gb7714-2005,%加载参考文献样式表
+maxbibnames=3,
 %nature,%%加载biblatex宏包，使用参考文献
-citestyle=gb7714-2015,%加载引注样式
+citestyle=gb7714-2005,%加载引注样式
 %backref=false,%不显示引用文献的页码
-gblocal=gb7714-2015,%使中英文献各自输入中英文的“和”与“等”
+gblocal=gb7714-2005,%使中英文献各自输入中英文的“和”与“等”
 url=false,%注意，report类型文档类下，url和报告时间是必须的
 doi=false,%不显示网址和doi
+gbpunctin=false,%不显示文献中的//析出符号
+gbmedium=false,%不显示OL符号
+mergedate=none
 ]{biblatex}%标注(引用)样式citestyle，著录样式bibstyle都采用gb7714-2015样式
 % \usepackage{pgfplots}%类似tikz的一个画图库，主要画统计图
 \usepackage{../customStyle}
@@ -32,7 +36,7 @@ doi=false,%不显示网址和doi
 % \usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo]{mtpro2}%使用mathtimepro2商业字体作为数学环境，并不推荐
 
 %biblatex宏包的参考文献数据源加载方式，注意book.bib应当与.tex文件在同一目录下，不然有可能会报错
-\addbibresource[location=local]{book.bib}
+\addbibresource[location=local]{bibliography.bib}
 % % \bibliographystyle{gbt7714-numerical}
 %%% 下面的命令重定义页面边距，使其符合中文刊物习惯 %%%%
 % \addtolength{\topmargin}{2.5cm}
@@ -536,7 +540,7 @@ SNN的输入与输出均是脉冲型信号，根据文献\cite{jaegerEncyclopedi
 \end{align}\par
 可见也符合公式\ref{eq:脉冲神经元学习过程}推导的结果。
 \subsection{结论}
-本文从泊松随机过程出发，根据平稳性和非线性特性线性近似的两个假设，推导得到了基于LIF原理的单个脉冲神经元权重更新方法，从数学上验证了现有脉冲神经网络模型的权重更新方法。
+本文从泊松随机过程出发，根据平稳性和非线性特性线性近似的两个假设，推导得到了基于LIF原理的单个脉冲神经元权重更新方法，从数学上验证了现有脉冲神经网络模型的权重更新方法。\cite{PeiZhaoYuYueQiuTanCeJinZhanYuGuoJiYueQiuKeYanZhan2020}\cite{xinHighprecisionCoregistrationOrbiter2018}
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
