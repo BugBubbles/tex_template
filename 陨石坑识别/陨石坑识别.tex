@@ -35,7 +35,7 @@ mergedate=none
 
 \fancyhf{} 
 % 页眉页脚设置
-\lhead{陈博非}
+\lhead{公式推导部分}
 \chead{陨石坑识别}
 \rhead{\today}
 \cfoot{\thepage}
@@ -44,7 +44,7 @@ mergedate=none
 % 加入页眉
 \pagestyle{fancy}
 % 表格行间距调整为1.5
-\renewcommand{\arraystretch}{1.0}
+% \renewcommand{\arraystretch}{1.5}
 
 \begin{document}
 \section{关于椭圆}
@@ -189,7 +189,12 @@ Hanak\cite{hanakCraterIdentificationAlgorithm2010}提出的不变量描述子定
 \begin{equation*}
   I_1 = \mathrm{tr}(\mathbf{C}_1^{-1}\mathbf{C}_2)\quad I_2 = \mathrm{tr}(\mathbf{C}_2^{-1}\mathbf{C}_1)
 \end{equation*}\par
-
+\subsection{距离描述子}
+实践中，发现互逆描述子需要保持行列式归一，引入了额外的计算量，当椭圆被压扁时，行列式接近于0，因此增加了数值不稳定。本人提出了具有以下形式的距离描述子：
+\begin{equation*}
+  I_1 = \frac{\mathbf{x}_2^\top\mathbf{C}_1\mathbf{x}_2}{\mathbf{x}_1^\top\mathbf{C}_1\mathbf{x}_1}\quad I_2 = \frac{\mathbf{x}_1^\top\mathbf{C}_2\mathbf{x}_1}{\mathbf{x}_2^\top\mathbf{C}_2\mathbf{x}_2}
+\end{equation*}\par
+其形式尚未见于任何文献报道，经过实验发现，其分布比互逆描述子更均匀，且不需要计算两个椭圆的行列式。式中的$\mathbf{x}_1$和$\mathbf{x}_2$是以齐次坐标表示的两个椭圆中心点。其几何意义为：两个圆中心距离与圆各自半径之比，是平面下的射影不变量。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
