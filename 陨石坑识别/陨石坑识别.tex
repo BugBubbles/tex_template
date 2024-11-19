@@ -189,6 +189,64 @@ Hanak\cite{hanakCraterIdentificationAlgorithm2010}提出的不变量描述子定
 \begin{equation*}
   I_1 = \mathrm{tr}(\mathbf{C}_1^{-1}\mathbf{C}_2)\quad I_2 = \mathrm{tr}(\mathbf{C}_2^{-1}\mathbf{C}_1)
 \end{equation*}\par
+需要注意的是，\textbr{必须保证}$\det(\mathbf{C}_1)=\det(\mathbf{C}_2)=1$。为了计算该描述子的不确定度，首先将两个齐次矩阵定义为：
+\begin{equation*}
+  \mathbf{C}_1=\begin{bmatrix}
+    A_1&B_1&D_1\\
+    B_1&C_1&E_1\\
+    D_1&E_1&F_1
+  \end{bmatrix}\quad\mathbf{C}_2=\begin{bmatrix}
+    A_2&B_2&D_2\\
+    B_2&C_2&E_2\\
+    D_2&E_2&F_2
+  \end{bmatrix}
+\end{equation*}\par
+只计算$I_1$，根据矩阵求逆的定义，计算矩阵$\mathbf{C}_1$的伴随矩阵$\mathbf{C}_1^*$，并计算行列式：
+\begin{equation*}
+  \mathbf{C}_1^*=\begin{bmatrix}
+   C_1F_1-E_1^2 & D_1E_1-B_1F_1 & B_1E_1-C_1D_1\\
+    D_1E_1-B_1F_1 & A_1F_1-D_1^2 & B_1D_1-A_1E_1\\
+    B_1E_1-C_1D_1 & B_1D_1-A_1E_1 & A_1C_1-B_1^2
+  \end{bmatrix}\quad\det(\mathbf{C}_1)=A_1C_1F_1+2B_1D_1E_1-A_1E_1^2-C_1D_1^2-B_1^2F_1
+\end{equation*}\par
+然后，只需要计算$\mathbf{C}_1^{-1}\mathbf{C}_2$的主对角线元素之和即可：
+\begin{align*}
+ ( \mathbf{C}_1^{-1}\mathbf{C}_2)_{11}&= \frac{1}{\det(\mathbf{C}_1)}\left[(C_1F_1-E_1^2)A_2+(D_1E_1-B_1F_1)B_2+(B_1E_1-C_1D_1)D_2\right]\\
+  ( \mathbf{C}_1^{-1}\mathbf{C}_2)_{22}&= \frac{1}{\det(\mathbf{C}_1)}\left[(D_1E_1-B_1F_1)B_2+(A_1F_1-D_1^2)C_2+(B_1D_1-A_1E_1)E_2\right]\\
+  ( \mathbf{C}_1^{-1}\mathbf{C}_2)_{33}&= \frac{1}{\det(\mathbf{C}_1)}\left[(B_1E_1-C_1D_1)D_2+(B_1D_1-A_1E_1)E_2+(A_1C_1-B_1^2)F_2\right]
+\end{align*}\par
+因此，$I_1$的闭式解为：
+\begin{align*}
+  I_1&=\frac{1}{\det(\mathbf{C}_1)}\left[(C_1F_1-E_1^2)A_2+2(D_1E_1-B_1F_1)B_2+2(B_1E_1-C_1D_1)D_2\right.\\
+  &\left.+(A_1F_1-D_1^2)C_2+2(B_1D_1-A_1E_1)E_2+(A_1C_1-B_1^2)F_2\right]
+\end{align*}\par
+为了求解该描述子的不确定度，首先计算$\det(\mathbf{C}_1)$对六个元素分量的偏导数，有：
+\begin{align*}
+  \pdiff{\det(\mathbf{C}_1)}{A_1}&=C_1F_1-E_1^2\\
+  \pdiff{\det(\mathbf{C}_1)}{B_1}&=2D_1E_1-2B_1F_1\\
+  \pdiff{\det(\mathbf{C}_1)}{C_1}&=A_1F_1-D_1^2\\
+  \pdiff{\det(\mathbf{C}_1)}{D_1}&=2B_1E_1-2C_1D_1\\
+  \pdiff{\det(\mathbf{C}_1)}{E_1}&=2B_1D_1-2A_1E_1
+\end{align*}
+\begin{equation*}
+  \pdiff{\det(\mathbf{C}_1)}{F_1}=A_1C_1-B_1^2
+\end{equation*}\par
+然后，计算分子部分$N_1$对十二个元素的各个偏导数，有：
+\begin{align*}
+  \pdiff{N_1}{A_1}&=F_1C_2+C_1F_2-2E_1E_2\\
+  \pdiff{N_1}{B_1}&=2E_1D_2+2D_1E_2-2F_1B_2-2B_1F_2\\
+  \pdiff{N_1}{C_1}&=F_1A_2+A_1F_2-2D_1D_2\\
+  \pdiff{N_1}{D_1}&=2E_1B_2+2B_1E_2-2C_1D_2-2D_1C_2\\
+  \pdiff{N_1}{E_1}&=2D_1B_2+2B_1D_2-2A_1E_2-2E_1A_2\\
+  \pdiff{N_1}{F_1}&=A_1C_2+C_1A_2-2B_1B_2\\
+  \pdiff{N_1}{A_2}&=C_1F_1-E_1^2\\
+  \pdiff{N_1}{B_2}&=2D_1E_1-2B_1F_1\\
+  \pdiff{N_1}{C_2}&=A_1F_1-D_1^2\\
+  \pdiff{N_1}{D_2}&=2B_1E_1-2C_1D_1\\
+  \pdiff{N_1}{E_2}&=2B_1D_1-2A_1E_1\\
+  \pdiff{N_1}{F_2}&=A_1C_1-B_1^2
+\end{align*}\par
+代入后可取得$u(I_1)$的表达式。
 \subsection{距离描述子}
 实践中，发现互逆描述子需要保持行列式归一，引入了额外的计算量，当椭圆被压扁时，行列式接近于0，因此增加了数值不稳定。本人提出了具有以下形式的距离描述子：
 \begin{equation*}
