@@ -165,12 +165,19 @@ Hanak\cite{hanakCraterIdentificationAlgorithm2010}提出的不变量描述子定
 \begin{equation}
   \left[\frac{2r_1}{l_1},\frac{2r_2}{l_1},\frac{2r_3}{l_1},\cos\alpha_1,\cos\alpha_2,I_\mathrm{CW/CCW}\right]
 \end{equation}\par
-其中，需要事先保证按内角从大到小，排序为1、2和3，才能计算以下不变量，基于该计算结果，可求出当前不变量的不确定度，如下：
+其中各个参数分别按图\ref{fig:Hanak}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.3\textwidth]{Hanak三元组.png}
+  \caption{Hanak描述子示意图}
+  \label{fig:Hanak}
+\end{figure}\par
+需要事先保证按内角从大到小，排序为1、2和3，才能计算以下不变量，基于该计算结果，可求出当前不变量的不确定度，如下：
 \begin{equation}
   \begin{aligned}
-    u\left(\frac{2r_1}{l_1}\right)&=\frac{2}{l_1}\sqrt{\left[\frac{u(r_1)}{r_1}\right]^2+\left(\frac{u(l_1)}{l_1}\right)^2}\\
-    u\left(\frac{2r_2}{l_1}\right)&=\frac{2}{l_1}\sqrt{\left[\frac{u(r_2)}{r_2}\right]^2+\left(\frac{u(l_1)}{l_1}\right)^2}\\
-    u\left(\frac{2r_3}{l_1}\right)&=\frac{2}{l_1}\sqrt{\left[\frac{u(r_3)}{r_3}\right]^2+\left(\frac{u(l_1)}{l_1}\right)^2}\\
+    u\left(\frac{2r_1}{l_1}\right)&=\frac{2}{l_1}\sqrt{u^2(r_1)+\left[\frac{r_1}{l_1}u(l_1)\right]^2}\\
+    u\left(\frac{2r_2}{l_1}\right)&=\frac{2}{l_1}\sqrt{u^2(r_2)+\left[\frac{r_2}{l_1}u(l_1)\right]^2}\\
+    u\left(\frac{2r_3}{l_1}\right)&=\frac{2}{l_1}\sqrt{u^2(r_3)+\left[\frac{r_3}{l_1}u(l_1)\right]^2}\\
     u(\cos\alpha_1)&=\frac{l_1}{l_2l_3}\sqrt{\cos^2\alpha_3u^2(l_2)+\cos^2\alpha_2u^2(l_3)+u^2(l_1)}\\
     u(\cos\alpha_2)&=\frac{l_2}{l_1l_3}\sqrt{\cos^2\alpha_3u^2(l_1)+\cos^2\alpha_1u^2(l_3)+u^2(l_2)}\\
     u(I_\mathrm{CW/CCW})&=0
@@ -182,8 +189,50 @@ Hanak\cite{hanakCraterIdentificationAlgorithm2010}提出的不变量描述子定
 \end{equation*}\par
 而最大边长$l_1$可由选定的两个顶点2和3计算所得，因此，其不确定度为：
 \begin{equation*}
-  u(l_1)=\frac{1}{l_1}\sqrt{u^2(x_1)+u^2(y_1)+u^2(x_2)+u^2(y_2)}
+  u(l_1)=\frac{1}{l_1}\sqrt{(x_2-x_3)^2[u^2(x_2)+u^2(x_3)]+(y_2-y_3)^2[u^2(y_2)+u^2(y_3)]}
 \end{equation*}\par
+\subsection{Park描述子}
+Hanak描述子仅是仿射不变量，因此不能用于着陆过程。Park\cite{parkRobustCraterTriangle2019}等人提出了利用交点计算的射影不变量，如图\ref{fig:Park}所示：
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.3\textwidth]{Park三元组.png}
+  \caption{Park描述子示意图}
+  \label{fig:Park}
+\end{figure}\par
+其定义为利用六个交点计算的六组共30个不变量，分别按照以下形式计算：
+\begin{align*}
+  I_{A_b}&=G(A_c,B_a,B_b,C_a,C_b)\\
+  I_{A_c}&=G(A_b,B_a,B_c,C_a,C_b)\\
+  I_{B_a}&=G(A_a,A_b,B_c,C_a,C_b)\\
+  I_{B_c}&=G(A_a,A_c,B_a,C_a,C_b)\\
+  I_{C_a}&=G(A_a,A_c,B_a,B_c,C_b)\\
+  I_{C_b}&=G(A_a,A_c,B_a,B_c,C_a)\\
+  G(x_1,x_2,x_3,x_4,x_5)&=\left[J(\mu),J(\nu),J\left(\frac{\mu}{\nu}\right),J\left(\frac{\mu-1}{\nu-1}\right),J\left(\frac{\mu(\nu-1)}{\nu(\mu-1)}\right)\right]\\
+  \mu& = \frac{\triangle x_1x_2x_4\triangle x_1x_3x_5}{\triangle x_1x_3x_4\triangle x_1x_2x_5}\\
+  \nu&=\frac{\triangle x_2x_1x_4\triangle x_2x_3x_5}{\triangle x_2x_3x_4\triangle x_2x_1x_5}\\
+  J(x)&=\frac{x^6-3x^5+3x^4-x^3+3x^2-3x+1}{2x^6-6x^5+9x^4-8x^3+9x^2-6x+2}
+\end{align*}\par
+关于从图像中确定交点，可利用特征值分解。首先，可根据三个陨石坑中心点构造出三角形三边，以边$BC$和对应的两个顶点$B$和$C$为例：
+\begin{align*}
+  \left\{
+  \begin{aligned}
+    \mathbf{x^\top Cx}&=0\\
+    \mathbf{l^\top x}&=0  
+  \end{aligned}
+  \right.\implies\det(\lambda\mathbf{C-ll^\top})=\det(\lambda\mathbf{I-C^\mathrm{-1}ll^\top})=0
+\end{align*}\par
+因此，将$\mathbf{C}^{-1}\mathbf{ll}^\top$作特征值分解，交点对应的两个解就是不为零的两个特征值$\lambda_1$和$\lambda_2$，对应的两个特征向量就是交点的齐次坐标，这是因为：
+\begin{proof}
+\begin{equation*}
+  \lambda\mathbf{x=Ax}\implies\mathbf{x}^\top(\mathbf{A}-{\lambda}\mathbf{I})\mathbf{x}=\mathbf{x}^\top (\lambda \mathbf{x}-\lambda\mathbf{x})=0
+\end{equation*}
+\end{proof}\par
+求解所得两个交点需要用对应位置的椭圆约束，以保证其在内侧，即向量$\overrightarrow{AB_c}$和$\overrightarrow{AC_b}$分别与向量$\overrightarrow{AB}$和$\overrightarrow{AC}$的向量积异号：
+\begin{align*}
+  (\overrightarrow{AB_c}\times\overrightarrow{AB})(\overrightarrow{AB_c}\times\overrightarrow{AC})&<0\\
+  (\overrightarrow{AC_b}\times\overrightarrow{AB})(\overrightarrow{AC_b}\times\overrightarrow{AC})&<0
+\end{align*}\par
+由此可唯一确定六个交点，并解出共计30组不变量。
 \subsection{互逆描述子}
 互逆描述子由Quan\cite{quanInvariantsPairConics1992}等人提出，其定义为：
 \begin{equation*}
