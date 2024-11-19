@@ -90,7 +90,7 @@ mergedate=none
 \end{bmatrix}
   \begin{bmatrix}
     A\\B\\C\\D\\E\\F
-  \end{bmatrix}=\mathbf{AX}=\mathbf{0}\implies\mathbf{U}\mathbold{\Sigma}\mathbf{ V}^\top=\mathbf{A}\implies\mathbf{X}=\mathbf{V}_3
+  \end{bmatrix}=\mathbf{AX}=\mathbf{0}\implies\mathbf{U}\mathbold{\Sigma}\mathbf{ V}^\top=\mathbf{A}\implies\mathbf{X}=\mathbf{V}_6
 \end{equation*}\par
 即矩阵$\mathbf{V}$的最后一列是$\mathbf{X}$的解。此时求解不确定度，可将各个点的观测值当作对同一个椭圆的独立重复试验，且为了简化求解过程，将$\mathbf{X}$的六个分量当作服从相同噪声分布，且彼此独立，此时可根据最小二乘公式一步求出不确定度：
 \begin{equation}
@@ -135,7 +135,7 @@ mergedate=none
   &\left\{
     \begin{aligned}
       \pdiff{N_a}{C}&=D^2-AF,\pdiff{D_a}{C}=-A\left[\sqrt{(A-C)^2+4B^2}-A-C\right]+(B^2-AC)\left[\frac{C-A}{\sqrt{(A-C)^2+4B^2}}-1\right]\\
-      \pdiff{N_b}{C}&=D^2-AF,\pdiff{D_b}{C}=-A\left[-\sqrt{(A-C)^2+4B^2}-A-C\right]-(B^2-AC)\left[\frac{C-A}{\sqrt{(A-C)^2+4B^2}}-1\right]\\ 
+      \pdiff{N_b}{C}&=D^2-AF,\pdiff{D_b}{C}=-A\left[-\sqrt{(A-C)^2+4B^2}-A-C\right]+(B^2-AC)\left[-\frac{C-A}{\sqrt{(A-C)^2+4B^2}}-1\right]\\ 
     \end{aligned}
   \right.
 \end{align*}
