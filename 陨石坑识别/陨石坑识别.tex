@@ -109,6 +109,7 @@ mergedate=none
     u^2(y_0)&=\left[\frac{EB^2-CBD}{(B^2-AC)^2}\right]^2u^2(A)+\left[\frac{DB^2-ACD-2ABE}{(B^2-AC)^2}\right]^2u^2(B)\\
     &+\left[\frac{AE-BD}{(B^2-AC)^2}\right]^2u^2(C)+\left[\frac{B}{(B^2-AC)}\right]^2u^2(D)+\left[\frac{A}{(B^2-AC)}\right]^2u^2(E)\\
   \end{aligned}
+  \label{eq:center-uncertainty}
 \end{equation}\par
 同样地，推导椭圆半长轴和半短轴的不确定度，\textbr{易得}：
 \begin{equation}
@@ -213,26 +214,60 @@ Hanak描述子仅是仿射不变量，因此不能用于着陆过程。Park\cite
   J(x)&=\frac{x^6-3x^5+3x^4-x^3+3x^2-3x+1}{2x^6-6x^5+9x^4-8x^3+9x^2-6x+2}
 \end{align*}\par
 关于从图像中确定交点，可利用特征值分解。首先，可根据三个陨石坑中心点构造出三角形三边，以边$BC$和对应的两个顶点$B$和$C$为例：
-\begin{align*}
+\begin{equation*}
   \left\{
   \begin{aligned}
     \mathbf{x^\top Cx}&=0\\
     \mathbf{l^\top x}&=0  
   \end{aligned}
-  \right.\implies\det(\lambda\mathbf{C-ll^\top})=\det(\lambda\mathbf{I-C^\mathrm{-1}ll^\top})=0
-\end{align*}\par
-因此，将$\mathbf{C}^{-1}\mathbf{ll}^\top$作特征值分解，交点对应的两个解就是不为零的两个特征值$\lambda_1$和$\lambda_2$，对应的两个特征向量就是交点的齐次坐标，这是因为：
-\begin{proof}
-\begin{equation*}
-  \lambda\mathbf{x=Ax}\implies\mathbf{x}^\top(\mathbf{A}-{\lambda}\mathbf{I})\mathbf{x}=\mathbf{x}^\top (\lambda \mathbf{x}-\lambda\mathbf{x})=0
-\end{equation*}
-\end{proof}\par
-求解所得两个交点需要用对应位置的椭圆约束，以保证其在内侧，即向量$\overrightarrow{AB_c}$和$\overrightarrow{AC_b}$分别与向量$\overrightarrow{AB}$和$\overrightarrow{AC}$的向量积异号：
+  \right.
+\end{equation*}\par
+因此，可根据高中所学知识，将直线方程写为$\mathbf{l}=[m,n,t]^\top$，代入至椭圆的一般式\ref{eq:ellipse}中，若设$n\neq 0$，可得：
+\begin{equation}
+  \left(A-2B\frac{m}{n}+C\frac{m^2}{n^2}\right)x^2+\left(-2B\frac{t}{n}+2C\frac{mt}{n^2}+2D-2E\frac{m}{n}\right)x+\left(C\frac{t^2}{n^2}-2E\frac{t}{n}+F\right)=0
+  \label{eq:line}
+\end{equation}\par
+取定三个系数为：
 \begin{align*}
-  (\overrightarrow{AB_c}\times\overrightarrow{AB})(\overrightarrow{AB_c}\times\overrightarrow{AC})&<0\\
-  (\overrightarrow{AC_b}\times\overrightarrow{AB})(\overrightarrow{AC_b}\times\overrightarrow{AC})&<0
+  \left\{
+    \begin{aligned}
+      a &= A-2B\frac{m}{n}+C\frac{m^2}{n^2}\\
+      b &= -2B\frac{t}{n}+2C\frac{mt}{n^2}+2D-2E\frac{m}{n}\\
+      c &= C\frac{t^2}{n^2}-2E\frac{t}{n}+F
+    \end{aligned}
+  \right.
 \end{align*}\par
-由此可唯一确定六个交点，并解出共计30组不变量。
+使用二次方程求根公式即可得交点坐标的齐次表示为：
+\begin{equation*}
+  \mathbf{x}=\begin{bmatrix}
+    x\\y\\1
+  \end{bmatrix}=\begin{bmatrix}
+    \frac{-b\pm\sqrt{b^2-4ac}}{2a}\\-\frac{m}{n}\left(\frac{-b\pm\sqrt{b^2-4ac}}{2a}\right)-\frac{t}{n}\\1
+  \end{bmatrix}
+\end{equation*}\par
+当$n=0$时，以上公式失效，此时可将$x=\frac{t}{m}$代至椭圆一般式\ref{eq:ellipse}中，同理可得：
+\begin{align*}
+  \left\{
+    \begin{aligned}
+      a &= C\\
+      b &= 2E-2B\frac{t}{m}\\
+      c &= A\frac{t^2}{m^2}-2D\frac{t}{m}+F
+    \end{aligned}
+  \right.
+\end{align*}\par
+则交点坐标的齐次表示为：
+\begin{equation*}
+  \mathbf{x}=\begin{bmatrix}
+    x\\y\\1
+  \end{bmatrix}=\begin{bmatrix}
+    -\frac{t}{m}\\\frac{-b\pm\sqrt{b^2-4ac}}{2a}\\1
+  \end{bmatrix}
+\end{equation*}\par
+求解所得两个交点需要用对应位置的椭圆约束，以保证其在内侧，即向量$\overrightarrow{BB_c}$和$\overrightarrow{CB_c}$反向：
+\begin{equation*}
+  \overrightarrow{BB_c}\cdot\overrightarrow{CB_c}<0
+\end{equation*}\par
+由此可唯一确定六个交点，并解出共计30组不变量。由于该描述子实在是复杂到了一定的\textbr{境界}，因此没有必要推导其不确定度了。
 \subsection{互逆描述子}
 互逆描述子由Quan\cite{quanInvariantsPairConics1992}等人提出，其定义为：
 \begin{equation*}
@@ -299,9 +334,63 @@ Hanak描述子仅是仿射不变量，因此不能用于着陆过程。Park\cite
 \subsection{距离描述子}
 实践中，发现互逆描述子需要保持行列式归一，引入了额外的计算量，当椭圆被压扁时，行列式接近于0，因此增加了数值不稳定。本人提出了具有以下形式的距离描述子：
 \begin{equation*}
-  I_1 = \frac{\mathbf{x}_2^\top\mathbf{C}_1\mathbf{x}_2}{\mathbf{x}_1^\top\mathbf{C}_1\mathbf{x}_1}\quad I_2 = \frac{\mathbf{x}_1^\top\mathbf{C}_2\mathbf{x}_1}{\mathbf{x}_2^\top\mathbf{C}_2\mathbf{x}_2}
+  I_1 = \frac{\mathbf{x}_2^\top\mathbf{C}_1\mathbf{x}_2}{\mathbf{x}_1^\top\mathbf{C}_1\mathbf{x}_1}=\frac{N_1}{D_1}\quad I_2 = \frac{\mathbf{x}_1^\top\mathbf{C}_2\mathbf{x}_1}{\mathbf{x}_2^\top\mathbf{C}_2\mathbf{x}_2}=\frac{N_2}{D_2}
 \end{equation*}\par
-其形式尚未见于任何文献报道，经过实验发现，其分布比互逆描述子更均匀，且不需要计算两个椭圆的行列式。式中的$\mathbf{x}_1$和$\mathbf{x}_2$是以齐次坐标表示的两个椭圆中心点。其几何意义为：两个圆中心距离与圆各自半径之比，是平面下的射影不变量。
+其形式尚未见于任何文献报道，经过实验发现，其分布比互逆描述子更均匀，且不需要计算两个椭圆的行列式。式中的$\mathbf{x}_1$和$\mathbf{x}_2$是以齐次坐标表示的两个椭圆中心点。其几何意义为：两个圆中心距离与圆各自半径之比，是平面下的射影不变量。不确定度服从以下形式：
+\begin{equation*}
+  u(I_1)=
+\end{equation*}
+同理，可以推导该描述子的不确定度，借助椭圆中心点的不确定度公式\ref{eq:center-uncertainty}，可得：
+\begin{align*}
+  \left\{\begin{aligned}
+    \pdiff{N_1}{A_1}&=x_{01}^2\\
+    \pdiff{N_1}{B_1}&=2x_{01}y_{01}\\
+    \pdiff{N_1}{C_1}&=y_{01}^2\\
+    \pdiff{N_1}{D_1}&=2x_{01}\\
+    \pdiff{N_1}{E_1}&=2y_{01}\\
+    \pdiff{N_1}{F_1}&=1
+  \end{aligned}\right.\quad\left\{\begin{aligned}
+    \pdiff{N_1}{A_2}&=2\pdiff{\mathbf{x}_2^\top}{A_2}\mathbf{C}_1\mathbf{x}_2\\
+    \pdiff{N_1}{B_2}&=2\pdiff{\mathbf{x}_2^\top}{B_2}\mathbf{C}_1\mathbf{x}_2\\
+    \pdiff{N_1}{C_2}&=2\pdiff{\mathbf{x}_2^\top}{C_2}\mathbf{C}_1\mathbf{x}_2\\
+    \pdiff{N_1}{D_2}&=2\pdiff{\mathbf{x}_2^\top}{D_2}\mathbf{C}_1\mathbf{x}_2\\
+    \pdiff{N_1}{E_2}&=2\pdiff{\mathbf{x}_2^\top}{E_2}\mathbf{C}_1\mathbf{x}_2\\
+    \pdiff{N_1}{F_2}&=2\pdiff{\mathbf{x}_2^\top}{F_2}\mathbf{C}_1\mathbf{x}_2
+  \end{aligned}\right.\quad\quad\quad \left\{\begin{aligned}
+    \pdiff{N_2}{A_2}&=x_{02}^2\\
+    \pdiff{N_2}{B_2}&=2x_{02}y_{02}\\
+    \pdiff{N_2}{C_2}&=y_{02}^2\\
+    \pdiff{N_2}{D_2}&=2x_{02}\\
+    \pdiff{N_2}{E_2}&=2y_{02}\\
+    \pdiff{N_2}{F_2}&=1
+  \end{aligned}\right.\quad \left\{\begin{aligned}
+    \pdiff{N_2}{A_1}&=2\pdiff{\mathbf{x}_1^\top}{A_1}\mathbf{C}_2\mathbf{x}_1\\
+    \pdiff{N_2}{B_1}&=2\pdiff{\mathbf{x}_1^\top}{B_1}\mathbf{C}_2\mathbf{x_1}\\
+    \pdiff{N_2}{C_1}&=2\pdiff{\mathbf{x}_1^\top}{C_1}\mathbf{C}_2\mathbf{x_1}\\
+    \pdiff{N_2}{D_1}&=2\pdiff{\mathbf{x}_1^\top}{D_1}\mathbf{C}_2\mathbf{x_1}\\
+    \pdiff{N_2}{E_1}&=2\pdiff{\mathbf{x}_1^\top}{E_1}\mathbf{C}_2\mathbf{x_1}\\
+    \pdiff{N_2}{F_1}&=2\pdiff{\mathbf{x}_1^\top}{F_1}\mathbf{C}_2\mathbf{x_1}
+  \end{aligned}\right.
+\end{align*}\par
+同理，可以计算分母部分的偏导数：
+\begin{align*}
+  \left\{\begin{aligned}
+    \pdiff{D_1}{A_1}&=x_{01}^2+2\pdiff{\mathbf{x}_1^\top}{A_1}\mathbf{C}_1\mathbf{x}_1\\
+    \pdiff{D_1}{B_1}&=2x_{01}y_{01}+2\pdiff{\mathbf{x}_1^\top}{B_1}\mathbf{C}_1\mathbf{x}_1\\
+    \pdiff{D_1}{C_1}&=y_{01}^2+2\pdiff{\mathbf{x}_1^\top}{C_1}\mathbf{C}_1\mathbf{x}_1\\
+    \pdiff{D_1}{D_1}&=2x_{01}+2\pdiff{\mathbf{x}_1^\top}{D_1}\mathbf{C}_1\mathbf{x}_1\\
+    \pdiff{D_1}{E_1}&=2y_{01}+2\pdiff{\mathbf{x}_1^\top}{E_1}\mathbf{C}_1\mathbf{x}_1\\
+    \pdiff{D_1}{F_1}&=1+2\pdiff{\mathbf{x}_1^\top}{F_1}\mathbf{C}_1\mathbf{x}_1
+  \end{aligned}\right.\quad \left\{\begin{aligned}
+    \pdiff{D_1}{A_2}&=x_{02}^2+2\pdiff{\mathbf{x}_2^\top}{A_2}\mathbf{C}_2\mathbf{x}_2\\
+    \pdiff{D_1}{B_2}&=2x_{02}y_{02}+2\pdiff{\mathbf{x}_2^\top}{B_2}\mathbf{C}_2\mathbf{x}_2\\
+    \pdiff{D_1}{C_2}&=y_{02}^2+2\pdiff{\mathbf{x}_2^\top}{C_2}\mathbf{C}_2\mathbf{x}_2\\
+    \pdiff{D_1}{D_2}&=2x_{02}+2\pdiff{\mathbf{x}_2^\top}{D_2}\mathbf{C}_2\mathbf{x}_2\\
+    \pdiff{D_1}{E_2}&=2y_{02}+2\pdiff{\mathbf{x}_2^\top}{E_2}\mathbf{C}_2\mathbf{x}_2\\
+    \pdiff{D_1}{F_2}&=1+2\pdiff{\mathbf{x}_2^\top}{F_2}\mathbf{C}_2\mathbf{x}_2
+  \end{aligned}\right.
+\end{align*}\par
+形式非常美观，可以直接代入公式\ref{eq:center-uncertainty}直接计算不确定度。
 \newpage
 \printbibliography[heading=bibliography,title=参考文献]
 \end{document}
