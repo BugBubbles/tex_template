@@ -1,0 +1,67 @@
+\documentclass{article}
+%基于北京航空航天大学仪器科学与光电工程学院实验报告及课程报告排版得来，类似于毕业论文排版格式
+%后续将更新毕业论文排版格式
+\usepackage{graphicx,float}%使用图的宏包，使用图的浮动体宏包，引入参数H使图像紧跟当前文字
+\usepackage{caption} %使用图表标题的宏包
+\usepackage[colorlinks=true,pdfstartview=FitH,%
+linkcolor=black,anchorcolor=violet,citecolor=magenta]{hyperref}%加载hyperref宏包，使用超链接
+\usepackage{setspace}%用于设置行间距列间距等命令的宏包
+\usepackage{array}%设置列表高度宽度的宏包
+\usepackage{zhnumber}%使用中文数字编号的宏包
+\usepackage{titlesec,titletoc}%使用标题自定义形式的宏包和使用目录自定义形式的宏包
+\usepackage{siunitx}%物理学单位宏包
+\usepackage{tabularx}%让表格宽度等于页面宽度
+\usepackage{makecell}%单个表格单元调整的宏包
+\usepackage{subfigure} %%使用子图的宏包
+\usepackage{dirtree}
+\usepackage[backend=biber,%nature,%%加载biblatex宏包，使用参考文献
+gbnamefmt=quanpin,%将文献作者姓氏区分大小写
+bibstyle=gb7714-2005,%加载参考文献样式表
+maxbibnames=3,
+%nature,%%加载biblatex宏包，使用参考文献
+citestyle=gb7714-2005,%加载引注样式
+%backref=false,%不显示引用文献的页码
+gblocal=gb7714-2005,%使中英文献各自输入中英文的“和”与“等”
+url=false,%注意，report类型文档类下，url和报告时间是必须的
+doi=false,%不显示网址和doi
+gbpunctin=false,%不显示文献中的//析出符号
+gbmedium=false,%不显示OL符号
+mergedate=none
+]{biblatex}%标注(引用)样式citestyle，著录样式bibstyle都采用gb7714-2015样式
+% \usepackage{pgfplots}%类似tikz的一个画图库，主要画统计图
+\usepackage{../customStyle}
+\addbibresource[location=local]{bibliography.bib}
+\graphicspath{{./fig}}
+
+% \fancyhf{} 
+% % 页眉页脚设置
+% \lhead{公式推导部分}
+% \chead{陨石坑识别}
+% \rhead{\today}
+% \cfoot{\thepage}
+% \rfoot{}
+% \lfoot{}
+% 加入页眉
+% \pagestyle{fancy}
+% 表格行间距调整为1.5
+% \renewcommand{\arraystretch}{1.5}
+
+\begin{document}
+\title{构建陨石坑数据库}
+论述的重点：小型、高精度陨石坑，用于着陆地区的足够精度的陨石坑数据集。
+\section{相关工作}
+\subsection{人工标注方法}
+在特定的遥感图像上，使用手工设计的特征能够最切合当前数据分布、取得最全面的标注结果。Head\cite{headGlobalDistributionLarge2010}等人利用CraterTools\cite{kneisslMapprojectionindependentCraterSizefrequency2011}工具和LOLA遥感图像，实现了对月球20km直径以上陨石坑的全部标注，共计标注陨石坑5185个，陨石坑最小尺寸可达20km，是陨石坑检测研究的基础数据集。Robbins\cite{robbinsNewGlobalDatabase2019}使用ArcGIS、Igor Pro软件生成全月±60°纬度范围的陨石坑标注，并人工核验标注结果，得到了以圆描述的陨石坑参数和以椭圆描述的陨石坑参数，以及对应的测量不确定度，目录内陨石坑总数达到1296796，最小尺寸可达1km。该目录中收录了一部分与陨石坑具有相似视觉特征的地形凹陷，该数据库是当前使用率最高的数据库之一。\par
+基于人工标注的方法将因标注专家的主观原因产生偏差，并不能全面反映真实陨石坑分布特性。通过设计的陨石坑描述符，从图像中获取最接近描述符的特征区域，完成对遥感图像或DEM的陨石坑标注是另一种常用的方法。Urbach\cite{urbachAutomaticDetectionSubkm2009}于2009年提出利用陨石坑亮面和暗面边缘一致性的形状描述关系标注陨石坑。通过将遥感图像取反，作背景去除、能量滤波、面积滤波、亮面-阴影滤波和匹配后，使用预先训练的决策树算法判定亮暗组合图像是否为陨石坑，在测试集上取得了约77.34\%的精确率和67.7\%的召回率，检测陨石坑最小尺寸可达1km。由于该算法没有后端处理陨石坑，因此存在形状不规则的错误检测结果。Maass\cite{maassEdgefreeScalePose2011,maassRobustApproximationImage2016}等人在Urbach[66]基础上使用一系列阈值分割图像，求出其中能够被稳定分割的阈值序列，然后根据陨石坑亮面与暗面的质心测度关系求出最优分割RoI，使用该RoI的边缘和Monto-Carle采样五个点拟合边缘的椭圆轮廓，取各次采样点拟合参数值的中位数为最优陨石坑椭圆边缘参数。该检测算法能够应对在射影变换和光照变换对拍摄所得陨石坑图像的不利影响，且已经通过欧洲航天局研发的机器人视觉导航测试台（Testbed for Robotic Optical Navigation, TRON）仿真测试。Bandeira\cite{bandeiraDetectionSubkilometerCraters2012}等人在此基础上进一步改进，使用AdaBoost算法筛选出候选区域并去除其中小面积的陨石坑，第二步使用预训练的陨石坑分类器输出置信概率，选取较高置信概率的预测陨石坑作为检测结果。在火星Nanedi Valles附近手工标注的遥感陨石坑数据集上，能够取得72\%的精确率和81\%的召回率。
+\subsection{基于学习的标注方法}
+机器学习提供了更强大的泛化能力，能够适合不同标注场景。结合机器学习分类器的标注算法能够排除错误陨石坑，有助于提高陨石坑检测精确率。利用小波变换特征或人工设计陨石坑特征的基础上，获取图像中可能存在的陨石坑位置并使用基于学习的方法完成分类，能够更好适应遥感数据分布特性，增强标注算法的泛化能力。\par
+Emami\cite{emamiCraterDetectionUsing2019}等人基于无监督思想设计了两步标注算法完成对月球陨石坑的标注。算法第一步使用四种方式，即凸包检测、霍夫变换、亮暗描述检测和兴趣点检测，从输入图像中取得候选陨石坑；第二步使用预训练的AlexNet分类器网络从候选陨石坑图像进一步筛选陨石坑，在NASA提供的遥感正射图像数据集上可取得99.61\%的回调率和97.9\%的准确率。Wang\cite{wangImprovedGlobalCatalog2021}等人利用方向梯度直方图描述子和支持向量机（Support Vector Machine, SVM）分类算法构建全月±60°范围内陨石坑目录。搜索全月范围梯度特征以生成候选陨石坑，经分类后得到标注方框。从方框中心出发每隔45°角，沿径向计算在检测框±10\%半径范围内的最高点，以该最高点作为真实的陨石坑边缘，然后将8个修正后的边缘点用最小二乘法拟合为圆，以此构建陨石坑目录。对输入的DEM作金字塔分辨率变换，逐层产生不同尺度的陨石坑标注结果，累计数量达到1319373，其中陨石坑直径均大于1km。\par
+基于遥感图像的描述子能够较好地提取陨石坑特征，但是该方法要求用于检测的图像必须拥有可辨识的图像特征，对于不显著、边缘不清晰的陨石坑则容易产生错误结果。因此，有学者研究基于地形DEM的陨石坑检测算法。Di\cite{diMachineLearningApproach2014}等人利用火星DEM数据，设计了一种基于Haar小波的陨石坑检测算法，使用标注数据分别训练Haar小波分类器、尺度Haar小波分类器和低通特征分类器，在推理时，对每一张输入的图像分别作三种小波特征提取和分类，根据确认的分类结果将候选陨石坑DEM子块作形态学闭操作和细化操作，从而得到估计的陨石坑边缘。本方法在测试数据集上取得了68\%的检测精确率和76\%的检测召回率。Wang\cite{wangActiveMachineLearning2019}等人在此基础上将遥感图像与DEM配准后，产生训练数据集，预训练Haar小波特征分类器，经AdaBoost提升后连续检测得到的陨石坑候选样本。此时将配准的DEM选取边缘点，根据其高度关系和边缘连续关系判定候选样本是否为陨石坑，将通过判定的陨石坑输出为检测结果。该方法在火星Martian DEM数据集上取得了94.01\%的精确率和84.18\%的召回率。Wang\cite{wangNovelApproachMultiscale2022}等人在此基础上增加了假设生成和假设检验环节，使用分辨率金字塔适应不同陨石坑尺度，用孤立森林筛选错误检测的陨石坑，最终可取得97.65\%的精确率和93.26\%的召回率。
+\subsection{小结}
+基于传统手工设计描述子的标注算法能够在特定的遥感数据取得较好的标注结果，但是由于模型设计的局限性，并不能适用于任意场景下遥感数据。由机器学习改进的自动标注手段可稳健地处理边缘退化的、不符合光照模型的陨石坑，实现标注程序的泛化性能。当前陨石坑标注算法的研究，主要集中于使用机器学习或深度学习方式实现自动标注。
+\section{构建方法}
+\section{数据库验证}
+验证方法
+\newpage
+\printbibliography[heading=bibliography,title=参考文献]
+\end{document}
