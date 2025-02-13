@@ -1,10 +1,12 @@
 \section{Experiment and Discussion}
 \label{sec:experiment and discussion}
 \subsection{数据集}
-\textbf{CraterDANet}：1）由Yang\cite{yangCraterDANetConvolutionalNeural2022}等人制作，依据NASA的LRO项目发布0.5m/pixel高分辨率的月球NAC图像，覆盖的纬度范围为45°S至46°S、经度范围为176.4°E至178.8°E，共计含有22张800×800分辨率图像，标注文件中忽略了直径小于8个像素的陨石坑，标注陨石坑总数接近20000个。
-\par\textbf{DACD}：
+\textbf{CraterDANet}：1）由Yang\cite{yangCraterDANetConvolutionalNeural2022}等人制作，依据NASA的LRO项目发布0.5m/pixel高分辨率的月球NAC图像，覆盖的纬度范围为45°S至46°S、经度范围为176.4°E至178.8°E，共计含有22张800×800分辨率的标注图像对，在标注文件中忽略了直径小于8个像素的陨石坑，标注陨石坑总数接近20000个。
+\par\textbf{LRONAC}：由Fairweather\cite{fairweatherAutomaticMappingSmall2022}等人制作，依据NASA的LRO项目发布的16张高分辨率（分辨率从0.25m/pixel至2m/pixel不等）NAC图像经降采样后裁剪至416$\times$416分辨率而得，其中14张来自阿波罗14号着陆点区域，2张来自其他区域。去除直径小于10像素的陨石坑标注，数据集共计含有43402个陨石坑，多数直径小于1km。数据集总共含有248个标注图像对。
 \par\textbf{MDCD}：由Yang\cite{yangHighresolutionFeaturePyramid2022}等人制作，含有500张256m/pixel低分辨率火星WAC红外成像图像，覆盖火星全球，即纬度从90°S至90°N、经度范围为180°W至180°E，每张图像裁剪为729×729大小，共计含有12000个陨石坑，单个陨石坑直径大小从6像素至250像素不等。
-\par\textbf{小陨石坑数据集}：由Liu\cite{liuIdentificationLunarCraters2024}、Robbins\cite{robbinsNewGlobalDatabase2019}和Bo\cite{boCatalogueMeterscaleImpact2022}等人提供的陨石坑目录，按照Liu\cite{liuIdentificationLunarCraters2024}提供的圆形NMS去除重叠陨石坑得到融合目录，包含直径5m至500m范围内的中小型陨石坑，覆盖纬度范围为43.090°N至43.022°N，经度范围为52.021°W至52.086°W。将0.5m/pixel高分辨率NAC图像以50\%重叠率滑窗按300×300、500×500大小裁剪，根据球坐标变换和正射投影将目录陨石坑以边界框形式存储为标注文件，去除标注陨石坑个数少于10个的标注文件与对应图像，共计得到74个标注图像对。
+\par\textbf{小陨石坑数据集}：由Liu\cite{liuIdentificationLunarCraters2024}、Robbins\cite{robbinsNewGlobalDatabase2019}和Bo\cite{boCatalogueMeterscaleImpact2022}等人提供的陨石坑目录，按照Liu\cite{liuIdentificationLunarCraters2024}提供的圆形NMS去除重叠陨石坑得到融合目录，包含直径5m至500m范围内的中小型陨石坑，覆盖纬度范围为43.090°N至43.022°N，经度范围为52.021°W至52.086°W。将0.5m/pixel高分辨率NAC图像以50\%重叠率滑窗按300×300、500×500大小裁剪，根据球坐标变换和正射投影将目录陨石坑以边界框形式存储为标注文件，去除标注陨石坑个数少于10个的标注文件与对应图像，共计得到74个标注图像对。\par
+完整的训练、验证数据集由CraterDANet和LRONAC数据集按比例混合而成，同时为保证检测模型对小尺寸陨石坑的敏感性，将原始数据集中单组标注文件和图像按300$\times$300$\times$300的滑窗和50\%重叠率进一步分割为小图块，去除在图块边缘区域的不完成陨石坑标注数据，保证单幅图像上的陨石坑个数不多于50个。训练集和验证集的比例为9:1，测试集为小陨石坑数据集。
 \subsection{训练策略}
+本文沿用Co-DETR\cite{zongDETRsCollaborativeHybrid2023}论文中提到表现最佳的DINO-Deformable-DETR模型，在一对一解码器分支上加入噪声以增加解码器的监督训练强度。训练图像均统一缩放至640$\times$640分辨率，使用随机放缩、裁剪和翻转作为数据增强，选取pytorch发布的预训练ResNet50权重作为backbone初始权重。设置2个协作分支，分别对应Faster RCNN\cite{renFasterRCNNRealtime2015}的和ATSS\cite{zhangBridgingGapAnchorbased2020}的分配方法产生协作正样本。初始学习率为$2\times10^{-4}$，优化器选为AdamW，权重衰减系数为$10^{-4}$，学习率衰减系数为0.1，每隔1个epoch衰减一次，训练总共持续12个epoch。训练过程中，每个epoch结束后，使用验证集计算模型的mAP值，选取mAP值最高的模型作为最终模型。
 \subsection{检测结果}
 \subsection{检验结果}
