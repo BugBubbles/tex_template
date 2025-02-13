@@ -1,0 +1,10 @@
+\section{Experiment and Discussion}
+\label{sec:experiment and discussion}
+\subsection{数据集}
+\textbf{CraterDANet}：1）由Yang\cite{yangCraterDANetConvolutionalNeural2022}等人制作，依据NASA的LRO项目发布0.5m/pixel高分辨率的月球NAC图像，覆盖的纬度范围为45°S至46°S、经度范围为176.4°E至178.8°E，共计含有22张800×800分辨率图像，标注文件中忽略了直径小于8个像素的陨石坑，标注陨石坑总数接近20000个。
+\par\textbf{DACD}：
+\par\textbf{MDCD}：由Yang\cite{yangHighresolutionFeaturePyramid2022}等人制作，含有500张256m/pixel低分辨率火星WAC红外成像图像，覆盖火星全球，即纬度从90°S至90°N、经度范围为180°W至180°E，每张图像裁剪为729×729大小，共计含有12000个陨石坑，单个陨石坑直径大小从6像素至250像素不等。
+\par\textbf{小陨石坑数据集}：由Liu\cite{liuIdentificationLunarCraters2024}、Robbins\cite{robbinsNewGlobalDatabase2019}和Bo\cite{boCatalogueMeterscaleImpact2022}等人提供的陨石坑目录，按照Liu\cite{liuIdentificationLunarCraters2024}提供的圆形NMS去除重叠陨石坑得到融合目录，包含直径5m至500m范围内的中小型陨石坑，覆盖纬度范围为43.090°N至43.022°N，经度范围为52.021°W至52.086°W。将0.5m/pixel高分辨率NAC图像以50\%重叠率滑窗按300×300、500×500大小裁剪，根据球坐标变换和正射投影将目录陨石坑以边界框形式存储为标注文件，去除标注陨石坑个数少于10个的标注文件与对应图像，共计得到74个标注图像对。
+\subsection{训练策略}
+\subsection{检测结果}
+\subsection{检验结果}

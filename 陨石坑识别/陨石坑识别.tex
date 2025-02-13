@@ -200,7 +200,7 @@ Hanak描述子仅是仿射不变量，因此不能用于着陆过程。Park\cite
   \caption{Park描述子示意图}
   \label{fig:Park}
 \end{figure}\par
-其定义为利用六个交点计算的六组共30个不变量，分别按照以下形式计算：
+其定义为利用六个交点计算的六组共30个不变量，按陨石坑的直径从大到小，分别为A、B和C，按照以下形式计算：
 \begin{align*}
   I_{A_b}&=G(A_c,B_a,B_b,C_a,C_b)\\
   I_{A_c}&=G(A_b,B_a,B_c,C_a,C_b)\\
@@ -208,12 +208,12 @@ Hanak描述子仅是仿射不变量，因此不能用于着陆过程。Park\cite
   I_{B_c}&=G(A_a,A_c,B_a,C_a,C_b)\\
   I_{C_a}&=G(A_a,A_c,B_a,B_c,C_b)\\
   I_{C_b}&=G(A_a,A_c,B_a,B_c,C_a)\\
-  G(x_1,x_2,x_3,x_4,x_5)&=\left[J(\mu),J(\nu),J\left(\frac{\mu}{\nu}\right),J\left(\frac{\mu-1}{\nu-1}\right),J\left(\frac{\mu(\nu-1)}{\nu(\mu-1)}\right)\right]\\
+  G(x_1,x_2,x_3,x_4,x_5)&=\left[J(\mu),J(\nu),J\left(\frac{\mu}{\nu}\right),J\left(\frac{\nu-1}{\mu-1}\right),J\left(\frac{\mu(\nu-1)}{\nu(\mu-1)}\right)\right]\\
   \mu& = \frac{\triangle x_1x_2x_4\triangle x_1x_3x_5}{\triangle x_1x_3x_4\triangle x_1x_2x_5}\\
   \nu&=\frac{\triangle x_2x_1x_4\triangle x_2x_3x_5}{\triangle x_2x_3x_4\triangle x_2x_1x_5}\\
-  J(x)&=\frac{x^6-3x^5+3x^4-x^3+3x^2-3x+1}{2x^6-6x^5+9x^4-8x^3+9x^2-6x+2}
+  J(x)&=\frac{2x^6-6x^5+9x^4-8x^3+9x^2-6x+2}{x^6-3x^5+3x^4-x^3+3x^2-3x+1}
 \end{align*}\par
-关于从图像中确定交点，可利用特征值分解。首先，可根据三个陨石坑中心点构造出三角形三边，以边$BC$和对应的两个顶点$B$和$C$为例：
+实验中表明，$J(x)$函数将全部不变量拉平了，并不利于描述，因此识别实验中取消$J(x)$部分，且$\mu$和$\nu$的数量级远远大于其他项，因此\textbr{只使用}$\mu$和$\nu$计算即可。关于从图像中确定交点，可利用特征值分解。可根据三个陨石坑中心点构造出三角形三边，以边$BC$和对应的两个顶点$B$和$C$为例：
 \begin{equation*}
   \left\{
   \begin{aligned}
