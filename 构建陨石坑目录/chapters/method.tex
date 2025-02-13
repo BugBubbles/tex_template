@@ -4,6 +4,81 @@
 \subsection{预处理}
 用于构建陨石坑目录的数据包括遥感光学图像与遥感DEM，首先需要配准。这里使用的遥感光学图像来自于LROC项目提供的NAC\_ROI\_CHANGE5\_LOA\_E432N3091.IMG\footnote{ 下载链接见于https://pds.lroc.asu.edu/data/LRO-L-LROC-5-RDR-V1.0/LROLRC\_2001/DATA/BDR/NAC\_ROI/CHANGE5\_LOA。}，使用的遥感DEM数据来自于Qian\cite{qianCopernicanaged200Ma2021}等人提供的CE5\_NAC DEM\footnote{下载链接见于https://zenodo.org/records/5532994。}和LROC项目提供的NAC\_DTM\_CHANGE501.tif\footnote{ 下载链接见于https://wms.lroc.asu.edu/lroc/view\_rdr\_product/NAC\_DTM\_CHANGE501}，将两个地形数据合并后与光学图像配准，采用相同的等距圆柱投影方式。由于等距圆柱投影在远离标准纬线位置处产生较大失真，根据嫦娥五号着陆点位置和NAC\_ROI\_CHANGE5\_LOA\_E432N3091.IMG文件提供的投影方式，将等距圆柱投影标准纬线移动至43.8°N处，将中央经线移动到51°W处，使用最近邻内插将DEM与遥感光学图像像素对齐，制成两幅分辨率为1.2m/pixel的区域地图和区域DEM，总计分辨率达到5298×7515。为检测更多的小尺度陨石坑，在制作推理数据集时，选取300×300、500×500和1000×1000三种图像分辨率层次，按50\%重叠率的滑动窗分割区域地图和区域DEM制成推理图像集。
 \subsection{协作分支}
-\subsection{去噪训练}
+极度不平衡的正负查询比例，使得基于DETR框架检测模型在训练过程中，有效的一一对应匹配梯度难以回传至深层网络，即Encoder上，导致Encoder层内的注意力模块难以被正确监督学习，降低了其检测性能。Co-DETR\cite{zongDETRsCollaborativeHybrid2023}通过引入大量的协作分支，在单个协作分支上使用随机选定的边界框分配方式，为每一个ground truth边界框分配多个协作框，形成类似于锚点机制的边界框分配方式，极大丰富了正查询样本的占比，从而保证正负查询比例协调。Co-DETR仅使用了最浅层的特征图，即最粗糙的特征图，经过多次降采样和卷积运算后，按照simple feature pyramids\cite{liExploringPlainVision2022}的构成方法产生特征金字塔，作为其协作分支的输入。协作分支各自的损失函数定义为：
+\begin{equation}
+  \mathcal{L}_\text{co}(y,\hat{y}) = \mathcal{L}_i(c^\text{pos}_i,\hat{c}_i^{pos})+\mathcal{L}_i(c^\text{neg}_i, \hat{c}_i^\text{neg})
+\end{equation}\par
+其中，$y=(c,\mathbf{b})=(c,(x,y,w,h))\in\mathbb{R}\times\mathbb{R}^{4}$为ground truth，包括了标签值与边界框参数，$\hat{y}$为对应预测值，$c$为GT类别，$\hat{c}$为预测类别，$\mathbf{b}$为GT边界框，$\mathbf{\hat{b}}$为预测边界框，上标pos和neg分别表示第i个分配方式决定下的正负样本。协作分支的总损失函数定义为：
+\begin{equation}
+  \mathcal{L}_\text{co} = \sum_{i=1}^{N}\mathcal{L}_i(y,\hat{y})
+  \label{eq:co-loss}
+\end{equation}\par
+其中，$N$为协作分支的数量。实际上，不仅是分配的正样本标签，正样本的边界框坐标回归也应当参与至协作分支的损失函数中，以进一步增强协作分支监督学习对Encoder的作用。这里选用简单的Smooth L1 loss作为边界框回归损失函数，将式\ref{eq:co-loss}改写为：
+\begin{equation}
+  \mathcal{L}_\text{co} = \sum_{i=1}^{N}\left[\mathcal{L}_i(c^\text{pos}_i,\hat{c}_i^{pos})+\mathcal{L}_i(c^\text{neg}_i, \hat{c}_i^\text{neg})+\lambda\mathcal{L}_{\text{box},i}(\mathbf{b}^\text{pos}_i,\mathbf{\hat{b}}_i^\text{pos})\right]
+  \label{eq:co-loss-reg}
+\end{equation}\par
 \subsection{小尺度损失函数}
+基于DETR框架的检测模型，其训练的损失函数通常由标签损失、边界框回归损失和IoU损失构成，如下式：
+\begin{equation}
+    \mathcal{L}(y,\hat{y}) = \lambda_{\text{cls}}\mathcal{L}_{\text{cls}}(c,\hat{c}) +  \lambda_{\text{box}}\mathcal{L}_{\text{box}}(\mathbf{b},\mathbf{\hat{b}}) +  \lambda_{\text{iou}}\mathcal{L}_{\text{iou}}(\mathbf{b},\mathbf{\hat{b}})
+  \label{eq:detr-loss}
+\end{equation}\par
+其中，$\lambda_{\text{cls}}$、$\lambda_{\text{box}}$和$\lambda_{\text{iou}}$为损失权重。与DINO\cite{zhangDINODETRImproved2023}和Deformable DETR\cite{zhuDeformableDETRDeformable2021}中使用的损失函数相同，这里的标签损失$\mathcal{L}_\text{cls}$仍然定义为Focal loss\cite{linFocalLossDense2017}。边界框回归损失定义为Smooth L1 loss。为了增强模型对小尺度陨石坑的检测能力，参照WIoUv3\cite{tongWiseIoUBoundingBox2023}的设计，定义：
+\begin{align}
+  \mathcal{L}_\text{WIoU}(\mathbf{b},\mathbf{\hat{b}}) &=\frac{\alpha}{\delta\cdot\beta^{\alpha-\delta}}\exp\left[\frac{(x-\hat{x})^2+(y-\hat{y})^2}{(W_g^2+H_g^2)^*}\right]\mathcal{L}_\text{IoU}(\mathbf{b},\mathbf{\hat{b}})\\
+  \mathcal{L}_\text{IoU}(\mathbf{b},\mathbf{\hat{b}}) &=1-\frac{\mathbf{b}\cap\mathbf{\hat{b}}}{\mathbf{b}\cup\mathbf{\hat{b}}}\\
+  \alpha(\mathbf{b},\mathbf{\hat{b}})&= \frac{\mathcal{L}_\text{IoU}(\mathbf{b},\mathbf{\hat{b}})}{\mathcal{L}^m_\text{IoU}(\mathbf{b},\mathbf{\hat{b}})}
+\end{align}\par
+式中，右上角的$*$号表示该项在求导运算中视为常量，即从计算图中脱离。$\mathcal{L}^m_\text{IoU}$表示由动量系数$m$控制的指数平滑项$\mathcal{L}_\text{IoU}$，$\beta$和$\delta$是两个超参数，用来抑制低质量的标注框产生的有害梯度。$W_g$和$H_g$分别表示参与计算IoU的预测框与GT框的最小闭包矩形的宽度与高度。$\mathcal{L}_\text{WIoU}$就是计算所得的WIoUv3损失。本文为了进一步增加在小尺度陨石坑上的检测能力，添加与尺度负相关的惩罚项，即尺度越小，相应的损失函数值越大，以增强模型对小尺度陨石坑的响应：
+\begin{equation}
+  \mathcal{L}_\text{scale}(\mathbf{b},\mathbf{\hat{b}}) = \frac{(x-\hat{x})^2+(y-\hat{y})^2}{\hat{w}^2+\hat{h}^2}+\frac{(\hat{w}-w)^2+(\hat{h}-h)^2}{\hat{w}^2+\hat{h}^2}
+\end{equation}\par
+由此，最终的小尺度IoU损失函数定义为：
+\begin{equation}
+  \mathcal{L}_\text{smallIoU}(\mathbf{b},\mathbf{\hat{b}}) = \mathcal{L}_\text{WIoU}(\mathbf{b},\mathbf{\hat{b}})+\mathcal{L}_\text{scale}(\mathbf{b},\mathbf{\hat{b}})
+\end{equation}
 \subsection{DEM-NMS}
+用于训练的数据集中仅为遥感光学图像，不含有地形信息，而检测所得候选陨石坑边界框与真实陨石坑的边界存在差距，因此需要加以检验才能最终确定陨石坑位置。此外，不同地图块间存在的重叠位置也将产生重复检测结果，应当使用非极大抑制排除重复结果。本文将这两个过程合并，在NMS算法中增加地形信息对检验相同陨石坑的影响，以提高陨石坑检验的准确性，受Softer NMS\cite{heSofterNMSRethinkingBounding2018}和Adaptive NMS\cite{liuAdaptiveNMSRefining2019}的加权融合思路启发，可通过用DEM提供地形数据代替基于学习得到的权重，避免了引入新的回归分支。
+
+DEM-NMS算法的流程如下：\par
+
+\begin{algorithm}[H]
+  \caption{DEM-NMS}
+  \KwIn{检测模型输出的候选陨石坑边界框集合$\mathcal{B}$，对应的置信度集合$\mathcal{C}$，地形DEM}
+  \KwOut{最终确定的陨石坑边界框集合$\mathcal{B}'$}
+  \For{$\mathbf{b}_i\in\mathcal{B}$}{
+    计算$\mathbf{b}_i$的中心点坐标$(x_i,y_i)$\;
+    计算$\mathbf{b}_i$的面积$S_i$\;
+    计算$\mathbf{b}_i$的高度$h_i$和宽度$w_i$\;
+    计算$\mathbf{b}_i$的置信度$c_i$\;
+    计算$\mathbf{b}_i$的高度和宽度的比值$r_i=\frac{h_i}{w_i}$\;
+    计算$\mathbf{b}_i$的面积与置信度的乘积$S_i\times c_i$\;
+    计算$\mathbf{b}_i$的高度和宽度的比值与置信度的乘积$r_i\times c_i$\;
+  }
+  对$\mathcal{B}$按照$S_i\times c_i$降序排列，得到$\mathcal{B}_S$\;
+  对$\mathcal{B}$按照$r_i\times c_i$降序排列，得到$\mathcal{B}_R$\;
+  \For{$\mathbf{b}_i\in\mathcal{B}_S$}{
+    \If{$\mathbf{b}_i$未被处理}{
+      \For{$\mathbf{b}_j\in\mathcal{B}_R$}{
+        \If{$\mathbf{b}_j$未被处理}{
+          计算$\mathbf{b}_i$与$\mathbf{b}_j$的IoU\;
+          \If{$\mathbf{b}_i$与$\mathbf{b}_j$的IoU大于阈值}{
+            计算$\mathbf{b}_i$与$\mathbf{b}_j$的DEM差值\;
+            \If{$\mathbf{b}_i$的DEM差值小于$\mathbf{b}_j$的DEM差值}{
+              标记$\mathbf{b}_j$为已处理\;
+            }
+            \Else{
+              标记$\mathbf{b}_i$为已处理\;
+            }
+          }
+        }
+      }
+    }
+  }
+  \For{$\mathbf{b}_i\in\mathcal{B}$}{
+    \If{$\mathbf{b}_i$未被处理}{
+      将$\mathbf{b}_i$加入$\mathcal{B}'$\;
+    }
+  }
+\end{algorithm}
