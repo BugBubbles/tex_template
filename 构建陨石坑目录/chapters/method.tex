@@ -39,46 +39,40 @@
   \mathcal{L}_\text{smallIoU}(\mathbf{b},\mathbf{\hat{b}}) = \mathcal{L}_\text{WIoU}(\mathbf{b},\mathbf{\hat{b}})+\mathcal{L}_\text{scale}(\mathbf{b},\mathbf{\hat{b}})
 \end{equation}
 \subsection{DEM-NMS}
-用于训练的数据集中仅为遥感光学图像，不含有地形信息，而检测所得候选陨石坑边界框与真实陨石坑的边界存在差距，因此需要加以检验才能最终确定陨石坑位置。此外，不同地图块间存在的重叠位置也将产生重复检测结果，应当使用非极大抑制排除重复结果。本文将这两个过程合并，在NMS算法中增加地形信息对检验相同陨石坑的影响，以提高陨石坑检验的准确性，受Softer NMS\cite{heSofterNMSRethinkingBounding2018}和Adaptive NMS\cite{liuAdaptiveNMSRefining2019}的加权融合思路启发，可通过用DEM提供地形数据代替基于学习得到的权重，避免了引入新的回归分支。
-
-DEM-NMS算法的流程如下：\par
-
+用于训练的数据集中仅为遥感光学图像，不含有地形信息，而检测所得候选陨石坑边界框与真实陨石坑的边界存在差距，因此需要检验才能最终确定陨石坑位置。此外，不同地图块间存在的重叠位置也将产生重复检测结果，应当使用非极大抑制排除重复结果。本文将这两个过程合并，在NMS算法中增加地形信息对检验相同陨石坑的影响，以提高陨石坑检验的准确性，受Softer NMS\cite{heSofterNMSRethinkingBounding2018}和Adaptive NMS\cite{liuAdaptiveNMSRefining2019}的加权融合思路启发，可通过用DEM提供地形数据代替基于学习得到的权重，避免了引入新的回归分支。
+\par 根据Liu\cite{liuIdentificationLunarCraters2024}等人描述计算圆形候选框彼此之间的IoU值；根据Wang\cite{wangImprovedGlobalCatalog2021}等人提供的地形修正算法，获取圆形候选框8个径向方向上$\pm20\%$半径范围内的DEM最高点坐标作为边界点（对单个方向径向长度100等分）。DEM-NMS v1版本仅将Liu\cite{liuIdentificationLunarCraters2024}等人提供的圆形IoU和Wang\cite{wangImprovedGlobalCatalog2021}等人提出的地形修正算法简单叠加在一起，在实际使用中，由于小型陨石坑周边最高点往往并不是其真实边缘，以上算法容易产生假边缘。此外，重叠陨石坑在检验时也将由于IoU值过高而被误判为同一陨石坑被抑制， 导致v1版本的DEM-NMS算法产生大量遗漏。这是由于计算IoU未考虑地形高度，而直接从圆形框计算造成的。由于候选陨石坑非常接近真实陨石坑区域，由此可以假设候选陨石坑区域内的最低点所在区域就是真实陨石坑的中心所在区域，v2版本修改IoU计算方式为圆形框内最低点的距离与半径和的比值，即：
+\begin{equation}
+  \mathrm{CircleIoU}_{12}=\left\{\begin{aligned}
+    &0 & \text{if } d_{12}>r_1+r_2\\
+    &1-\frac{d_{12}}{r_1+r_2} & \text{otherwise}
+  \end{aligned}\right.
+  \label{eq:circle-iou}
+\end{equation}
+\par 式中的$r_1,r_2$分别代表两个圆形框的半径，$d_{12}$代表两个圆形框内\textbf{最低点}的距离。受Softer NMS\cite{heSofterNMSRethinkingBounding2018}启发，待抑制的各个陨石坑参数可经加权后合并，保证多个候选框能够产生更精确的边界。定义各个候选框的权重为：
+\begin{equation}
+  w_i = \frac{1/d_i^2}{\sum_{j=1}^{N}1/d_j^2}
+\end{equation}\par
+其中，$d_i$为候选框中心与其最低点的距离。最终的DEM-NMS v2算法流程如下：
 \begin{algorithm}[H]
-  \caption{DEM-NMS}
-  \KwIn{检测模型输出的候选陨石坑边界框集合$\mathcal{B}$，对应的置信度集合$\mathcal{C}$，地形DEM}
-  \KwOut{最终确定的陨石坑边界框集合$\mathcal{B}'$}
-  \For{$\mathbf{b}_i\in\mathcal{B}$}{
-    计算$\mathbf{b}_i$的中心点坐标$(x_i,y_i)$\;
-    计算$\mathbf{b}_i$的面积$S_i$\;
-    计算$\mathbf{b}_i$的高度$h_i$和宽度$w_i$\;
-    计算$\mathbf{b}_i$的置信度$c_i$\;
-    计算$\mathbf{b}_i$的高度和宽度的比值$r_i=\frac{h_i}{w_i}$\;
-    计算$\mathbf{b}_i$的面积与置信度的乘积$S_i\times c_i$\;
-    计算$\mathbf{b}_i$的高度和宽度的比值与置信度的乘积$r_i\times c_i$\;
-  }
-  对$\mathcal{B}$按照$S_i\times c_i$降序排列，得到$\mathcal{B}_S$\;
-  对$\mathcal{B}$按照$r_i\times c_i$降序排列，得到$\mathcal{B}_R$\;
-  \For{$\mathbf{b}_i\in\mathcal{B}_S$}{
-    \If{$\mathbf{b}_i$未被处理}{
-      \For{$\mathbf{b}_j\in\mathcal{B}_R$}{
-        \If{$\mathbf{b}_j$未被处理}{
-          计算$\mathbf{b}_i$与$\mathbf{b}_j$的IoU\;
-          \If{$\mathbf{b}_i$与$\mathbf{b}_j$的IoU大于阈值}{
-            计算$\mathbf{b}_i$与$\mathbf{b}_j$的DEM差值\;
-            \If{$\mathbf{b}_i$的DEM差值小于$\mathbf{b}_j$的DEM差值}{
-              标记$\mathbf{b}_j$为已处理\;
-            }
-            \Else{
-              标记$\mathbf{b}_i$为已处理\;
-            }
-          }
-        }
-      }
-    }
-  }
-  \For{$\mathbf{b}_i\in\mathcal{B}$}{
-    \If{$\mathbf{b}_i$未被处理}{
-      将$\mathbf{b}_i$加入$\mathcal{B}'$\;
-    }
-  }
+  \caption{DEM-NMS v2版本}
+  \label{alg:dem-nms v2}
+  \begin{algorithmic}[1]
+  \Require $B\in\mathbb{R}^{N\times4}$为候选边界框集合，$N_t$为阈值，$S\in\mathbb{R}^N$为候选边界框得分。\\
+  $B=\{b_1,b_2,\ldots,b_n\},S=\{s_1,s_2,\ldots,s_n\}$
+  \State $C \gets \{\}$
+  \State $T \gets \mathrm{Box2Circle}(B)$
+  \State $D \gets \mathrm{getBottom}(T)$ \Comment{获取候选框最低点}
+  \State $T=\{t_1,t_2,\ldots,t_n\}, D=\{d_1,d_2,\ldots,d_n\}$
+  \While{$T \neq \varnothing $}
+    \State $m \gets \mathrm{argmax} S$
+    \State $T \gets T - t_m$
+    \State $D \gets D - d_m$
+    \State $S \gets \mathrm{CircleIoU}(M,T)$ \Comment{计算圆形框IoU}
+    \State $S \gets \exp\left(-S^2/\sigma\right)$ \Comment{Soft NMS}
+    \State $\mathrm{idx} \gets \mathrm{CircleIoU}(M,B)\ge N_t$ 
+    \State $\displaystyle M \gets \frac{\sum_{\mathrm{idx}}b_j/d^2_j}{\sum_{\mathrm{idx}}1/d_j^2}$ \Comment{Softer NMS的加权融合}
+    \State $C \gets C\cup M$
+  \EndWhile \\
+  \Return $C, S$
+  \end{algorithmic}
 \end{algorithm}
