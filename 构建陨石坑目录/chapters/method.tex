@@ -1,8 +1,6 @@
 \section{Method}
 \label{sec:method}
 构建陨石坑目录需要陨石坑检测和检验两大步骤，本章节着重介绍用于目标检测的CO-DINO网络构造原理、训练策略以及用于陨石坑检验的DEM-NMS算法。
-\subsection{预处理}
-用于构建陨石坑目录的数据包括遥感光学图像与遥感DEM，首先需要配准。这里使用的遥感光学图像来自于LROC项目提供的NAC\_ROI\_CHANGE5\_LOA\_E432N3091.IMG\footnote{ 下载链接见于https://pds.lroc.asu.edu/data/LRO-L-LROC-5-RDR-V1.0/LROLRC\_2001/DATA/BDR/NAC\_ROI/CHANGE5\_LOA。}，使用的遥感DEM数据来自于Qian\cite{qianCopernicanaged200Ma2021}等人提供的CE5\_NAC DEM\footnote{下载链接见于https://zenodo.org/records/5532994。}和LROC项目提供的NAC\_DTM\_CHANGE501.tif\footnote{ 下载链接见于https://wms.lroc.asu.edu/lroc/view\_rdr\_product/NAC\_DTM\_CHANGE501}，将两个地形数据合并后与光学图像配准，采用相同的等距圆柱投影方式。由于等距圆柱投影在远离标准纬线位置处产生较大失真，根据嫦娥五号着陆点位置和NAC\_ROI\_CHANGE5\_LOA\_E432N3091.IMG文件提供的投影方式，将等距圆柱投影标准纬线移动至43.8°N处，将中央经线移动到51°W处，使用最近邻内插将DEM与遥感光学图像像素对齐，制成两幅分辨率为1.2m/pixel的区域地图和区域DEM，总计分辨率达到5298×7515。为检测更多的小尺度陨石坑，在制作推理数据集时，选取300×300、500×500和1000×1000三种图像分辨率层次，按50\%重叠率的滑动窗分割区域地图和区域DEM制成推理图像集。
 \subsection{协作分支}
 极度不平衡的正负查询比例，使得基于DETR框架检测模型在训练过程中，有效的一一对应匹配梯度难以回传至深层网络，即Encoder上，导致Encoder层内的注意力模块难以被正确监督学习，降低了其检测性能。Co-DETR\cite{zongDETRsCollaborativeHybrid2023}通过引入大量的协作分支，在单个协作分支上使用随机选定的边界框分配方式，为每一个ground truth边界框分配多个协作框，形成类似于锚点机制的边界框分配方式，极大丰富了正查询样本的占比，从而保证正负查询比例协调。Co-DETR仅使用了最浅层的特征图，即最粗糙的特征图，经过多次降采样和卷积运算后，按照simple feature pyramids\cite{liExploringPlainVision2022}的构成方法产生特征金字塔，作为其协作分支的输入。协作分支各自的损失函数定义为：
 \begin{equation}

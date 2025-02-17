@@ -15,29 +15,119 @@
 \subsection{评价指标}
 待评价的模型主要包括检测模型和检验算法，其中检测模型和检验算法均在测试集\ref{sec:small crater dataset}上完成测试。
 \subsubsection{评价检测模型}
-陨石坑检测模型的评价指标一般由精确率、召回率和F1分数组成。定义正样本为与某个ground truth框的IoU值超过设定阈值的全体检测候选框，其余候选框定义为负样本，通常取正样本IoU阈值为50\%。其中精确率（AP）定义为正确检测的正样本占全体正样本的比例，召回率（AR）定义为正确检测的正样本占全体ground truth框的比例，F1分数为精确率和召回率之调和平均数，能够综合反映模型的检测能力，即有：
-\begin{align}
-  \mathrm{AP}&=\frac{TP}{TP+FP}\\
-  \mathrm{AR}&=\frac{TP}{TP+FN}\\
-  \mathrm{F1-score}&=\frac{2AP\cdot AR}{AP+AR}
-\end{align}\par
-式中，TP表示True Positive，FP表示False Positive，FN表示False Negative。精确率反映模型正确检测陨石坑的能力，召回率反映模型对陨石坑的检测灵敏性。
+陨石坑检测模型的评价指标一般由不同IoU阈值的精确率和召回率构成。定义正样本为与某个ground truth框的IoU值超过设定阈值的全体检测候选框，其余候选框定义为负样本，通常取正样本IoU阈值为50\%，同时为排除低置信度的检测结果，取定置信分数阈值为0.8。其中精确率（Precision）定义为正确检测的正样本占全体正样本的比例，召回率（Recall）定义为正确检测的正样本占全体ground truth框的比例。为了排除IoU阈值对模型表现的干扰，以0.1步进值计算检测模型在不同阈值下的精确率和召回率之综合表现，即平均精确率（AP）和平均召回率（AR），即有：
+\begin{equation}
+  \mathrm{P}=\frac{TP}{TP+FP}\qquad\mathrm{R}=\frac{TP}{TP+FN}
+  \label{eq:P and R}
+\end{equation}
+\begin{equation}
+  \mathrm{AP}=\int_R\mathrm{P}(R)\mathrm{d}R\qquad\mathrm{AR}=\frac{1}{N}\sum_n\mathrm{R}_n
+  \label{eq:AP and AR}
+\end{equation}\par
+式中，TP表示True Positive，FP表示False Positive，FN表示False Negative。精确率反映模型正确检测陨石坑的能力，召回率反映模型对陨石坑的检测灵敏性。除此以外，本文还关注小目标检测的能力，因此检测评价指标共包括$P$，$R$，$AP_\mathrm{small}$和$AR_\mathrm{small}$。
 \subsubsection{评价检验算法}
-陨石坑目录是对陨石坑分布、形状的度量，其常用的度量指标包括陨石坑中心点的误差$E_\mathrm{cnt}$、半径误差$E_r$以及IoU误差$E_\mathrm{IoU}$。分别定义为如下：
+陨石坑目录是对陨石坑分布、形状的度量，其常用的度量指标包括陨石坑中心点的误差$E_\mathrm{cnt}$、半径误差$E_r$以及IoU$E_\mathrm{IoU}$\cite{liuIdentificationLunarCraters2024}。取定坐标系为月球固定直角坐标系（Moon Fixed），其原点定义为月球中心，x轴沿月球本初子午线与赤道面之交线，z轴垂直于赤道面指向北极，y轴符合右手系，在该坐标系下分别定义以上三个评价指标为：
 \begin{align}
   E_\mathrm{cnt}&=\sqrt{\frac{1}{N}\sum_i^N\|\mathbf{x}-\hat{\mathbf{x}}\|_2^2}\\
   E_r&=\sqrt{\frac{1}{N}\sum_i^N\|r_i-\hat{r}_i\|_2^2}\\
-  E_\mathrm{IoU}&=\sqrt{\frac{1}{N}\sum_i^N\|1-\mathrm{IoU}_{i\hat{i}}\|_2^2}
+  \mathrm{IoU}&=\sqrt{\frac{1}{N}\sum_i^N\mathrm{IoU}_{i\hat{i}}}
 \end{align}\par
-式中，$\mathbf{x},\hat{\mathbf{x}}$分别代表预测陨石坑的归一化中心坐标和真实陨石坑的归一化中心坐标，$r,\hat{r}$分别代表预测陨石坑和真实陨石坑的归一化半径。最终三个误差值的范围均在0～1以内，误差数值越小，检验算法效果越好。
-\subsection{检测结果}
+式中，$\mathbf{x},\hat{\mathbf{x}}$分别代表预测陨石坑的中心坐标和真实陨石坑的中心坐标，$r,\hat{r}$分别代表预测陨石坑和真实陨石坑的半径，单位均为m。最终三个误差值的范围均在0～1以内，误差数值越小，检验算法效果越好。
+\subsection{目标检测实验}
 \subsubsection{与SOTA模型的对比}
 
-\subsubsection{候选陨石坑目录}
+本文与当前主流的陨石坑检测框架如Faster RCNN、YOLOv7和SSD进行对比，与目标检测主流框架DINO、Co-DINO和RT-DETR进行对比。此外，为了验证本文提出的小目标损失函数的有效性，还与小目标检测领域的DNTR等论文进行对比。
+\par 此外，由于建立陨石坑目录的区域尚未存在为标注文件，应当考察检测模型在零样本条件下的泛化性能，建立零样本测试基准集\cite{boCatalogueMeterscaleImpact2022}上计算其指标$\mathrm{P,R,AP_small}$和$\mathrm{AR_small}$。此外，还与当前目标检测领域的先进模型进行对比，所有模型的backbone均取为ResNet50。训练的迭代次数与评价指标一并列出。
+\begin{table}[H]
+  \begin{center}
+  \caption{在Bo\cite{boCatalogueMeterscaleImpact2022}数据集上的对比实验}
+  \label{tab:detect-comp}
+  \begin{tabular}{ c  c  c  c  c  c c}
+  \toprule
+  模型 & 训练迭代数 & 
+  Precision(\%)$\uparrow$ & Recall(\%)$\uparrow$ & $\mathrm{AP}_\mathrm{small}$(\%)$\uparrow$ & $\mathrm{AR}_\mathrm{small}$(\%)$\uparrow$& $\mathrm{mAP}\uparrow$ \\
+  \hline
+  基于CNN & & & & & & \\
+  Faster-RCNN & 30 & 84.58 & 49.83 & 23.5 & 32.6 & 24.1\\
+  YOLOv7 & 74 & 39.7 & 40.6 & -- & -- & 21.6 \\
+  YOLOv11 & 120 & 81.02 & 19.68 & -- & -- & 31.78\\
+  DiffusionDet &120 & 98.4 & 82.74 & 84.4 & 69.9&61.9  \\
+  SSD & 30 & 91.3 &33.5 &22.6 &35.2&22.1 \\
+  \hline
+  基于Transformer & & & & && \\
+  RT-DETR & 36 & 93.0 & 56.16 & 35.0 & 40.9& 34.4\\
+  Align DETR&30 & 100 & 53.77 & 38.80 & 54.70 & 33.80\\
+  DINO &30 &98.65 &72.61 &42.60 &57.10 &37.10\\
+  Co-DINO &30 &98.67 & 93.04 & 54.90 & 65.60 & 51.11\\
+  Co-DINO$\ddagger$ （ours）& & & & & &\\
+  \hline
+  小目标检测 & & & & & & \\
+  DNTR\cite{liuDeNoisingFPNTransformer2024}& & & & & &  \\
+  \bottomrule 
+  \end{tabular}
+  \end{center}
+\end{table}
+说明，带有$\ddagger$的模型为本文修改小目标损失后的改进版本。
+\par 或许可以在这里加入一个在MDCD数据集上的对比实验（不一定需要零样本测试）
 
-\subsection{检验结果}
-\subsubsection{与其他检验算法对比}
-
-\subsection{消融实验}
 \subsubsection{协作分支的作用}
+
 \subsubsection{小尺度损失的作用}
+
+\subsection{检验算法实验}
+检测所得陨石坑标注，经过坐标系平移变换，可统一至相同的图像坐标系下。此时，重叠区域的陨石坑检测结果应当通过检测算法去除，并与地形信息结合验证，可得到图像坐标系下的陨石坑目录，通过投影逆变换后，可得到月球坐标系下的陨石坑目录。
+\subsubsection{与其他检验算法对比}
+在Bo\cite{boCatalogueMeterscaleImpact2022}数据集上，将本文提出的soft NMS+地形结合检验算法与采用普通NMS算法、普通NMS+地形结合算法作比较，计算其误差值$E_\mathrm{cnt},E_r,E_\mathrm{IoU}$，所得结果一并如下表列出：
+\begin{table}[H]
+  \begin{center}
+  \caption{在Bo\cite{boCatalogueMeterscaleImpact2022}数据集上的对比实验}
+  \label{tab:verify-comp}
+  \begin{tabular}{ c  c  c  c }
+  \toprule
+  算法 & $E_\mathrm{cnt}$ & $E_r$ & $E_\mathrm{IoU}$ \\
+  \hline
+  普通NMS &  & 0.08 & 0.05 \\
+  普通NMS+地形结合 & 0.09 & 0.06 & 0.03 \\
+  soft NMS & 0.07 & 0.05 & 0.02 \\
+  soft NMS+地形结合 & 0.06 & 0.04 & 0.01 \\
+  \bottomrule 
+  \end{tabular}
+  \end{center}
+\end{table}\par
+可以看到，DEM-NMS算法处理后得到的陨石坑目录在中心点、半径和IoU误差上均优于其他算法。
+\subsubsection{讨论}
+\subsection{构建陨石坑目录}
+\subsubsection{嫦娥五号着陆点区域}
+\label{sec:chang_e_5 crater}
+用于构建陨石坑目录的数据包括遥感光学图像与遥感DEM，首先需要配准。这里使用的遥感光学图像来自于LROC\cite{robinsonLunarReconnaissanceOrbiter2010}项目提供的NAC\_ROI\_CHANGE5\_LOA\_E432N3091.IMG\footnote{ 下载链接见于https://pds.lroc.asu.edu/data/LRO-L-LROC-5-RDR-V1.0/LROLRC\_2001/DATA/BDR/NAC\_ROI/CHANGE5\_LOA。}，使用的遥感DEM数据来自于Qian\cite{qianCopernicanaged200Ma2021}等人提供的CE5\_NAC DEM\footnote{下载链接见于https://zenodo.org/records/5532994。}和LROC项目提供的NAC\_DTM\_CHANGE501.tif\footnote{ 下载链接见于https://wms.lroc.asu.edu/lroc/view\_rdr\_product/NAC\_DTM\_CHANGE501}，将两个地形数据合并后与光学图像配准，采用相同的等距圆柱投影方式。由于等距圆柱投影在远离标准纬线位置处产生较大失真，根据嫦娥五号着陆点位置和NAC\_ROI\_CHANGE5\_LOA\_E432N3091.IMG文件提供的投影方式，将等距圆柱投影标准纬线移动至43.8°N处，将中央经线移动到51°W处，使用最近邻内插将DEM与遥感光学图像像素对齐，制成两幅分辨率为1.2m/pixel的区域地图和区域DEM，总计分辨率达到5298×7515。为检测更多的小尺度陨石坑，在制作推理数据集时，选取300×300、500×500和1000×1000三种图像分辨率层次，按50\%重叠率的滑动窗分割区域地图和区域DEM制成推理图像集。\par
+经过DEM-NMS运算后，为了保证较高的召回率，设定其置信分数阈值为0.3，去除得分少于阈值的陨石坑后，总共得到XXXX个陨石坑，列出不同尺度分布下的陨石坑密度和分布情况：
+\begin{table}[H]
+  \begin{center}
+  \caption{嫦娥五号着陆点区域陨石坑尺度及分布密度}
+  \label{tab:chang_e_5 crater}
+  \begin{tabular}{ c  c  c  c}
+  \toprule
+  直径范围 & 数目 & 密度 & 平均深度 \\
+  \hline
+  5m-10m &  &  & \\
+  10-50m &  &  & \\
+  50-100m &  &  & \\
+  >100m &  &  & \\
+  \bottomrule 
+  \end{tabular}
+  \end{center}
+\end{table}\par
+在当前地图下绘制陨石坑的分布图如图所示：
+
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{figures/chang_e_5_crater.png}
+%   \caption{嫦娥五号着陆点区域陨石坑分布图}
+%   \label{fig:chang_e_5 crater}
+% \end{figure}
+
+\subsection{月球南极区域}
+采用与\ref{sec:chang_e_5 crater}节相似的方法构建，这里使用来自于LROC项目提供的月球南极1m/pixel高分辨率极区投影图像\footnote{ 下载链接见于https://pds.lroc.asu.edu/data/LRO-L-LROC-5-RDR-V1.0/LROLRC\_2001/DATA/BDR/NAC\_POLE/NAC\_POLE\_SOUTH。}，由于月球南极地区太阳高度角极低，同一张遥感图像内含有较多阴影暗区，LROC采取将多组不同时间戳取得的遥感光学图像拼接，；使用的遥感DEM数据来自于NASA的LOLA\cite{barkerImprovedLOLAElevation2021}项目提供的LDEM\_875S\_5M\_FLOAT.IMG\footnote{下载链接见于https://imbrium.mit.edu/DATA/LOLA\_GDR/POLAR/FLOAT\_IMG。}，分辨率为5m/pixel。LDEM包含的数据为靠近南极点的87.5$^\circ$S～90$^\circ$S纬度范围，对应的光学图像为NAC\_POLE\_P870S0150.IMG起至NAC\_POLE\_P892S3150.IMG终止共计24张影像，均采用极点位于月球南极点的极区投影方式。南极地区光照较为复杂，LROC将多组来自不同时间戳处获取的遥感光学图像进行拼接，以获取光照相对均匀的拼图。需要注意的是，南极地区存在永久阴影区，这些区域内的陨石坑无法通过光学图像检测，因此本文在构建月球南极地区的陨石坑目录时，将永久阴影区排除在外。
+
+\par 由于DEM数据与遥感光学图像采用的是相同的极区投影方式，由此这里不需要再作配准计算。\par
+生的阈值和经坐标系转换、投影逆运算后，将检验确认得到的全体陨石坑转换至月球坐标系下
