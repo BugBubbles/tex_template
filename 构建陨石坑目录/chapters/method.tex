@@ -30,7 +30,7 @@
 \end{align}\par
 式中，右上角的$*$号表示该项在求导运算中视为常量，即从计算图中脱离。$\mathcal{L}^m_\text{IoU}$表示由动量系数$m$控制的指数平滑项$\mathcal{L}_\text{IoU}$，$\beta$和$\delta$是两个超参数，用来抑制低质量的标注框产生的有害梯度。$W_g$和$H_g$分别表示参与计算IoU的预测框与GT框的最小闭包矩形的宽度与高度。$\mathcal{L}_\text{WIoU}$就是计算所得的WIoUv3损失。本文为了进一步增加在小尺度陨石坑上的检测能力，添加与尺度负相关的惩罚项，即尺度越小，相应的损失函数值越大，以增强模型对小尺度陨石坑的响应：
 \begin{equation}
-  \mathcal{L}_\text{scale}(\mathbf{b},\mathbf{\hat{b}}) = \frac{(x-\hat{x})^2+(y-\hat{y})^2}{\hat{w}^2+\hat{h}^2}+\frac{(\hat{w}-w)^2+(\hat{h}-h)^2}{\hat{w}^2+\hat{h}^2}
+  \mathcal{L}_\text{scale}(\mathbf{b},\mathbf{\hat{b}}) = \frac{(\hat{w}-w)^2+(\hat{h}-h)^2}{W_g^2+H_g^2}
 \end{equation}\par
 由此，最终的小尺度IoU损失函数定义为：
 \begin{equation}

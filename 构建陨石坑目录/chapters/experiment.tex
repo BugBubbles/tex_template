@@ -26,13 +26,13 @@
 \end{equation}\par
 式中，TP表示True Positive，FP表示False Positive，FN表示False Negative。精确率反映模型正确检测陨石坑的能力，召回率反映模型对陨石坑的检测灵敏性。除此以外，本文还关注小目标检测的能力，因此检测评价指标共包括$P$，$R$，$AP_\mathrm{small}$和$AR_\mathrm{small}$。
 \subsubsection{评价检验算法}
-陨石坑目录是对陨石坑分布、形状的度量，其常用的度量指标包括陨石坑中心点的误差$E_\mathrm{cnt}$、半径误差$E_r$以及IoU$E_\mathrm{IoU}$\cite{liuIdentificationLunarCraters2024}。取定坐标系为月球固定直角坐标系（Moon Fixed），其原点定义为月球中心，x轴沿月球本初子午线与赤道面之交线，z轴垂直于赤道面指向北极，y轴符合右手系，在该坐标系下分别定义以上三个评价指标为：
+陨石坑目录是对陨石坑分布、形状的度量，其常用的度量指标包括陨石坑中心点的误差$E_\mathrm{cnt}$、半径误差$E_r$以及IoU$E_\mathrm{IoU}$\cite{liuIdentificationLunarCraters2024}。取定坐标系为月球固定直角坐标系（Moon Fixed），其原点定义为月球中心，x轴沿月球本初子午线与赤道面之交线，z轴垂直于赤道面指向北极，y轴符合右手系。在该坐标系下分别定义以上三个评价指标为：
 \begin{align}
-  E_\mathrm{cnt}&=\sqrt{\frac{1}{N}\sum_i^N\|\mathbf{x}-\hat{\mathbf{x}}\|_2^2}\\
-  E_r&=\sqrt{\frac{1}{N}\sum_i^N\|r_i-\hat{r}_i\|_2^2}\\
+  E_\mathrm{cnt}&=\sqrt{\frac{1}{N}\sum_i^N\|\mathbf{x}-\hat{\mathbf{x}}\|_2^2}/x_\mathrm{thr}\\
+  E_r&=\sqrt{\frac{1}{N}\sum_i^N\|r_i-\hat{r}_i\|_2^2}/r_\mathrm{thr}\\
   \mathrm{IoU}&=\sqrt{\frac{1}{N}\sum_i^N\mathrm{IoU}_{i\hat{i}}}
 \end{align}\par
-式中，$\mathbf{x},\hat{\mathbf{x}}$分别代表预测陨石坑的中心坐标和真实陨石坑的中心坐标，$r,\hat{r}$分别代表预测陨石坑和真实陨石坑的半径，单位均为m。最终三个误差值的范围均在0～1以内，误差数值越小，检验算法效果越好。
+式中，$\mathbf{x},\hat{\mathbf{x}}$分别代表预测陨石坑的中心坐标和真实陨石坑的中心坐标，$r,\hat{r}$分别代表预测陨石坑和真实陨石坑的半径。以匈牙利匹配算法确定目标陨石坑目录和预测目录中陨石坑的对应关系。最终三个误差值的范围均在0～1以内，误差数值越小，检验算法效果越好。
 \subsection{目标检测实验}
 \subsubsection{与SOTA模型的对比}
 
@@ -51,18 +51,21 @@
   Faster-RCNN & 30 & 84.58 & 49.83 & 23.5 & 32.6 & 24.1\\
   YOLOv7 & 74 & 39.7 & 40.6 & -- & -- & 21.6 \\
   YOLOv11 & 120 & 81.02 & 19.68 & -- & -- & 31.78\\
-  DiffusionDet &120 & 98.4 & 82.74 & 84.4 & 69.9&61.9  \\
+  DiffusionDet &50 & 97.79 & 89.63 & 72.6 & 77.6 & 70.00  \\
   SSD & 30 & 91.3 &33.5 &22.6 &35.2&22.1 \\
   \hline
   基于Transformer & & & & && \\
   RT-DETR & 36 & 93.0 & 56.16 & 35.0 & 40.9& 34.4\\
   Align DETR&30 & 100 & 53.77 & 38.80 & 54.70 & 33.80\\
+  DAB-DETR & & & & & &\\
   DINO &30 &98.65 &72.61 &42.60 &57.10 &37.10\\
   Co-DINO &30 &98.67 & 93.04 & 54.90 & 65.60 & 51.11\\
   Co-DINO$\ddagger$ （ours）& & & & & &\\
   \hline
   小目标检测 & & & & & & \\
-  DNTR\cite{liuDeNoisingFPNTransformer2024}& & & & & &  \\
+  DNTR\cite{liuDeNoisingFPNTransformer2024}& 36 & 93.67 & 94.06 & 48.3 & 57.9 & 58.4  \\
+  RFLA\cite{xuRFLAGaussianReceptive2022} & 30 & 89.31 & 92.51 & 42.40 & 54.80 & 45.50 \\
+  DetectoRS\cite{Qiao2020DetectoRSDO} & 36  & 91.91 & 92.57 & 40.60 & 52.70 & 48.4 \\
   \bottomrule 
   \end{tabular}
   \end{center}
@@ -77,19 +80,20 @@
 \subsection{检验算法实验}
 检测所得陨石坑标注，经过坐标系平移变换，可统一至相同的图像坐标系下。此时，重叠区域的陨石坑检测结果应当通过检测算法去除，并与地形信息结合验证，可得到图像坐标系下的陨石坑目录，通过投影逆变换后，可得到月球坐标系下的陨石坑目录。
 \subsubsection{与其他检验算法对比}
-在Bo\cite{boCatalogueMeterscaleImpact2022}数据集上，将本文提出的soft NMS+地形结合检验算法与采用普通NMS算法、普通NMS+地形结合算法作比较，计算其误差值$E_\mathrm{cnt},E_r,E_\mathrm{IoU}$，所得结果一并如下表列出：
+在Bo\cite{boCatalogueMeterscaleImpact2022}数据集上，将本文提出的soft NMS+地形结合检验算法与采用普通NMS算法、普通NMS+地形结合算法作比较。所有NMS计算中取定的交并比阈值均为0.5，所得误差值$E_\mathrm{cnt},E_r,E_\mathrm{IoU}$结果如下表列出：
 \begin{table}[H]
   \begin{center}
   \caption{在Bo\cite{boCatalogueMeterscaleImpact2022}数据集上的对比实验}
   \label{tab:verify-comp}
   \begin{tabular}{ c  c  c  c }
   \toprule
-  算法 & $E_\mathrm{cnt}$ & $E_r$ & $E_\mathrm{IoU}$ \\
+  算法 & $E_\mathrm{cnt}$\@50$\downarrow$ & $E_r$\@50$\downarrow$ & $\mathrm{IoU}$\@50$\uparrow$ \\
   \hline
-  普通NMS &  & 0.08 & 0.05 \\
-  普通NMS+地形结合 & 0.09 & 0.06 & 0.03 \\
-  soft NMS & 0.07 & 0.05 & 0.02 \\
-  soft NMS+地形结合 & 0.06 & 0.04 & 0.01 \\
+  普通NMS & 3.146 & 3.134 & 0.3695 \\
+  地形检验 & 4.450 & 6.853 & 0.3708 \\
+  soft NMS & 3.040 & 3.907 & 0.3392 \\
+  softer NMS & 3.200 & 3.110 & 0.3725\\
+  DEM-NMS & 0.06 & 0.04 & 0.01 \\
   \bottomrule 
   \end{tabular}
   \end{center}
